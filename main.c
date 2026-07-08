@@ -1,15 +1,12 @@
 #include <FormEngine.h>
 #include <TUI.h>
 #include <AudioMan.h>
-
-#define SOIL 0
-#define SNAKE 1
+#include "stat.c"
 
 linkedList *snakeList;
+#include "constants.h"
+#include "dirt.c"
 #include "snake.c"
-
-int worldX = 80;
-int worldY = 40;
 
 int main() {
 	startWorld(true, true);
@@ -18,7 +15,16 @@ int main() {
 	setFrameDimension(worldX, worldY);
 	setFramePosition(worldX/2, worldY/2);
 
+	World *w = getWorld();
+	for (int x = 0; x < w->x; x++) {
+		for (int y = 0; y < w->y; y++) {
+			placeForm(makeDirt(), x, y);
+		}
+	}
+
 	Snake *snake0 = makeSnake(worldX/2, worldY/2);
+
+
 
 	runWorld();
 

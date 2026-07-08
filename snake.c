@@ -1,7 +1,6 @@
 #include "snake.h"
 
 int snakeCount = 0;
-int baseSnake = 6;
 
 Snake *makeSnake(int xPos, int yPos) {
 	Snake *s = calloc(1, sizeof(Snake));
@@ -12,7 +11,7 @@ Snake *makeSnake(int xPos, int yPos) {
 	s->body = makeList();
 	addToList(&s->body, sb);
 
-	scheduleEvent(0, snakeMovement, s, 1.0);
+	scheduleEvent(0, snakeMovement, s, moveInterval);
 
 	Player *player = checkPlayer(snakeCount+1);
 	if (player == 0) {
@@ -27,7 +26,7 @@ Snake *makeSnake(int xPos, int yPos) {
 		}
 	}
 	placeSnake(s);
-	for (int i = 0; i < baseSnake; i++ ) {
+	for (int i = 0; i < baseSnake - 1;  i++ ) {
 		growSnake(s);
 	}
 
@@ -37,9 +36,9 @@ Snake *makeSnake(int xPos, int yPos) {
 	Sigil *skin = createSigil(s->self)->data;
 	skin->symbol = '@';
 	skin->figure = true;
-	skin->r = 128;
-	skin->g = 128;
-	skin->b = 128;
+	skin->r = 255;
+	skin->g = 255;
+	skin->b = 255;
 
 	return s;
 }
@@ -84,7 +83,6 @@ void growSnake(Snake *s) {
 	addToList(&s->body, s->butt);
 	placeForm(s->self, tail[0], tail[1]);
 	free(tail);
-
 }
 
 void placeSnake(Snake *s) {
@@ -98,6 +96,7 @@ void placeSnake(Snake *s) {
 			int y = sb->pos[1];
 
 			placeForm(s->self, x, y);
+			addEco(x, y, ecoTrail);
 
 			cur = cur->next;
 		} else {
