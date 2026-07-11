@@ -65,6 +65,7 @@ $(TARGET): $(FORMINC)FormEngine.h $(FORMLIB)libFormEngine.a $(RENDERLIB)lib$(REN
 	gcc main.o -o $@ $(LDFLAGS) -L$(FORMLIB) -lFormEngine -L$(AUDIOLIB) -l$(AUDIO) -L$(RENDERLIB) -l$(RENDERER) -L$(GAMELIB) -lGameCore -L$(OIBLIB) -lOIB -L$(MOLTNLIB) -lMoltnCore -L$(HELPERLIB) -lHelper $(AUDIOFLAGS) -lm
 
 main.o: main.c snake.c snake.h constants.h dirt.c dirt.h stat.c stat.h
+	cp $(AUDIODIR)lsan.supp .
 	gcc $(CFLAGS) -c main.c -o $@
 
 $(HELPERLIB)libHelper.a:
@@ -94,5 +95,5 @@ clean:
 	$(MAKE) clean -C $(ENGINEDIR)
 
 fclean:
-	rm -rf $(TARGET) *.o *.d
+	rm -rf $(TARGET) *.o *.d lsan.supp
 	$(MAKE) fclean -C $(ENGINEDIR)
