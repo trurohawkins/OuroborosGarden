@@ -46,6 +46,16 @@ float *getStat(Form *f, int id) {
 	return 0;
 }
 
+bool setStat(Form *f, int id, float value) {
+	float *stat = getStat(f, id);
+	if (stat) {
+		*stat = value;
+		return true;
+	} else {
+		return false;
+	}
+}
+
 Form *checkStat(int x, int y, int id) {
 	World *w = getWorld();
 	if (x >= 0 && y >= 0 && x < w->x && y < w->y) {

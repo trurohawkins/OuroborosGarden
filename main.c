@@ -4,6 +4,7 @@
 #include "stat.c"
 
 linkedList *snakeList;
+bool drawing = true;
 #include "constants.h"
 #include "dirt.c"
 #include "plant.c"
@@ -20,7 +21,7 @@ void pressPause(void *, float val) {
 }
 
 int main() {
-	startWorld(true, true);
+	startWorld(drawing, true);
 	Player *god = makePlayer(0, 0, 0);
 	addPlayer(god);
 	addControl(god, "K0 ", pressPause);
@@ -35,6 +36,8 @@ int main() {
 			placeForm(makeDirt(), x, y);
 		}
 	}
+
+	initPlants();
 
 	Snake *snake0 = makeSnake(worldX/2, worldY/2);
 

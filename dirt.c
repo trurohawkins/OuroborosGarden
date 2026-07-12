@@ -11,7 +11,7 @@ Form *makeDirt() {
 	Form *dirt = makeForm(DIRT);
 	initStats(dirt, dirtStats);
 	addStat(dirt, ECO, 0);
-
+	addStat(dirt, OUTPUT, 1);
 	Sigil *skin = createSigil(dirt)->data;
 	
 	dirtColor(dirt);
@@ -105,6 +105,30 @@ float changeEco(Form *f, float amnt) {
 	return diff;
 }
 
+void calcFlow(int x, int y) {
+	Form *dirt = 0;
+	float roots = 0;
+	Cell *c = getCell(x, y);
+	if (c) {
+		for (int i = 0; i < FORMS_PER_CELL; i++) {
+			if (c->within[i]) {
+				Form *f = c->within[i];
+				if (f->id == DIRT) {
+					dirt = f;
+				} else {
+					float *r = getStat(f, ROOTS);
+					if (r) {
+						roots += *r;
+					}
+				}
+			}
+		}
+		if (dirt) {
+			setStat(dirt, OUTPUT, lerp(output[0], output[1], roots));
+		}
+	}
+}
+
 void dirtColor(Form *f) {
 	float eco = *getStat(f, ECO);
 	Sigil *skin = findNub(f, 1)->data;
@@ -117,11 +141,14 @@ void dirtColor(Form *f) {
 }
 
 Form *checkSoil(int x, int y) {
-	World *w = getWorld();
-	Cell *c = &w->map[(y*w->x)+x];
-	for (int i = 0; i < FORMS_PER_CELL; i++) {
-		if (c->within[i] && c->within[i]->id == DIRT) {
-			return c->within[i];
+	Cell *c = getCell(x, y);
+	if (c) {
+		for (int i = 0; i < FORMS_PER_CELL; i++) {
+			if (c->within[i]) {
+				if (c->within[i]->id == DIRT) {
+					return c->within[i];
+				}
+			}
 		}
 	}
 	return 0;

@@ -36,6 +36,7 @@ Snake *makeSnake(int xPos, int yPos) {
 	Sigil *skin = createSigil(s->self)->data;
 	skin->symbol = '@';
 	skin->figure = true;
+	skin->priority = 1;
 	skin->r = 255;
 	skin->g = 255;
 	skin->b = 255;
@@ -106,6 +107,9 @@ void placeSnake(Snake *s) {
 
 			placeForm(s->self, x, y);
 			addEco(x, y, ecoTrail);
+			if (randPercent() < plantTrail) {
+				placeGrass(x, y);
+			}
 
 			cur = cur->next;
 		} else {

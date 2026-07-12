@@ -12,18 +12,21 @@ float bioEvap = 0.1;
 // snake
 int baseSnake = 10;
 float ecoTrail = 0.17f;
+float plantTrail = 0.3;
 float moveInterval = 1.0;
 //plants
-float plantsInterval = 5.0;
+float plantsInterval = 2.0;
 
 //Form IDs
 #define DIRT 0
 #define PLANT 1
 #define SNAKE 2
-
+#define GRASS 3
 
 //stat IDs
-#define ECO 1
+// dirt
+#define ECO 0
+#define OUTPUT 1
 // plants
 #define GROWTH 2
 #define PULL 3
@@ -31,8 +34,7 @@ float plantsInterval = 5.0;
 #define ROOTS 5
 #define COVER 6
 #define LIFE 7
-#define COUNTER 8
-#define BEAT 9
-#define CYCLE 10
-#define STAGE 11
-#define LIFETIME 13
+#define BEAT 8
+#define CYCLE 9
+#define STAGE 10 
+#define LIFETIME 11
