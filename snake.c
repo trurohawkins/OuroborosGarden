@@ -43,6 +43,7 @@ Snake *makeSnake(int xPos, int yPos) {
 	return s;
 }
 
+// important to restart the rhythm
 void pauseSnake(Snake *s, bool paused) {
 	if (paused) {
 		unscheduleEvent(0);

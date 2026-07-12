@@ -64,7 +64,7 @@ prod: $(TARGET)
 $(TARGET): $(FORMINC)FormEngine.h $(FORMLIB)libFormEngine.a $(RENDERLIB)lib$(RENDERER).a $(RENDERINC)$(RENDERER).h $(AUDIOLIB)lib$(AUDIO).a $(AUDIOINC)$(AUDIO).h $(GAMEINC)GameCore.h $(GAMELIB)libGameCore.a $(OIBINC)OIB.h $(OIBLIB)libOIB.a $(MOLTNLIB)libMoltnCore.a $(MOLTNINC)MoltnCore.h $(HELPERLIB)libHelper.a  $(HELPERINC)helper.h main.o  
 	gcc main.o -o $@ $(LDFLAGS) -L$(FORMLIB) -lFormEngine -L$(AUDIOLIB) -l$(AUDIO) -L$(RENDERLIB) -l$(RENDERER) -L$(GAMELIB) -lGameCore -L$(OIBLIB) -lOIB -L$(MOLTNLIB) -lMoltnCore -L$(HELPERLIB) -lHelper $(AUDIOFLAGS) -lm
 
-main.o: main.c snake.c snake.h constants.h dirt.c dirt.h stat.c stat.h
+main.o: main.c snake.c snake.h constants.h dirt.c dirt.h stat.c stat.h plant.c plant.h
 	cp $(AUDIODIR)lsan.supp .
 	gcc $(CFLAGS) -c main.c -o $@
 

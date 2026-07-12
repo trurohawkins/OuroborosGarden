@@ -6,12 +6,12 @@
 linkedList *snakeList;
 #include "constants.h"
 #include "dirt.c"
+#include "plant.c"
 #include "snake.c"
 
 void pressPause(void *, float val) {
 	if (val == 0) {
 		toggleGamePause();
-		flushAudioEvents();
 		for (linkedList *cur = snakeList; cur != 0; cur = cur->next) {
 			Snake *s = cur->data;
 			pauseSnake(s, getPaused());

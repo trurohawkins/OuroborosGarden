@@ -4,6 +4,11 @@
 #define EMPTY -42069
 #define NUB 3
 
+typedef struct {
+	int id;
+	float value;
+} Stat;
+
 Nub * initStats(Form *f, int numStats);
 bool addStat(Form *f, int id, float value);
 float *getStat(Form *f, int stat);

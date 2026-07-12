@@ -115,3 +115,15 @@ void dirtColor(Form *f) {
 	sprintf(buffer, "%f = dirt: %i, %i, %i\n", eco, skin->r, skin->g, skin->b);
 	//debugWrite(buffer);
 }
+
+Form *checkSoil(int x, int y) {
+	World *w = getWorld();
+	Cell *c = &w->map[(y*w->x)+x];
+	for (int i = 0; i < FORMS_PER_CELL; i++) {
+		if (c->within[i] && c->within[i]->id == DIRT) {
+			return c->within[i];
+		}
+	}
+	return 0;
+}
+
