@@ -68,7 +68,7 @@ void growSnake(Snake *s) {
 				}
 				break;
 			} else {
-				printf("bad tail\n");
+				//printf("bad tail\n");
 			}
 		} else {
 			head = false;
@@ -114,7 +114,7 @@ void removeSnake(Snake *s) {
 			removeForm(s->self, sb->pos[0], sb->pos[1]);
 			cur = cur->next;
 		} else {
-			printf("bad body on snake %p\n", s);
+			//printf("bad body on snake %p\n", s);
 		}
 	}
 }
