@@ -43,6 +43,14 @@ Snake *makeSnake(int xPos, int yPos) {
 	return s;
 }
 
+void pauseSnake(Snake *s, bool paused) {
+	if (paused) {
+		unscheduleEvent(0);
+	} else{
+		scheduleEvent(0, snakeMovement, s, moveInterval);
+	}
+}
+
 SnakeBody *makeBody(int xp, int yp) {
 	SnakeBody *sb = calloc(1, sizeof(SnakeBody));
 	sb->pos[0] = xp;

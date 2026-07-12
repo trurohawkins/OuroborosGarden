@@ -113,5 +113,5 @@ void dirtColor(Form *f) {
 	skin->b = lerp(dirtA[2], dirtB[2], eco);
 	char buffer[100];
 	sprintf(buffer, "%f = dirt: %i, %i, %i\n", eco, skin->r, skin->g, skin->b);
-	debugWrite(buffer);
+	//debugWrite(buffer);
 }

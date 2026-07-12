@@ -8,8 +8,22 @@ linkedList *snakeList;
 #include "dirt.c"
 #include "snake.c"
 
+void pressPause(void *, float val) {
+	if (val == 0) {
+		toggleGamePause();
+		flushAudioEvents();
+		for (linkedList *cur = snakeList; cur != 0; cur = cur->next) {
+			Snake *s = cur->data;
+			pauseSnake(s, getPaused());
+		}
+	}
+}
+
 int main() {
 	startWorld(true, true);
+	Player *god = makePlayer(0, 0, 0);
+	addPlayer(god);
+	addControl(god, "K0 ", pressPause);
 
 	makeWorld(worldX, worldY);
 	setFrameDimension(worldX, worldY);
