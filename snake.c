@@ -32,7 +32,11 @@ Snake *makeSnake(int xPos, int yPos) {
 
 	addToList(&snakeList, s);
 	snakeCount++;
-
+	Nub *ren = growRenderNub(s->self);
+	RenderObject *rob = ren->data;
+	rob->data = s;
+	rob->render = renderSnake;
+	/*
 	Sigil *skin = createSigil(s->self)->data;
 	skin->symbol = '@';
 	skin->figure = true;
@@ -40,7 +44,7 @@ Snake *makeSnake(int xPos, int yPos) {
 	skin->r = 255;
 	skin->g = 255;
 	skin->b = 255;
-
+	*/
 	return s;
 }
 
@@ -236,4 +240,26 @@ void incPos(int *px, int *py, int dx, int dy) {
 	}
 }
 
-
+void *renderSnake(void *data) {
+	Snake *s = data;
+	linkedList *commands = 0;
+	linkedList *body = s->body;
+	rend sigil = {
+		.figure = true,
+		.symbol = '@',
+		.priority = 1,
+		.r = 255,
+		.g = 255,
+		.b = 255,
+	};
+	while (body) {
+		SnakeBody *sb = body->data;
+		RenderCommand *reco = calloc(1, sizeof(RenderCommand));
+		reco->screenPos[0] = worldXToScreenX(sb->pos[0]);
+		reco->screenPos[1] = worldYToScreenY(sb->pos[1]);
+		reco->sigil = sigil;
+		addToList(&commands, reco);
+		body = body->next;
+	}
+	return commands;
+}

@@ -7,4 +7,5 @@ void dirtColor(Form *f);
 Form *checkSoil(int x, int y);
 
 void calcFlow(int x, int y);
+void *renderDirt(void *data);
 

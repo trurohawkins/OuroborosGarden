@@ -12,9 +12,12 @@ Form *makeDirt() {
 	initStats(dirt, dirtStats);
 	addStat(dirt, ECO, 0);
 	addStat(dirt, OUTPUT, 1);
-	Sigil *skin = createSigil(dirt)->data;
-	
-	dirtColor(dirt);
+	//Sigil *skin = createSigil(dirt)->data;
+	Nub *ren = growRenderNub(dirt);
+	RenderObject *rob = ren->data;
+	rob->data = dirt;
+	rob->render = renderDirt;
+	//dirtColor(dirt);
 	return dirt;
 }
 
@@ -95,7 +98,7 @@ float changeEco(Form *f, float amnt) {
 			*eco = clampF(*eco + amnt, 0, maxEco);
 		}
 		//setStat(f, "intake", calcIntake(*eco));
-		dirtColor(f);
+		//dirtColor(f);
 		if (amnt > 0 && *eco > maxEco * 0.75f) {
 			if (randPercent() > 0.95f) {
 				//placeGrass(f->pos[0], f->pos[1]);
@@ -138,6 +141,20 @@ void dirtColor(Form *f) {
 	char buffer[100];
 	sprintf(buffer, "%f = dirt: %i, %i, %i\n", eco, skin->r, skin->g, skin->b);
 	//debugWrite(buffer);
+}
+
+void *renderDirt(void *data) {
+	Form *dirt = data;
+	linkedList *commands = 0;
+	RenderCommand *reco = calloc(1, sizeof(RenderCommand));
+	reco->screenPos[0] = worldXToScreenX(dirt->pos[0]);// + screenX/2 - frameDim[0]/2;
+	reco->screenPos[1] = worldYToScreenY(dirt->pos[1]);// + screenY/2 - frameDim[1]/2;
+	float eco = *getStat(dirt, ECO);
+	reco->sigil.r = lerp(dirtA[0], dirtB[0], eco);
+	reco->sigil.g = lerp(dirtA[1], dirtB[1], eco);
+	reco->sigil.b = lerp(dirtA[2], dirtB[2], eco);
+	addToList(&commands, reco);
+	return commands;
 }
 
 Form *checkSoil(int x, int y) {

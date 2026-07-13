@@ -61,10 +61,13 @@ Form *checkStat(int x, int y, int id) {
 	if (x >= 0 && y >= 0 && x < w->x && y < w->y) {
 		Cell *c = &w->map[(y*theWorld.x) + x];
 		for (int i = 0; i < FORMS_PER_CELL; i++) {
-			float *stat = getStat(c->within[i], id);
-			if (stat) {
-				return c->within[i];
+			if (c->within[i]) {
+				float *stat = getStat(c->within[i], id);
+				if (stat) {
+					return c->within[i];
+				}
 			}
 		}
 	}
+	return NULL;
 }

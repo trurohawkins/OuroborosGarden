@@ -37,11 +37,11 @@ int main() {
 		}
 	}
 
+	//placeGrass(10, 30);
+
 	initPlants();
 
 	Snake *snake0 = makeSnake(worldX/2, worldY/2);
-
-
 
 	runWorld();
 

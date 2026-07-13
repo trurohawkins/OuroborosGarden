@@ -36,7 +36,7 @@ FORMDIR = $(ENGINEDIR)Form/
 FORMINC = $(FORMDIR)include/
 FORMLIB = $(FORMDIR)lib/
 
-DEV_CFLAGS = -g -fsanitize=address,undefined -fno-omit-frame-pointer
+DEV_CFLAGS = -g -O0 -fsanitize=address,undefined -fno-omit-frame-pointer
 DEV_LDFLAGS = -fsanitize=address,undefined
 
 TSAN_CFLAGS = -g -O1 -fsanitize=thread -fno-omit-frame-pointer

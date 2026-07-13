@@ -68,7 +68,8 @@ bool lifeCycle(Form *plant) {
 		float lifeTime = *getStat(plant, LIFETIME);
 		float stage = *getStat(plant, STAGE);
 		//if they lose too much they die
-		if (stage < lifeTime && *eco - loss >= 0) {
+		//if (stage < lifeTime && *eco - loss >= 0) {
+		if (*eco - loss >= 0) {
 			if (!drawing) {printf("   eco loss %f\n", loss);}
 			*eco -= loss;
 		} else {
@@ -139,7 +140,7 @@ void plantDie(void *plant) {
 
 void plantEco(Form *plant) {
 	if (plant->id == GRASS) {
-		grassColor(plant);
+		//grassColor(plant);
 	}
 }
 

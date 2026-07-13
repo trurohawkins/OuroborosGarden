@@ -15,7 +15,7 @@ float ecoTrail = 0.17f;
 float plantTrail = 0.3;
 float moveInterval = 1.0;
 //plants
-float plantsInterval = 2.0;
+float plantsInterval = 1.0;
 
 //Form IDs
 #define DIRT 0

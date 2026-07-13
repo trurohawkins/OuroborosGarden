@@ -11,6 +11,10 @@ Form *makeGrass() {
 	setStat(grass, CYCLE, 5);
 	setStat(grass, LIFETIME, 4);
 
+	Nub *ren = growRenderNub(grass);
+	RenderObject *rob = ren->data;
+	rob->data = grass;
+	rob->render = renderGrass;
 
 	return grass;
 }
@@ -20,7 +24,7 @@ void placeGrass(int x, int y) {
 		return;
 	}
 	Form *dirt = checkSoil(x, y);
-	if (dirt && *getStat(dirt, ECO) > 0.75f) {
+	if (dirt) {// && *getStat(dirt, ECO) > 0.75f) {
 		Form *grass = makeGrass();
 		placeForm(grass, x, y);
 		/*
@@ -44,17 +48,11 @@ bool growGrass(Form *g) {
 			 TileSet *ts = getTile((int)(*tile));
 			 editData(ts->color, (int)g->pos[0], (int)g->pos[1], 1, 1);
 			 */
-		Sigil *skin = createSigil(g)->data;
-		skin->symbol = '#';
-		skin->figure = true;
-		skin->r = grassB[0];
-		skin->g = grassB[1];
-		skin->b = grassB[2];
-		grassColor(g);
 		setStat(g, GROWTH, 1);
 		setStat(g, BEAT, 1);
 		setStat(g, CYCLE, 15);
-		setStat(g, LOSS, 0.001);
+		//setStat(g, LOSS, 0.001);
+		setStat(g, LOSS, 0.01);
 		setStat(g, ROOTS, 0.25);
 		setStat(g, COVER, evaporation/5);
 		calcFlow(g->pos[0], g->pos[1]);
@@ -65,17 +63,13 @@ bool growGrass(Form *g) {
 		setStat(g, CYCLE, 25);
 		setStat(g, GROWTH, 0.6);
 		setStat(g, COVER, evaporation/3);
-		Sigil *skin = findNub(g, 1)->data;
-		skin->figure = false;
 		/*
 			 g->id = 3;
 			 setStat(g, "tile", 3);
 			 */
-		grassColor(g);
 	} else if (*stage == 3) {
 		spreadGrass(g->pos[0], g->pos[1]);
 		setStat(g, CYCLE, 35);
-		grassColor(g);
 	} 
 	return true;
 }
@@ -94,8 +88,9 @@ void grassColor(Form *g) {
 	// if the plant has less eco than stasis its dying
 	// if more its growing
 	float ct = eco;// / 0.5;//growth;
-	Sigil *skin = findNub(g, 1)->data;
-	if (skin) {
+	Nub *sigil = findNub(g, 1);
+	if (sigil) {
+		Sigil *skin = findNub(g, 1)->data;
 		skin->r = lerp(grassA[0], grassB[0], ct);
 		skin->g = lerp(grassA[1], grassB[1], ct);
 		skin->b = lerp(grassA[2], grassB[2], ct);
@@ -119,3 +114,29 @@ Form *checkGrass(int x, int y) {
 	return NULL;
 }
 
+void *renderGrass(void *data) {
+	Form *grass = data;
+	float stage = *getStat(grass, STAGE);
+	if (stage == 0) {
+		return NULL;
+	}
+	linkedList *commands = 0;
+	RenderCommand *reco = calloc(1, sizeof(RenderCommand));
+	reco->screenPos[0] = worldXToScreenX(grass->pos[0]);// + screenX/2 - frameDim[0]/2;
+	reco->screenPos[1] = worldYToScreenY(grass->pos[1]);// + screenY/2 - frameDim[1]/2;
+	float eco = *getStat(grass, ECO);
+	reco->sigil.r = lerp(grassA[0], grassB[0], eco);
+	reco->sigil.g = lerp(grassA[1], grassB[1], eco);
+	reco->sigil.b = lerp(grassA[2], grassB[2], eco);
+	reco->sigil.figure = true;
+	if (stage == 1) {
+		reco->sigil.symbol = ':';
+	} else if (stage == 2) {
+		reco->sigil.symbol = '+';
+	} else {
+		reco->sigil.symbol = '#';
+	}
+
+	addToList(&commands, reco);
+	return commands;
+}
