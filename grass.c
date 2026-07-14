@@ -120,23 +120,22 @@ void *renderGrass(void *data) {
 	if (stage == 0) {
 		return NULL;
 	}
-	linkedList *commands = 0;
-	RenderCommand *reco = calloc(1, sizeof(RenderCommand));
-	reco->screenPos[0] = worldXToScreenX(grass->pos[0]);// + screenX/2 - frameDim[0]/2;
-	reco->screenPos[1] = worldYToScreenY(grass->pos[1]);// + screenY/2 - frameDim[1]/2;
 	float eco = *getStat(grass, ECO);
-	reco->sigil.r = lerp(grassA[0], grassB[0], eco);
-	reco->sigil.g = lerp(grassA[1], grassB[1], eco);
-	reco->sigil.b = lerp(grassA[2], grassB[2], eco);
-	reco->sigil.figure = true;
+	RenderCommand reco = {
+		.screenPos[0] = worldXToScreenX(grass->pos[0]),// + screenX/2 - frameDim[0]/2;
+		.screenPos[1] = worldYToScreenY(grass->pos[1]),// + screenY/2 - frameDim[1]/2;
+		.r = lerp(grassA[0], grassB[0], eco),
+		.g = lerp(grassA[1], grassB[1], eco),
+		.b = lerp(grassA[2], grassB[2], eco),
+	};
 	if (stage == 1) {
-		reco->sigil.symbol = ':';
+		reco.sigil = ':';
 	} else if (stage == 2) {
-		reco->sigil.symbol = '+';
+		reco.sigil = '+';
 	} else {
-		reco->sigil.symbol = '#';
+		reco.sigil = '#';
 	}
+	addRenderCommand(reco);
 
-	addToList(&commands, reco);
-	return commands;
+	return NULL;
 }

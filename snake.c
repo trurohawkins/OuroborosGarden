@@ -244,21 +244,17 @@ void *renderSnake(void *data) {
 	Snake *s = data;
 	linkedList *commands = 0;
 	linkedList *body = s->body;
-	rend sigil = {
-		.figure = true,
-		.symbol = '@',
-		.priority = 1,
+	RenderCommand reco = {
+		.sigil = '@',
 		.r = 255,
 		.g = 255,
 		.b = 255,
 	};
 	while (body) {
 		SnakeBody *sb = body->data;
-		RenderCommand *reco = calloc(1, sizeof(RenderCommand));
-		reco->screenPos[0] = worldXToScreenX(sb->pos[0]);
-		reco->screenPos[1] = worldYToScreenY(sb->pos[1]);
-		reco->sigil = sigil;
-		addToList(&commands, reco);
+		reco.screenPos[0] = worldXToScreenX(sb->pos[0]);
+		reco.screenPos[1] = worldYToScreenY(sb->pos[1]);
+		addRenderCommand(reco);
 		body = body->next;
 	}
 	return commands;
