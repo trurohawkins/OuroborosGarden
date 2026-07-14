@@ -11,7 +11,7 @@ Snake *makeSnake(int xPos, int yPos) {
 	s->body = makeList();
 	addToList(&s->body, sb);
 
-	scheduleEvent(0, snakeMovement, s, moveInterval);
+	addTimedEvent(snakeMovement, s, moveInterval);
 
 	Player *player = checkPlayer(snakeCount+1);
 	if (player == 0) {
@@ -46,15 +46,6 @@ Snake *makeSnake(int xPos, int yPos) {
 		 skin->b = 255;
 		 */
 	return s;
-}
-
-// important to restart the rhythm
-void pauseSnake(Snake *s, bool paused) {
-	if (paused) {
-		unscheduleEvent(0);
-	} else{
-		scheduleEvent(0, snakeMovement, s, moveInterval);
-	}
 }
 
 SnakeBody *makeBody(int xp, int yp) {

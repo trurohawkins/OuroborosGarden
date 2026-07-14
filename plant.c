@@ -5,7 +5,7 @@
 int plantStats = 11;
 
 void initPlants() {
-	scheduleEvent(1, plantsAction, 0, plantsInterval);
+	addTimedEvent(plantsAction, 0, plantsInterval);
 }
 
 void plantsAction(void *) {

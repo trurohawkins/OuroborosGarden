@@ -15,7 +15,6 @@ void pressPause(void *, float val) {
 		toggleGamePause();
 		for (linkedList *cur = snakeList; cur != 0; cur = cur->next) {
 			Snake *s = cur->data;
-			pauseSnake(s, getPaused());
 		}
 	}
 }
