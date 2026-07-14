@@ -10,10 +10,10 @@ int spreadInterval = 6;
 int evapInterval = 3;
 float bioEvap = 0.1;
 // snake
-int baseSnake = 10;
+int baseSnake = 6;
 float ecoTrail = 0.17f;
 float plantTrail = 0.3;
-float moveInterval = 1.0;
+float moveInterval = 0.7;
 //plants
 float plantsInterval = 1.0;
 
@@ -22,6 +22,7 @@ float plantsInterval = 1.0;
 #define PLANT 1
 #define SNAKE 2
 #define GRASS 3
+#define FLOWER 4
 
 //stat IDs
 // dirt

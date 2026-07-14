@@ -37,14 +37,14 @@ Snake *makeSnake(int xPos, int yPos) {
 	rob->data = s;
 	rob->render = renderSnake;
 	/*
-	Sigil *skin = createSigil(s->self)->data;
-	skin->symbol = '@';
-	skin->figure = true;
-	skin->priority = 1;
-	skin->r = 255;
-	skin->g = 255;
-	skin->b = 255;
-	*/
+		 Sigil *skin = createSigil(s->self)->data;
+		 skin->symbol = '@';
+		 skin->figure = true;
+		 skin->priority = 1;
+		 skin->r = 255;
+		 skin->g = 255;
+		 skin->b = 255;
+		 */
 	return s;
 }
 
@@ -144,7 +144,36 @@ void turnSnake(Snake *s, int direction) {
 	}
 }
 
+bool snakeCheck(Snake *s) {
+	int* d = getDir4(s->dir);
+	SnakeBody *head = s->body->data;
+	int posCheck[2] = {head->pos[0], head->pos[1]};
+	incPos(posCheck, posCheck+1, d[0], d[1]);
+	Cell *c = getCell(posCheck[0], posCheck[1]);
+	Form *fruit = 0;
+	for (int i = 0; i < FORMS_PER_CELL; i++) {
+		if (c->within[i]) {
+			Form *f = c->within[i];
+			if (f->id == FLOWER) {
+				float flowerGrowth = *getStat(f, STAGE);
+				if (flowerGrowth >= 5) {
+					fruit = f;
+				}
+			}
+		}
+	}
+	if (fruit) {
+		removeForm(fruit, fruit->pos[0], fruit->pos[1]);
+		freeForm(fruit);
+		growSnake(s);
+	}
+	return true;
+}
+
 bool moveSnake(Snake *s) {
+	if (!snakeCheck(s)) {
+		return false;
+	}
 	removeSnake(s);
 	int pre[2] = {-5, -5};
 	int dir[2];

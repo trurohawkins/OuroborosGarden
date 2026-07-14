@@ -1,5 +1,6 @@
 #include "plant.h"
 #include "grass.h"
+#include "flower.h"
 
 int plantStats = 11;
 
@@ -129,6 +130,8 @@ bool lifeCycle(Form *plant) {
 bool grow(Form *plant) {
 	if (plant->id == GRASS) {
 		growGrass(plant);
+	} else if (plant->id == FLOWER) {
+		growFlower(plant);
 	}
 }
 
@@ -145,3 +148,4 @@ void plantEco(Form *plant) {
 }
 
 #include "grass.c"
+#include "flower.c"

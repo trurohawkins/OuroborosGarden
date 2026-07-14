@@ -24,6 +24,7 @@ void placeSnake(Snake *s);
 void removeSnake(Snake *s);
 
 void turnSnake(Snake *s, int direction);
+bool snakeCheck(Snake *s);
 bool moveSnake(Snake *s);
 void snakeMovement(void *s);
 

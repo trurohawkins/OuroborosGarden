@@ -34,10 +34,14 @@ int main() {
 	for (int x = 0; x < w->x; x++) {
 		for (int y = 0; y < w->y; y++) {
 			placeForm(makeDirt(), x, y);
+			if (randPercent() > 0.95f) {
+				placeFlower(x, y);
+			}
 		}
 	}
 
 	//placeGrass(10, 30);
+	placeFlower(45, 20);
 
 	initPlants();
 

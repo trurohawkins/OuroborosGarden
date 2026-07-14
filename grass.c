@@ -129,11 +129,11 @@ void *renderGrass(void *data) {
 		.b = lerp(grassA[2], grassB[2], eco),
 	};
 	if (stage == 1) {
-		reco.sigil = ':';
-	} else if (stage == 2) {
 		reco.sigil = '+';
-	} else {
+	} else if (stage == 2) {
 		reco.sigil = '#';
+	} else {
+		reco.sigil = -1;
 	}
 	addRenderCommand(reco);
 
