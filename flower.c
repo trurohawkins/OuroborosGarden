@@ -6,11 +6,11 @@ float fullFower = 3;
 Form *makeFlower() {
 	Form *f = makePlant();
 	f->id = 4;
-	setStat(f, GROWTH, 0.2);
+	setStat(f, GROWTH, 0.5);
 	setStat(f, PULL, 0.2);
 	setStat(f, BEAT, 2);
 	setStat(f, CYCLE, 2);
-	setStat(f, LIFETIME, 9);
+	setStat(f, LIFETIME, 4);
 	return f;
 }
 
@@ -53,44 +53,34 @@ bool growFlower(Form *f) {
 		rob->render = renderFlower;
 		setStat(f, GROWTH, 1);
 		setStat(f, PULL, 0.5);
-		setStat(f, LOSS, 0.01);
+		setStat(f, LOSS, 0.1);
 		//setStat(f, BEAT, 30);
 		setStat(f, CYCLE, 3);
-	} else if (*stage < 8) {
+		setStat(f, ROOTS, 0.5);
+		calcFlow(f->pos[0], f->pos[1]);
+	} else if (*stage < 5) {
 		//Anim *anim = ((Anim**)f->anim)[0];
 		//changeSprite(anim, *stage - 1);
 		if (*stage == 2) {
-			setStat(f, ROOTS, 0.25);
+			setStat(f, ROOTS, 1);
 			calcFlow(f->pos[0], f->pos[1]);
 			setStat(f, COVER, 0.005);
 			setStat(f, LOSS, 0.05);
 		} else if (*stage == 3) {
-			setStat(f, ROOTS, 0.5);
-			calcFlow(f->pos[0], f->pos[1]);
-			setStat(f, COVER, 0.007);
-		} else if (*stage == 4) {
 			//changeBio(f->pos[0], f->pos[1], -0.5);
-			setStat(f, ROOTS, 0.75);
-			calcFlow(f->pos[0], f->pos[1]);
 			setStat(f, COVER, 0.01);
 			setStat(f, CYCLE, 9);
-			setStat(f, GROWTH, 1.2);
-		} else if (*stage == 5) {
-			//changeBio(f->pos[0], f->pos[1], -0.5);
-			setStat(f, ROOTS, 1);
-			calcFlow(f->pos[0], f->pos[1]);
-			setStat(f, GROWTH, 0.5);
-		} else if (*stage == 6) {
+		} else if (*stage == 4) {
 			setStat(f, ROOTS, 0);
 			calcFlow(f->pos[0], f->pos[1]);
 			setStat(f, CYCLE, 12);
-			setStat(f, PULL, 0);
 			//setStat(f, LOSS, 0);
 			setStat(f, LOSS, 0.01);
+			spreadFlower(f->pos[0], f->pos[1]);
 		}
 	} else {
 		//changeBio(f->pos[0], f->pos[1], 0.05);
-		addEco(f->pos[0], f->pos[1], 1);
+		addEco(f->pos[0], f->pos[1], *getStat(f, ECO));
 	}
 	return true;
 }
@@ -102,25 +92,36 @@ void *renderFlower(void *data) {
 	RenderCommand reco = {
 		.screenPos[0] = worldXToScreenX(flower->pos[0]),
 		.screenPos[1] = worldYToScreenY(flower->pos[1]),
-		.r = 200,
-		.g = 75,
-		.b = 180,
+		.r = 255, 
+		.g = 0,
+		.b = 255,
+		.layer = FLOWERLAYER,
 	};
 	if (*stage == 1) {
-		reco.sigil = ',';
+		reco.sigil = flowerStamps[0];
 	} else if (*stage == 2) {
-		reco.sigil = '.';
+		reco.sigil = flowerStamps[1];
 	} else if (*stage == 3) {
-		reco.sigil = ';';
+		reco.sigil = flowerStamps[2];
 	} else if (*stage == 4) {
-		reco.sigil = ':';
+		reco.sigil = flowerStamps[3];
 	} else if (*stage == 5) {
-		reco.sigil = 'i';
+		reco.sigil = flowerStamps[4];
 	} else if (*stage == 6) {
-		reco.sigil = 'I';
+		reco.sigil = flowerStamps[5];
 	} else {
-		reco.sigil = '_';
+		reco.sigil = flowerStamps[6];
 	}
 	addRenderCommand(reco);
 	return NULL;
+}
+
+void spreadFlower(int x, int y) {
+	int start = randomInt(8);
+	for (int i = 0; i < 8; i++) {
+		int *d = getDir8((start+i)%8);
+		if (placeFlower(x + d[0], y + d[1])) {
+			return;
+		}
+	}
 }

@@ -5,17 +5,17 @@ int worldY = 40;
 // soil
 int maxEco = 1;
 float evaporation = 0.05;
-float spreadDither = 0.01;
+float spreadDither = 0.005;
 int spreadInterval = 6;
 int evapInterval = 3;
 float bioEvap = 0.1;
 // snake
 int baseSnake = 6;
-float ecoTrail = 0.17f;
+float ecoTrail = 0.05f;
 float plantTrail = 0.3;
 float moveInterval = 0.7;
 //plants
-float plantsInterval = 1.0;
+float plantsInterval = 5.0;
 
 //Form IDs
 #define DIRT 0
@@ -39,3 +39,9 @@ float plantsInterval = 1.0;
 #define CYCLE 9
 #define STAGE 10 
 #define LIFETIME 11
+
+//sprite layering
+#define SNAKELAYER 3
+#define FLOWERLAYER 2
+#define GRASSLAYER 1
+#define DIRTLAYER 0

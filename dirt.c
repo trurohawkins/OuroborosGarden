@@ -25,8 +25,10 @@ float checkSpread(int x, int y, float amnt) {
 	Form *f = checkStat(x, y, ECO);
 	if (f) {
 		float *check = getStat(f, ECO);
-		if (check && *check < maxEco) {
-			amnt = changeEco(f, amnt);
+		if (check) {
+			if ((amnt > 0 && *check < maxEco) || (amnt < 0 && *check > 0)) {
+				amnt = changeEco(f, amnt);
+			}
 		}
 	}
 	return amnt;
@@ -36,64 +38,55 @@ void addEco(int x, int y, float amnt) {
 	if (equal(amnt, 0)) {
 		return;
 	}
+
 	World *w = getWorld(); 
-	float extra = 0;
-	if (x >= 0 && y >= 0 && x < w->x && y < w->y) {
-		float queue[w->x * w->y * 2];
-		// if worldx and world y bigger than 100, use dynamic allocation
-		bool visited[w->x][w->y];
-		memset(visited, 0, sizeof(visited));
-		//add x y 
-		queue[0] = x;
-		queue[1] = y;
-		visited[x][y] = true;
-		//font 0 back 0
-		int front = 0;
-		int back = 2;
-		while (front < back) {
-			int cur[2] = {queue[front], queue[front+1]};
-			amnt = checkSpread(cur[0], cur[1], amnt); 
-			amnt -= spreadDither;
+	int maxAddForms = 8;
+	Form *buff[maxAddForms];
+	dfsDirt(x, y, maxAddForms, buff);
+	float pulled = 0;
+	for (int i = 0; i < maxAddForms; i++) {
+		if (buff[i]) {
+			float *eco = getStat(buff[i], ECO);
+			amnt = changeEco(buff[i], amnt);
 			if (equal(0, amnt) || amnt < 0) {
 				break;
 			}
-			front += 2;
-			int index = randomInt(8);
-			int dir = coinFlip(-1, 1);
-			for (int i = 0; i < 8; i++) {
-				int *d = getDir8(index);
-				int nx = cur[0] + d[0];
-				int ny = cur[1] + d[1];
-				if (nx > -1 && nx < w->x && ny > -1 && ny < w->y) {
-					if (!visited[nx][ny]) { 
-						queue[back++] = nx;
-						queue[back++] = ny;
-						visited[nx][ny] = true;
-					}
-				}
-				if (dir > 0) {
-					index = (index+1) % 8;
-				} else {
-					if (index > 0) {
-						index--;
-					} else {
-						index = 7;
-					}
-				}
+		}
+	}
+}
+float pullEco(int x, int y, float amnt) {
+	if (equal(amnt, 0)) {
+		return 0;
+	}
+	int maxPullForms = 32;
+	Form *buff[maxPullForms];
+	dfsDirt(x, y, maxPullForms, buff);
+	float pulled = 0;
+	for (int i = 0; i < maxPullForms; i++) {
+		if (!drawing) {printf("buff form %p\n", buff[i]);}
+		if (buff[i]) {
+			float *eco = getStat(buff[i], ECO);
+			if (!drawing) {printf("pulling from %f with eco %f\n", buff[i], *eco);}
+			pulled += changeEco(buff[i], -amnt);
+			if (!drawing) {printf("now eco is %f\n", *eco);}
+			if (pulled >= amnt) {
+				break;
 			}
 		}
 	}
-	return;
+	return pulled;
 }
-
 
 float changeEco(Form *f, float amnt) {
 	float *eco = getStat(f, ECO);
-	float diff = 0;
+	float diff = fabs(amnt);
 	if (eco) {
 		if (*eco + amnt > maxEco) {
 			diff = (*eco + amnt) - maxEco;
 			*eco = 1;
+		} else if (*eco + amnt < 0) {
+			diff = *eco;
+			*eco = 0;
 		} else {
 			*eco = clampF(*eco + amnt, 0, maxEco);
 		}
@@ -153,6 +146,7 @@ void *renderDirt(void *data) {
 		.r = lerp(dirtA[0], dirtB[0], eco),
 		.g = lerp(dirtA[1], dirtB[1], eco),
 		.b = lerp(dirtA[2], dirtB[2], eco),
+		.layer = DIRTLAYER,
 	};
 	addRenderCommand(reco);
 	return NULL;//commands;
@@ -172,3 +166,57 @@ Form *checkSoil(int x, int y) {
 	return 0;
 }
 
+void dfsDirt(int x, int y, int max, Form **buff) {
+	World *w = getWorld();
+	int count = 0;
+	if (x >= 0 && y >= 0 && x < w->x && y < w->y) {
+		float queue[w->x * w->y * 2];
+		// if worldx and world y bigger than 100, use dynamic allocation
+		bool visited[w->x][w->y];
+		memset(visited, 0, sizeof(visited));
+		//add x y 
+		queue[0] = x;
+		queue[1] = y;
+		visited[x][y] = true;
+		//font 0 back 0
+		int front = 0;
+		int back = 2;
+		while (front < back) {
+			int cur[2] = {queue[front], queue[front+1]};
+			Form *f = checkStat(cur[0], cur[1], ECO);
+			if (f && f->id == DIRT) {
+				buff[count] = f;
+				if (!drawing) {printf("got form %p\n", f);}
+				if (count + 1 < max) {
+					count++;
+				} else {
+					return;
+				}
+			}
+			front += 2;
+			int index = randomInt(8);
+			int dir = coinFlip(-1, 1);
+			for (int i = 0; i < 8; i++) {
+				int *d = getDir8(index);
+				int nx = cur[0] + d[0];
+				int ny = cur[1] + d[1];
+				if (nx > -1 && nx < w->x && ny > -1 && ny < w->y) {
+					if (!visited[nx][ny]) { 
+						queue[back++] = nx;
+						queue[back++] = ny;
+						visited[nx][ny] = true;
+					}
+				}
+				if (dir > 0) {
+					index = (index+1) % 8;
+				} else {
+					if (index > 0) {
+						index--;
+					} else {
+						index = 7;
+					}
+				}
+			}
+		}
+	}
+}

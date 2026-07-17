@@ -12,7 +12,7 @@ typedef struct Snake {
 	Form *self;
 	int dir;
 	int newDir;
-
+	int stamp;
 	int staggered;
 } Snake;
 
@@ -36,6 +36,5 @@ void snakeRight(void *s, float val);
 
 
 void freeSnake(void *s);
-void incPos(int *px, int *py, int dx, int dy);
 void *renderSnake(void *data);
 

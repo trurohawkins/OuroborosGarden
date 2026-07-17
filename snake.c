@@ -36,6 +36,8 @@ Snake *makeSnake(int xPos, int yPos) {
 	RenderObject *rob = ren->data;
 	rob->data = s;
 	rob->render = renderSnake;
+
+	s->stamp = createStamp("@");
 	/*
 		 Sigil *skin = createSigil(s->self)->data;
 		 skin->symbol = '@';
@@ -245,30 +247,16 @@ void freeSnake(void *s) {
 	free(snake);
 }
 
-void incPos(int *px, int *py, int dx, int dy) {
-	World *w = &theWorld;//getWorld();
-	if ((*px + dx) < 0) {
-		*px = w->x + (*px + dx);
-	} else {
-		*px = (*px + dx) % w->x;
-	}
-
-	if ((*py + dy) < 0) {
-		*py = w->y + (*py + dy);
-	} else {
-		*py = (*py + dy) % w->y;
-	}
-}
-
 void *renderSnake(void *data) {
 	Snake *s = data;
 	linkedList *commands = 0;
 	linkedList *body = s->body;
 	RenderCommand reco = {
-		.sigil = '@',
+		.sigil = s->stamp,
 		.r = 255,
 		.g = 255,
 		.b = 255,
+		.layer = SNAKELAYER,
 	};
 	while (body) {
 		SnakeBody *sb = body->data;

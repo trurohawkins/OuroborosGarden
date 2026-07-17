@@ -3,9 +3,22 @@
 #include "flower.h"
 
 int plantStats = 11;
+int grassStamps[4];
+int flowerStamps[8];
 
 void initPlants() {
 	addTimedEvent(plantsAction, 0, plantsInterval);
+	grassStamps[0] = createStamp("#");//("\u2261");
+	grassStamps[1] = createStamp("\u2591");
+	grassStamps[2] = -1;//createStamp("\u2593");
+	grassStamps[3] = -1;
+	flowerStamps[0] = createStamp("o");
+	flowerStamps[1] = createStamp("0");
+	flowerStamps[2] = createStamp("$");
+	flowerStamps[3] = createStamp("!");
+	flowerStamps[4] = createStamp("L");
+	flowerStamps[5] = createStamp("$");
+	flowerStamps[6] = createStamp("$");
 }
 
 void plantsAction(void *) {
@@ -70,6 +83,7 @@ bool lifeCycle(Form *plant) {
 		float stage = *getStat(plant, STAGE);
 		//if they lose too much they die
 		//if (stage < lifeTime && *eco - loss >= 0) {
+		if (!drawing) {printf("    starting eco %f\n", *eco);}
 		if (*eco - loss >= 0) {
 			if (!drawing) {printf("   eco loss %f\n", loss);}
 			*eco -= loss;
@@ -87,38 +101,31 @@ bool lifeCycle(Form *plant) {
 		}
 		float pull = *getStat(plant, PULL);
 		float *growth = getStat(plant, GROWTH);
+		if (!drawing) {printf("     pull: %f\n", pull);}
 		//pulling eco from the surrounding ground
 		if (*eco < *growth) {
 			pull = min(pull, *growth - *eco);
-			float gather = 0;
-			for (int j = 0; j < 9; j++) {
-				if (ground[j]) {
-					float *dirtEco = getStat(ground[j], ECO);
-					if (dirtEco) {
-						if (*dirtEco > pull) {
-							gather = pull;
-							changeEco(ground[j], -pull);
-						} else {
-							gather += *dirtEco;
-							changeEco(ground[j], -(*dirtEco));
-						}
-						if (gather >= pull) {
-							break;
-						}
-					}
-				}
-			}
+			float gather = pullEco(x, y, pull);
 			if (gather > 0) {
 				if (!drawing) {printf("   eco gather %f\n", gather);}
 				*eco += gather;
 			}
-		}	
+		}	else {
+			if (!drawing) {printf("    no eco gathered %f < %f\n", *eco, *growth);}
+		}
 		if (!drawing) {printf("     final eco: %f\n", *eco);}
 		// if they gather enough eco they grow
 		// if they are old enough
-		if (*eco >= *growth && *life >= *getStat(plant, CYCLE)) {
+		float cycle = *getStat(plant, CYCLE);
+		if (!drawing) {printf("    growth: %f. life: %f >= cycle %f\n", *growth, *life, cycle);}
+		if (*eco >= *growth && *life >= cycle) {
 			if (grow(plant)) {
 				*life = 0;
+			} else {
+				return false;
+			}
+			if (*getStat(plant, STAGE) > *getStat(plant, LIFETIME)) {
+				return false;
 			}
 		}
 
@@ -129,9 +136,9 @@ bool lifeCycle(Form *plant) {
 
 bool grow(Form *plant) {
 	if (plant->id == GRASS) {
-		growGrass(plant);
+		return growGrass(plant);
 	} else if (plant->id == FLOWER) {
-		growFlower(plant);
+		return growFlower(plant);
 	}
 }
 

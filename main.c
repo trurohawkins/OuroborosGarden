@@ -6,6 +6,7 @@
 linkedList *snakeList;
 bool drawing = true;
 #include "constants.h"
+#include "help.c"
 #include "dirt.c"
 #include "plant.c"
 #include "snake.c"
@@ -19,7 +20,10 @@ void pressPause(void *, float val) {
 	}
 }
 
-int main() {
+int main(int argc, char **argv) {
+	if (argc > 1) {
+		drawing = false;
+	}
 	startWorld(drawing, true);
 	Player *god = makePlayer(0, 0, 0);
 	addPlayer(god);
@@ -39,8 +43,8 @@ int main() {
 		}
 	}
 
-	//placeGrass(10, 30);
-	placeFlower(45, 20);
+	placeGrass(5, 30);
+	//placeFlower(45, 20);
 
 	initPlants();
 

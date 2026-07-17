@@ -15,7 +15,6 @@ Form *makeGrass() {
 	RenderObject *rob = ren->data;
 	rob->data = grass;
 	rob->render = renderGrass;
-
 	return grass;
 }
 
@@ -48,11 +47,11 @@ bool growGrass(Form *g) {
 			 TileSet *ts = getTile((int)(*tile));
 			 editData(ts->color, (int)g->pos[0], (int)g->pos[1], 1, 1);
 			 */
-		setStat(g, GROWTH, 1);
+		setStat(g, GROWTH, 0.8);
 		setStat(g, BEAT, 1);
 		setStat(g, CYCLE, 15);
 		//setStat(g, LOSS, 0.001);
-		setStat(g, LOSS, 0.01);
+		setStat(g, LOSS, 0.05);
 		setStat(g, ROOTS, 0.25);
 		setStat(g, COVER, evaporation/5);
 		calcFlow(g->pos[0], g->pos[1]);
@@ -70,14 +69,20 @@ bool growGrass(Form *g) {
 	} else if (*stage == 3) {
 		spreadGrass(g->pos[0], g->pos[1]);
 		setStat(g, CYCLE, 35);
-	} 
+	} else {
+		spreadGrass(g->pos[0], g->pos[1]);
+		addEco(g->pos[0], g->pos[1], *getStat(g, ECO));
+	}
 	return true;
 }
 
 void spreadGrass(int x, int y) {
 	for (int i = 0; i < 8; i++) {
+		int xp = x; 
+		int yp = y;
 		int *d = getDir8(i);
-		placeGrass(x + d[0], y + d[1]);
+		incPos(&xp, &yp, d[0], d[1]);
+		placeGrass(xp, yp);
 	}
 }
 
@@ -127,13 +132,16 @@ void *renderGrass(void *data) {
 		.r = lerp(grassA[0], grassB[0], eco),
 		.g = lerp(grassA[1], grassB[1], eco),
 		.b = lerp(grassA[2], grassB[2], eco),
+		.layer = GRASSLAYER,
 	};
 	if (stage == 1) {
-		reco.sigil = '+';
+		reco.sigil = grassStamps[0];
 	} else if (stage == 2) {
-		reco.sigil = '#';
+		reco.sigil = grassStamps[1];
+	} else if (stage == 3) {
+		reco.sigil = grassStamps[2];
 	} else {
-		reco.sigil = -1;
+		reco.sigil = grassStamps[3];
 	}
 	addRenderCommand(reco);
 
