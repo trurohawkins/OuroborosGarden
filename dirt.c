@@ -6,6 +6,8 @@ float intake[2] = {0.01, 0.1};
 float output[2] = {0.05, 0.1};
 
 int dirtStats = 2;
+#define MAXADDFORMS 8
+#define MAXPULLFORMS 32
 
 Form *makeDirt() {
 	Form *dirt = makeForm(DIRT);
@@ -40,11 +42,10 @@ void addEco(int x, int y, float amnt) {
 	}
 
 	World *w = getWorld(); 
-	int maxAddForms = 8;
-	Form *buff[maxAddForms];
-	dfsDirt(x, y, maxAddForms, buff);
+	Form *buff[MAXADDFORMS] = {0};
+	dfsDirt(x, y, MAXADDFORMS, buff);
 	float pulled = 0;
-	for (int i = 0; i < maxAddForms; i++) {
+	for (int i = 0; i < MAXADDFORMS; i++) {
 		if (buff[i]) {
 			float *eco = getStat(buff[i], ECO);
 			amnt = changeEco(buff[i], amnt);
@@ -58,11 +59,10 @@ float pullEco(int x, int y, float amnt) {
 	if (equal(amnt, 0)) {
 		return 0;
 	}
-	int maxPullForms = 32;
-	Form *buff[maxPullForms];
-	dfsDirt(x, y, maxPullForms, buff);
+	Form *buff[MAXPULLFORMS];
+	dfsDirt(x, y, MAXPULLFORMS, buff);
 	float pulled = 0;
-	for (int i = 0; i < maxPullForms; i++) {
+	for (int i = 0; i < MAXPULLFORMS; i++) {
 		if (!drawing) {printf("buff form %p\n", buff[i]);}
 		if (buff[i]) {
 			float *eco = getStat(buff[i], ECO);

@@ -42,8 +42,7 @@ int main(int argc, char **argv) {
 			}
 		}
 	}
-
-	placeGrass(5, 30);
+	//placeGrass(5, 30);
 	//placeFlower(45, 20);
 
 	initPlants();
