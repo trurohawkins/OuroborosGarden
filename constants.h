@@ -15,7 +15,7 @@ float ecoTrail = 0.05f;
 float plantTrail = 0.3;
 float moveInterval = 0.7;
 //plants
-float plantsInterval = 5.0;
+float plantsInterval = 1.0;
 
 //Form IDs
 #define DIRT 0
@@ -34,14 +34,14 @@ float plantsInterval = 5.0;
 #define LOSS 4
 #define ROOTS 5
 #define COVER 6
-#define LIFE 7
-#define BEAT 8
-#define CYCLE 9
-#define STAGE 10 
-#define LIFETIME 11
 
 //sprite layering
 #define SNAKELAYER 3
 #define FLOWERLAYER 2
 #define GRASSLAYER 1
 #define DIRTLAYER 0
+
+//NUBS
+#define STATNUB 3
+#define PLANTNUB 4
+

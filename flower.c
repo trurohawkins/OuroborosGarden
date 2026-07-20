@@ -5,12 +5,14 @@ float fullFower = 3;
 
 Form *makeFlower() {
 	Form *f = makePlant();
-	f->id = 4;
-	setStat(f, GROWTH, 0.5);
+	f->id = FLOWER;
+	setStat(f, GROWTH, 1);
 	setStat(f, PULL, 0.2);
-	setStat(f, BEAT, 2);
-	setStat(f, CYCLE, 2);
-	setStat(f, LIFETIME, 4);
+	Nub *plant = findNub(f, PLANTNUB);
+	Plant *data = plant->data;
+	data->beat = 2;
+	data->cycle = 10;
+	data->lifeTime = 4;
 	return f;
 }
 
@@ -27,8 +29,12 @@ bool placeFlower(int x, int y) {
 }
 
 bool growFlower(Form *f) {
-	float *stage = getStat(f, STAGE);
-	if (*stage == 0) {
+	Nub *plantNub = findNub(f, PLANTNUB);
+	if (!plantNub) {
+		return false;
+	}
+	Plant *data = plantNub->data;
+	if (data->stage == 0) {
 		int x = f->pos[0];
 		int y = f->pos[1];
 		Form *dirt = checkSoil(x, y);
@@ -44,36 +50,36 @@ bool growFlower(Form *f) {
 		if (randPercent() < 0.95) {
 			//return false;
 		}
-	}	
-	(*stage)++;
-	if (*stage == 1) {
+	}
+	data->stage++;
+	if (data->stage == 1) {
 		Nub *ren = growRenderNub(f);
 		RenderObject *rob = ren->data;
 		rob->data = f;
 		rob->render = renderFlower;
+		data->cycle = 20;
 		setStat(f, GROWTH, 1);
 		setStat(f, PULL, 0.5);
 		setStat(f, LOSS, 0.1);
 		//setStat(f, BEAT, 30);
-		setStat(f, CYCLE, 3);
 		setStat(f, ROOTS, 0.5);
 		calcFlow(f->pos[0], f->pos[1]);
-	} else if (*stage < 5) {
+	} else if (data->stage < 5) {
 		//Anim *anim = ((Anim**)f->anim)[0];
 		//changeSprite(anim, *stage - 1);
-		if (*stage == 2) {
+		if (data->stage == 2) {
 			setStat(f, ROOTS, 1);
 			calcFlow(f->pos[0], f->pos[1]);
 			setStat(f, COVER, 0.005);
 			setStat(f, LOSS, 0.05);
-		} else if (*stage == 3) {
+		} else if (data->stage == 3) {
 			//changeBio(f->pos[0], f->pos[1], -0.5);
+			data->cycle = 9;
 			setStat(f, COVER, 0.01);
-			setStat(f, CYCLE, 9);
-		} else if (*stage == 4) {
+		} else if (data->stage == 4) {
+			data->cycle = 25;
 			setStat(f, ROOTS, 0);
 			calcFlow(f->pos[0], f->pos[1]);
-			setStat(f, CYCLE, 12);
 			//setStat(f, LOSS, 0);
 			setStat(f, LOSS, 0.01);
 			spreadFlower(f->pos[0], f->pos[1]);
@@ -88,7 +94,11 @@ bool growFlower(Form *f) {
 void *renderFlower(void *data) {
 	Form *flower = data;
 
-	float *stage = getStat(flower, STAGE);
+	Nub *plantNub = findNub(flower, PLANTNUB);
+	Plant *plant = plantNub->data;
+	if (!plant) {
+		return NULL;
+	}
 	RenderCommand reco = {
 		.screenPos[0] = worldXToScreenX(flower->pos[0]),
 		.screenPos[1] = worldYToScreenY(flower->pos[1]),
@@ -97,17 +107,17 @@ void *renderFlower(void *data) {
 		.b = 255,
 		.layer = FLOWERLAYER,
 	};
-	if (*stage == 1) {
+	if (plant->stage == 1) {
 		reco.sigil = flowerStamps[0];
-	} else if (*stage == 2) {
+	} else if (plant->stage == 2) {
 		reco.sigil = flowerStamps[1];
-	} else if (*stage == 3) {
+	} else if (plant->stage == 3) {
 		reco.sigil = flowerStamps[2];
-	} else if (*stage == 4) {
+	} else if (plant->stage == 4) {
 		reco.sigil = flowerStamps[3];
-	} else if (*stage == 5) {
+	} else if (plant->stage == 5) {
 		reco.sigil = flowerStamps[4];
-	} else if (*stage == 6) {
+	} else if (plant->stage == 6) {
 		reco.sigil = flowerStamps[5];
 	} else {
 		reco.sigil = flowerStamps[6];

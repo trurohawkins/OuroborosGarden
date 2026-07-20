@@ -2,7 +2,6 @@
 #include "FormEngine.h"
 
 #define EMPTY -42069
-#define NUB 3
 
 typedef struct {
 	int id;

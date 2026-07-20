@@ -7,7 +7,7 @@ Stat empty = {
 
 Nub *initStats(Form *f, int numStats) {
 	Nub *stat = growNub(f);
-	stat->type = NUB;
+	stat->type = STATNUB;
 	stat->owned = true;
 	Stat *stats = calloc(numStats + 1, sizeof(Stat));
 	stats[0].id = numStats + 1;
@@ -19,7 +19,7 @@ Nub *initStats(Form *f, int numStats) {
 }
 
 bool addStat(Form *f, int id, float value) {
-	Nub *stat = findNub(f, NUB);
+	Nub *stat = findNub(f, STATNUB);
 	if (stat) {
 		Stat *stats = stat->data;
 		for (int i = 1; i < stats[0].id; i++) {
@@ -34,7 +34,7 @@ bool addStat(Form *f, int id, float value) {
 }
 
 float *getStat(Form *f, int id) {
-	Nub *stat = findNub(f, NUB);
+	Nub *stat = findNub(f, STATNUB);
 	if (stat) {
 		Stat *stats = stat->data;
 		for (int i = 1; i < stats[0].id; i++) {

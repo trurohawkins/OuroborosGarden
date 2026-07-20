@@ -7,14 +7,12 @@ Form *makeGrass() {
 	grass->id = GRASS;
 	setStat(grass, GROWTH, 0.1);
 	setStat(grass, PULL, 0.1);
-	setStat(grass, BEAT, 5);
-	setStat(grass, CYCLE, 5);
-	setStat(grass, LIFETIME, 4);
+	Nub *plantNub = findNub(grass, PLANTNUB);
+	Plant *data = plantNub->data;
+	data->beat = 1;
+	data->cycle = 5;
+	data->lifeTime = 4;
 
-	Nub *ren = growRenderNub(grass);
-	RenderObject *rob = ren->data;
-	rob->data = grass;
-	rob->render = renderGrass;
 	return grass;
 }
 
@@ -36,39 +34,40 @@ void placeGrass(int x, int y) {
 
 
 bool growGrass(Form *g) {
-	if (!drawing) {
-		printf("grwoing grass %p\n" , g);
+	Nub *plantNub = findNub(g, PLANTNUB);
+	if (!plantNub) {
+		return false;
 	}
-	float *stage = getStat(g, STAGE);
-	(*stage)++;
-	if (*stage == 1) {
-		/*
-			 float *tile = getStat(g, "tile");
-			 TileSet *ts = getTile((int)(*tile));
-			 editData(ts->color, (int)g->pos[0], (int)g->pos[1], 1, 1);
-			 */
+	Plant *data = plantNub->data;
+	data->stage++;
+	if (!drawing) {printf("grwoing grass %p stage %i\n" , g, data->stage);}
+	if (data->stage == 1) {
+		data->cycle = 15;
+		Nub *ren = growRenderNub(g);
+		RenderObject *rob = ren->data;
+		rob->data = g;
+		rob->render = renderGrass;
 		setStat(g, GROWTH, 0.8);
-		setStat(g, BEAT, 1);
-		setStat(g, CYCLE, 15);
 		//setStat(g, LOSS, 0.001);
 		setStat(g, LOSS, 0.05);
 		setStat(g, ROOTS, 0.25);
 		setStat(g, COVER, evaporation/5);
 		calcFlow(g->pos[0], g->pos[1]);
-	} else if (*stage == 2) {
+	} else if (data->stage == 2) {
 		//changeBio(g->pos[0], g->pos[1], 0.25);
+		//setStat(g, CYCLE, 25);
+		data->cycle = 25;
 		setStat(g, ROOTS, 0.75);
 		calcFlow(g->pos[0], g->pos[1]);
-		setStat(g, CYCLE, 25);
 		setStat(g, GROWTH, 0.6);
 		setStat(g, COVER, evaporation/3);
 		/*
 			 g->id = 3;
 			 setStat(g, "tile", 3);
 			 */
-	} else if (*stage == 3) {
+	} else if (data->stage == 3) {
+		data->cycle = 35;
 		spreadGrass(g->pos[0], g->pos[1]);
-		setStat(g, CYCLE, 35);
 	} else {
 		spreadGrass(g->pos[0], g->pos[1]);
 		addEco(g->pos[0], g->pos[1], *getStat(g, ECO));
@@ -105,9 +104,6 @@ void grassColor(Form *g) {
 Form *checkGrass(int x, int y) {
 	Cell *c = getCell(x, y);
 	if (c) {
-		if (!drawing) {
-			printf("checking grass at %i, %i\n", x, y);
-		}
 		for (int i = 0; i < FORMS_PER_CELL; i++) {
 			if (c->within[i]) {
 				if (c->within[i]->id == GRASS) {
@@ -121,8 +117,9 @@ Form *checkGrass(int x, int y) {
 
 void *renderGrass(void *data) {
 	Form *grass = data;
-	float stage = *getStat(grass, STAGE);
-	if (stage == 0) {
+	Nub *plantNub = findNub(grass, PLANTNUB);
+	Plant *plant = plantNub->data;
+	if (!plant) {
 		return NULL;
 	}
 	float eco = *getStat(grass, ECO);
@@ -134,11 +131,11 @@ void *renderGrass(void *data) {
 		.b = lerp(grassA[2], grassB[2], eco),
 		.layer = GRASSLAYER,
 	};
-	if (stage == 1) {
+	if (plant->stage == 1) {
 		reco.sigil = grassStamps[0];
-	} else if (stage == 2) {
+	} else if (plant->stage == 2) {
 		reco.sigil = grassStamps[1];
-	} else if (stage == 3) {
+	} else if (plant->stage == 3) {
 		reco.sigil = grassStamps[2];
 	} else {
 		reco.sigil = grassStamps[3];

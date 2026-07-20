@@ -148,8 +148,8 @@ bool snakeCheck(Snake *s) {
 		if (c->within[i]) {
 			Form *f = c->within[i];
 			if (f->id == FLOWER) {
-				float flowerGrowth = *getStat(f, STAGE);
-				if (flowerGrowth >= 5) {
+				Plant *p = getPlant(f);
+				if (p->stage >= 2) {
 					fruit = f;
 				}
 			}

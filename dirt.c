@@ -7,7 +7,7 @@ float output[2] = {0.05, 0.1};
 
 int dirtStats = 2;
 #define MAXADDFORMS 8
-#define MAXPULLFORMS 32
+#define MAXPULLFORMS 8
 
 Form *makeDirt() {
 	Form *dirt = makeForm(DIRT);
@@ -186,7 +186,6 @@ void dfsDirt(int x, int y, int max, Form **buff) {
 			Form *f = checkStat(cur[0], cur[1], ECO);
 			if (f && f->id == DIRT) {
 				buff[count] = f;
-				if (!drawing) {printf("got form %p\n", f);}
 				if (count + 1 < max) {
 					count++;
 				} else {

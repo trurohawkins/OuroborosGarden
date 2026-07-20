@@ -1,11 +1,11 @@
 #include <FormEngine.h>
 #include <TUI.h>
 #include <AudioMan.h>
-#include "stat.c"
 
 linkedList *snakeList;
 bool drawing = true;
 #include "constants.h"
+#include "stat.c"
 #include "help.c"
 #include "dirt.c"
 #include "plant.c"
@@ -42,8 +42,6 @@ int main(int argc, char **argv) {
 			}
 		}
 	}
-	//placeGrass(5, 30);
-	//placeFlower(45, 20);
 
 	initPlants();
 

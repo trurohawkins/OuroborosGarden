@@ -30,7 +30,7 @@ void plantsAction(void *) {
 			for (int i = 0; i < FORMS_PER_CELL; i++) {
 				if (c->within[i]) {
 					Form *plant = c->within[i];
-					if (getStat(plant, GROWTH)) {// && plant->id != 2 && plant->id != 3) {
+					if (findNub(plant, PLANTNUB)) {// && plant->id != 2 && plant->id != 3) {
 						if (!lifeCycle(plant)) {
 							//addToList(&dead, plant);
 							plantDie(plant);
@@ -45,6 +45,10 @@ void plantsAction(void *) {
 
 Form *makePlant() {
 	Form *plant = makeForm(PLANT);//0.2, 0.7, 0.5, 1, 1);
+	Nub *plantNub = growNub(plant);
+	plantNub->type = PLANTNUB;
+	plantNub->owned = true;
+	plantNub->data = calloc(1, sizeof(Plant));
 	initStats(plant, plantStats);
 	addStat(plant, ECO, 0);
 	addStat(plant, GROWTH, 0);
@@ -54,36 +58,34 @@ Form *makePlant() {
 	addStat(plant, ROOTS, 0);
 	// affects evaporation in dirt
 	addStat(plant, COVER, 0);
-
-	addStat(plant, LIFE, 0);
-	addStat(plant, BEAT, 0);
-
-	// at what interval in its lifeTime it grows
-	addStat(plant, CYCLE, 0);
-	addStat(plant, STAGE, 0);
-	//lifeTime, number of stages before it dies
-	addStat(plant, LIFETIME, 1);
-
 	return plant;
 }
 
-bool lifeCycle(Form *plant) {
-	if (!plant) {
-		return false;
+Plant *getPlant(Form *p) {
+	if (!p) {
+		return 0;
 	}
-	float *life = getStat(plant, LIFE);
-	float beat = *getStat(plant, BEAT);
-	(*life)++;
-	if ((int)*life % (int)beat == 0) {
-		if (!drawing) {printf("plant beat %p\n", plant);}
+	Nub *plantNub = findNub(p, PLANTNUB);
+	if (!plantNub) {
+		return 0;
+	}
+	return plantNub->data;
+}
+
+bool lifeCycle(Form *plant) {
+	Plant *data = getPlant(plant);
+	if (!data) {
+		return true;
+	}
+	data->life++;
+	if (data->life % data->beat == 0) {
 		// plant loses some eco
 		float *eco = getStat(plant, ECO);
+		if (!drawing) {printf("plant beat %p\n", plant);}
+		if (!drawing) {printf("    starting eco %f\n", *eco);}
 		float loss = *getStat(plant, LOSS); 
-		float lifeTime = *getStat(plant, LIFETIME);
-		float stage = *getStat(plant, STAGE);
 		//if they lose too much they die
 		//if (stage < lifeTime && *eco - loss >= 0) {
-		if (!drawing) {printf("    starting eco %f\n", *eco);}
 		if (*eco - loss >= 0) {
 			if (!drawing) {printf("   eco loss %f\n", loss);}
 			*eco -= loss;
@@ -92,13 +94,6 @@ bool lifeCycle(Form *plant) {
 		}
 		int x = plant->pos[0];
 		int y = plant->pos[1];
-		//gathering references to soil around plant
-		Form *ground[9];
-		ground[0] = checkSoil(x, y);
-		for (int j = 0; j < 8; j++) {
-			int *dir = getDir8(j);
-			ground[j+1] = checkSoil(x + dir[0], y + dir[1]);
-		}
 		float pull = *getStat(plant, PULL);
 		float *growth = getStat(plant, GROWTH);
 		if (!drawing) {printf("     pull: %f\n", pull);}
@@ -116,15 +111,14 @@ bool lifeCycle(Form *plant) {
 		if (!drawing) {printf("     final eco: %f\n", *eco);}
 		// if they gather enough eco they grow
 		// if they are old enough
-		float cycle = *getStat(plant, CYCLE);
-		if (!drawing) {printf("    growth: %f. life: %f >= cycle %f\n", *growth, *life, cycle);}
-		if (*eco >= *growth && *life >= cycle) {
+		if (!drawing) {printf("    growth: %f. life: %d >= cycle %d\n", *growth, data->life, data->cycle);}
+		if (*eco >= *growth && data->life >= data->cycle) {
 			if (grow(plant)) {
-				*life = 0;
+				data->life = 0;
 			} else {
 				return false;
 			}
-			if (*getStat(plant, STAGE) > *getStat(plant, LIFETIME)) {
+			if  (data->stage > data->lifeTime) {
 				return false;
 			}
 		}
