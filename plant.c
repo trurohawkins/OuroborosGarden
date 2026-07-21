@@ -8,9 +8,11 @@ int flowerStamps[8];
 
 void initPlants() {
 	addTimedEvent(plantsAction, 0, plantsInterval);
-	grassStamps[0] = createStamp("#");//("\u2261");
-	grassStamps[1] = createStamp("\u2591");
-	grassStamps[2] = -1;//createStamp("\u2593");
+	addTimedEvent(dirtFlow, 0, spreadInterval);
+	addTimedEvent(ecoEvaporation, 0, evapInterval);
+	grassStamps[0] = createStamp("\u2591");//("\u2261");
+	grassStamps[1] = createStamp("\u2592");
+	grassStamps[2] = createStamp("\u2593");
 	grassStamps[3] = -1;
 	flowerStamps[0] = createStamp("o");
 	flowerStamps[1] = createStamp("0");

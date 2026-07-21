@@ -11,25 +11,26 @@ Form *makeGrass() {
 	Plant *data = plantNub->data;
 	data->beat = 1;
 	data->cycle = 5;
-	data->lifeTime = 4;
+	data->lifeTime = 5;
 
 	return grass;
 }
 
-void placeGrass(int x, int y) {
-	if (checkGrass(x, y)) {
-		return;
+bool placeGrass(int x, int y) {
+	if (!checkGrass(x, y)) {
+		Form *dirt = checkSoil(x, y);
+		if (dirt) {// && *getStat(dirt, ECO) > 0.75f) {
+			Form *grass = makeGrass();
+			placeForm(grass, x, y);
+			/*
+				 TileSet *ts = getTile(2);
+				 editData(ts->color, (int)grass->pos[0], (int)grass->pos[1], 0, 1);
+				 addToList(&grassList, grass);// makePos(x, y));
+				 */
+			return true;
+		}
 	}
-	Form *dirt = checkSoil(x, y);
-	if (dirt) {// && *getStat(dirt, ECO) > 0.75f) {
-		Form *grass = makeGrass();
-		placeForm(grass, x, y);
-		/*
-			 TileSet *ts = getTile(2);
-			 editData(ts->color, (int)grass->pos[0], (int)grass->pos[1], 0, 1);
-			 addToList(&grassList, grass);// makePos(x, y));
-			 */
-	}
+	return false;
 }
 
 
@@ -49,7 +50,7 @@ bool growGrass(Form *g) {
 		rob->render = renderGrass;
 		setStat(g, GROWTH, 0.8);
 		//setStat(g, LOSS, 0.001);
-		setStat(g, LOSS, 0.05);
+		setStat(g, LOSS, 0.02);
 		setStat(g, ROOTS, 0.25);
 		setStat(g, COVER, evaporation/5);
 		calcFlow(g->pos[0], g->pos[1]);
@@ -67,21 +68,31 @@ bool growGrass(Form *g) {
 			 */
 	} else if (data->stage == 3) {
 		data->cycle = 35;
-		spreadGrass(g->pos[0], g->pos[1]);
+		spreadGrass(g);
 	} else {
-		spreadGrass(g->pos[0], g->pos[1]);
+		spreadGrass(g);
 		addEco(g->pos[0], g->pos[1], *getStat(g, ECO));
 	}
 	return true;
 }
 
-void spreadGrass(int x, int y) {
-	for (int i = 0; i < 8; i++) {
-		int xp = x; 
-		int yp = y;
-		int *d = getDir8(i);
-		incPos(&xp, &yp, d[0], d[1]);
-		placeGrass(xp, yp);
+float grassCost = 0.12f;
+void spreadGrass(Form *g) {
+	float *eco = getStat(g, ECO);
+	int spawn = *eco / grassCost;
+	for (int i = 0; i < 16; i++) {
+		int point = randomInt(8);
+		int p[2] = {g->pos[0], g->pos[1]}; 
+		int *d = getDir8(point);
+		incPos(p, p+1, d[0], d[1]);
+		if (placeGrass(p[0], p[1])) {
+			*eco -= grassCost;
+			if (spawn > 0) {
+				spawn--;
+			} else {
+				break;
+			}
+		}
 	}
 }
 

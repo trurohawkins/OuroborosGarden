@@ -37,7 +37,7 @@ int main(int argc, char **argv) {
 	for (int x = 0; x < w->x; x++) {
 		for (int y = 0; y < w->y; y++) {
 			placeForm(makeDirt(), x, y);
-			if (randPercent() > 0.95f) {
+			if (randPercent() > 0.98f) {
 				placeFlower(x, y);
 			}
 		}
@@ -46,6 +46,15 @@ int main(int argc, char **argv) {
 	initPlants();
 
 	Snake *snake0 = makeSnake(worldX/2, worldY/2);
+	for (int x = 0; x < 5; x++) {
+		for (int y = 0; y < 5; y++) {
+			//addEco(0 + x, 35 + y, 1);
+		}
+	}
+	for (int i = 0; i < 8; i++) {
+		//placeGrass(randomInt(worldX), randomInt(worldY));
+	}
+	//placeFlower(40, 30);
 
 	runWorld();
 

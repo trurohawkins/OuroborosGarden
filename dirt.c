@@ -12,7 +12,7 @@ int dirtStats = 2;
 Form *makeDirt() {
 	Form *dirt = makeForm(DIRT);
 	initStats(dirt, dirtStats);
-	addStat(dirt, ECO, 0);
+	addStat(dirt, ECO, 0);//randPercent());
 	addStat(dirt, OUTPUT, 1);
 	//Sigil *skin = createSigil(dirt)->data;
 	Nub *ren = growRenderNub(dirt);
@@ -21,6 +21,109 @@ Form *makeDirt() {
 	rob->render = renderDirt;
 	//dirtColor(dirt);
 	return dirt;
+}
+
+void dirtFlow(void*) {
+	World *w = getWorld();
+	for (int x = 0; x < w->x; x++) {
+		for (int y = 0; y < w->y; y++) {
+			Cell *c = &w->map[(y * w->x) + x];
+			for (int i = 0; i < FORMS_PER_CELL; i++) {
+				Form *f = c->within[i];
+				if (f) {
+					if (f->id == DIRT) {
+						float *eco = getStat(f, ECO);
+						if (eco && !equal(*eco, 0)) {
+							float *output = getStat(f, OUTPUT);
+							//printf("at %i, %i we got eco %f\n", x, y, *eco);
+							int start = 0;//randomInt(4);
+							for (int j = 0; j < 4; j++) {
+								int index = (start + j) % 4;
+								int p[2] = {x, y};
+								int *d4 = getDir4(index);
+								incPos(p, p+1, d4[0], d4[1]);
+								spreadEco(eco, output, p[0], p[1]);
+							}
+							changeEco(f, 0);
+						}
+					} else {
+						float *source = getStat(f, SOURCE);
+						if (source) {
+							addEco(x, y, *source);
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+void spreadEco(float *source, float *output, int x, int y) {
+	Cell *c = getCell(x, y);
+	if (c) {
+		for (int i = 0; i < FORMS_PER_CELL; i++) {
+			Form *f = c->within[i];
+			if (f && f->id == DIRT) {
+				float *eco = getStat(f, ECO);
+				if (*source > *eco) {
+					float in = calcIntake(*eco);
+					//printf("at %f eco, intake is %f\n", *eco, calcIntake(*eco));
+					float diff = min(in, (*source - *eco) / 2);
+					diff = min (*output, diff);
+					//printf("from source %f to eco %f, diff: %f\n", *source, *eco, diff);
+					*source -= diff;
+					changeEco(f, diff);
+					//printf("now s: %f. e: %f\n", *source, *eco);
+				}
+			}
+		}
+	}
+}
+
+void ecoEvaporation(void *) {
+	World *w = getWorld();
+	for (int x = 0; x < w->x; x++) {
+		for (int y = 0; y < w->y; y++) {
+			Cell *c = &w->map[(y * w->x) + x];
+			Form *dirt = 0;
+			float evap = -evaporation;
+			//printf("evap\n");
+			for (int i = 0; i < FORMS_PER_CELL; i++) {
+				Form *f = c->within[i];
+				if (f) {
+					if (f->id == DIRT) {
+						dirt = f;
+					} else {
+						float *c = getStat(f, COVER);
+						if (c) {
+							if (evap + *c < 0) {
+								evap += *c;
+							} else {
+								evap = 0;
+								break;
+							}
+						}
+					}
+				}
+			}
+			if (dirt) {
+				if (evap < 0) {
+					changeEco(dirt, evap);
+				}
+				/*
+				float *eco = getStat(dirt, "eco");
+				if (*eco == 0) {
+					float *bio = getStat(dirt, "bio");
+					if (*bio - bioEvap > 0) {
+						changeBio(x, y, -bioEvap);
+					} else {
+						changeBio(x, y, -(*bio));
+					}
+				}
+				*/
+			}
+		}
+	}
 }
 
 float checkSpread(int x, int y, float amnt) {
@@ -219,3 +322,8 @@ void dfsDirt(int x, int y, int max, Form **buff) {
 		}
 	}
 }
+
+float calcIntake(float eco) {
+	return lerp(intake[1], intake[0], eco);
+}
+
