@@ -3,6 +3,10 @@
 float flowerGrowth = 0.5;
 float fullFower = 3;
 
+float fruit[3] = {255, 0, 255};
+float sprout[3] = {100, 100, 155};
+float dying[3] = {100, 75, 50};
+
 Form *makeFlower() {
 	Form *f = makePlant();
 	f->id = FLOWER;
@@ -16,16 +20,16 @@ Form *makeFlower() {
 	return f;
 }
 
-bool placeFlower(int x, int y) {
+Form *placeFlower(int x, int y) {
 	if (!checkFormID(x, y, FLOWER)) {
 		Form *dirt = checkSoil(x, y);
 		if (dirt) {
 			Form *flower = makeFlower();
 			placeForm(flower, x, y);
-			return true;
+			return flower;
 		}
 	}
-	return false;
+	return NULL;
 }
 
 bool growFlower(Form *f) {
@@ -99,29 +103,22 @@ void *renderFlower(void *data) {
 	if (!plant) {
 		return NULL;
 	}
+	float eco = clampF(*getStat(flower, ECO), 0, 1);
 	RenderCommand reco = {
 		.screenPos[0] = worldXToScreenX(flower->pos[0]),
 		.screenPos[1] = worldYToScreenY(flower->pos[1]),
-		.r = 255, 
-		.g = 0,
-		.b = 255,
 		.layer = FLOWERLAYER,
 	};
-	if (plant->stage == 1) {
-		reco.sigil = flowerStamps[0];
-	} else if (plant->stage == 2) {
-		reco.sigil = flowerStamps[1];
-	} else if (plant->stage == 3) {
-		reco.sigil = flowerStamps[2];
-	} else if (plant->stage == 4) {
-		reco.sigil = flowerStamps[3];
-	} else if (plant->stage == 5) {
-		reco.sigil = flowerStamps[4];
-	} else if (plant->stage == 6) {
-		reco.sigil = flowerStamps[5];
+	if (plant->stage <= 2) {
+		reco.r = lerp(dying[0], sprout[0], eco);
+		reco.g = lerp(dying[1], sprout[1], eco);
+		reco.b = lerp(dying[2], sprout[2], eco);
 	} else {
-		reco.sigil = flowerStamps[6];
+		reco.r = lerp(dying[0], fruit[0], eco);
+		reco.g = lerp(dying[1], fruit[1], eco);
+		reco.b = lerp(dying[2], fruit[2], eco);
 	}
+	reco.sigil = flowerStamps[plant->stage-1];
 	addRenderCommand(reco);
 	return NULL;
 }

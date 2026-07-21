@@ -11,7 +11,7 @@ Form *makeGrass() {
 	Plant *data = plantNub->data;
 	data->beat = 1;
 	data->cycle = 5;
-	data->lifeTime = 5;
+	data->lifeTime = 4;
 
 	return grass;
 }
@@ -133,7 +133,7 @@ void *renderGrass(void *data) {
 	if (!plant) {
 		return NULL;
 	}
-	float eco = *getStat(grass, ECO);
+	float eco = clampF(*getStat(grass, ECO), 0, 1);
 	RenderCommand reco = {
 		.screenPos[0] = worldXToScreenX(grass->pos[0]),// + screenX/2 - frameDim[0]/2;
 		.screenPos[1] = worldYToScreenY(grass->pos[1]),// + screenY/2 - frameDim[1]/2;
@@ -142,15 +142,7 @@ void *renderGrass(void *data) {
 		.b = lerp(grassA[2], grassB[2], eco),
 		.layer = GRASSLAYER,
 	};
-	if (plant->stage == 1) {
-		reco.sigil = grassStamps[0];
-	} else if (plant->stage == 2) {
-		reco.sigil = grassStamps[1];
-	} else if (plant->stage == 3) {
-		reco.sigil = grassStamps[2];
-	} else {
-		reco.sigil = grassStamps[3];
-	}
+	reco.sigil = grassStamps[plant->stage-1];
 	addRenderCommand(reco);
 
 	return NULL;

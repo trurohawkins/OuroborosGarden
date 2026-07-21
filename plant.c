@@ -18,9 +18,6 @@ void initPlants() {
 	flowerStamps[1] = createStamp("0");
 	flowerStamps[2] = createStamp("$");
 	flowerStamps[3] = createStamp("!");
-	flowerStamps[4] = createStamp("L");
-	flowerStamps[5] = createStamp("$");
-	flowerStamps[6] = createStamp("$");
 }
 
 void plantsAction(void *) {

@@ -37,7 +37,7 @@ int main(int argc, char **argv) {
 	for (int x = 0; x < w->x; x++) {
 		for (int y = 0; y < w->y; y++) {
 			placeForm(makeDirt(), x, y);
-			if (randPercent() > 0.98f) {
+			if (randPercent() > 0.99f) {
 				placeFlower(x, y);
 			}
 		}
@@ -54,7 +54,13 @@ int main(int argc, char **argv) {
 	for (int i = 0; i < 8; i++) {
 		//placeGrass(randomInt(worldX), randomInt(worldY));
 	}
-	//placeFlower(40, 30);
+	/*
+	Form *flower = placeFlower(40, 30);
+	for (int i = 0; i < 3; i++) {
+		growFlower(flower);
+	}
+	setStat(flower, ECO, 1.1);
+	*/
 
 	runWorld();
 
