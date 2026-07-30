@@ -37,7 +37,7 @@ int main(int argc, char **argv) {
 	for (int x = 0; x < w->x; x++) {
 		for (int y = 0; y < w->y; y++) {
 			placeForm(makeDirt(), x, y);
-			if (randPercent() > 0.99f) {
+			if (randPercent() > 0.995f) {
 				placeFlower(x, y);
 			}
 		}
