@@ -38,15 +38,6 @@ Snake *makeSnake(int xPos, int yPos) {
 	rob->render = renderSnake;
 
 	s->stamp = createStamp("@");
-	/*
-		 Sigil *skin = createSigil(s->self)->data;
-		 skin->symbol = '@';
-		 skin->figure = true;
-		 skin->priority = 1;
-		 skin->r = 255;
-		 skin->g = 255;
-		 skin->b = 255;
-		 */
 	return s;
 }
 
@@ -252,7 +243,8 @@ void *renderSnake(void *data) {
 	linkedList *commands = 0;
 	linkedList *body = s->body;
 	RenderCommand reco = {
-		.sigil = s->stamp,
+		.type = 0,
+		.index = s->stamp,
 		.r = 255,
 		.g = 255,
 		.b = 255,

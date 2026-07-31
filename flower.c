@@ -108,6 +108,8 @@ void *renderFlower(void *data) {
 		.screenPos[0] = worldXToScreenX(flower->pos[0]),
 		.screenPos[1] = worldYToScreenY(flower->pos[1]),
 		.layer = FLOWERLAYER,
+		.type = 0,
+		.index = flowerStamps[plant->stage-1],
 	};
 	if (plant->stage <= 2) {
 		reco.r = lerp(dying[0], sprout[0], eco);
@@ -118,7 +120,6 @@ void *renderFlower(void *data) {
 		reco.g = lerp(dying[1], fruit[1], eco);
 		reco.b = lerp(dying[2], fruit[2], eco);
 	}
-	reco.sigil = flowerStamps[plant->stage-1];
 	addRenderCommand(reco);
 	return NULL;
 }

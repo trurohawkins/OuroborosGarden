@@ -141,8 +141,9 @@ void *renderGrass(void *data) {
 		.g = lerp(grassA[1], grassB[1], eco),
 		.b = lerp(grassA[2], grassB[2], eco),
 		.layer = GRASSLAYER,
+		.type = 0,
+		.index = grassStamps[plant->stage-1],
 	};
-	reco.sigil = grassStamps[plant->stage-1];
 	addRenderCommand(reco);
 
 	return NULL;
