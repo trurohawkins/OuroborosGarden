@@ -95,10 +95,6 @@ void placeSnake(Snake *s) {
 
 			placeForm(s->self, x, y);
 			addEco(x, y, ecoTrail);
-			if (randPercent() < plantTrail) {
-				placeGrass(x, y);
-			}
-
 			cur = cur->next;
 		} else {
 			//printf("bad body on snake %p\n", s);

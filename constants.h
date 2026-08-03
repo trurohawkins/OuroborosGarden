@@ -15,9 +15,11 @@ float spreadDither = 0.005;
 float bioEvap = 0.1;
 // snake
 int baseSnake = 6;
-float ecoTrail = 0.05f;
+float ecoTrail = 0.01f;
 float plantTrail = 0.03;
 //plants
+float grassChance = 0.75f;
+float flowerChance = 0.01f;
 
 //Form IDs
 #define DIRT 0

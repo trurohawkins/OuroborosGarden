@@ -121,7 +121,6 @@ bool lifeCycle(Form *plant) {
 				return false;
 			}
 		}
-
 		plantEco(plant);
 	}
 	return true;

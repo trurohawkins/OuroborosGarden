@@ -37,8 +37,11 @@ int main(int argc, char **argv) {
 	for (int x = 0; x < w->x; x++) {
 		for (int y = 0; y < w->y; y++) {
 			placeForm(makeDirt(), x, y);
-			if (randPercent() > 0.995f) {
-				//placeFlower(x, y);
+			if (randPercent() < grassChance) {
+				placeGrass(x, y);
+			}
+			if (randPercent() < flowerChance) {
+				placeFlower(x, y);
 			}
 		}
 	}
@@ -62,8 +65,8 @@ int main(int argc, char **argv) {
 	setStat(flower, ECO, 1.1);
 	*/
 
-	int sign = createTextBox(8, 5, "poop");
-	addUI(sign, 10, 10);
+	//int sign = createTextBox(8, 5, "poop");
+	//addUI(sign, 10, 10);
 	runWorld();
 
 	linkedList *curSnake = snakeList;

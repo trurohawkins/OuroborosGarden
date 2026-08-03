@@ -6,7 +6,7 @@ float intake[2] = {0.01, 0.1};
 float output[2] = {0.05, 0.1};
 
 int dirtStats = 2;
-#define MAXADDFORMS 8
+#define MAXADDFORMS 64
 #define MAXPULLFORMS 8
 
 Form *makeDirt() {
@@ -34,17 +34,14 @@ void dirtFlow(void*) {
 					if (f->id == DIRT) {
 						float *eco = getStat(f, ECO);
 						if (eco && !equal(*eco, 0)) {
-							float *output = getStat(f, OUTPUT);
-							//printf("at %i, %i we got eco %f\n", x, y, *eco);
 							int start = 0;//randomInt(4);
 							for (int j = 0; j < 4; j++) {
-								int index = (start + j) % 4;
 								int p[2] = {x, y};
+								int index = (start + j) % 4;
 								int *d4 = getDir4(index);
 								incPos(p, p+1, d4[0], d4[1]);
-								spreadEco(eco, output, p[0], p[1]);
+								spreadEco(f, p[0], p[1]);
 							}
-							changeEco(f, 0);
 						}
 					} else {
 						float *source = getStat(f, SOURCE);
@@ -58,27 +55,104 @@ void dirtFlow(void*) {
 	}
 }
 
-void spreadEco(float *source, float *output, int x, int y) {
+void spreadEco(Form *from, int x, int y) {
 	Cell *c = getCell(x, y);
 	if (c) {
+		float *source = getStat(from, ECO);
 		for (int i = 0; i < FORMS_PER_CELL; i++) {
-			Form *f = c->within[i];
-			if (f && f->id == DIRT) {
-				float *eco = getStat(f, ECO);
+			Form *to = c->within[i];
+			if (to && to->id == DIRT) {
+				float *eco = getStat(to, ECO);
 				if (*source > *eco) {
+					/*
 					float in = calcIntake(*eco);
 					//printf("at %f eco, intake is %f\n", *eco, calcIntake(*eco));
 					float diff = min(in, (*source - *eco) / 2);
-					diff = min (*output, diff);
+					diff = min (output, diff);
 					//printf("from source %f to eco %f, diff: %f\n", *source, *eco, diff);
-					*source -= diff;
-					changeEco(f, diff);
+					*/
+					float flow = (*source - *eco) / 2;
+					flow = changeEco(to, flow);
+					changeEco(from, -flow);
+					//changeEco(source, -diff);
+					//changeEco(eco, diff);
 					//printf("now s: %f. e: %f\n", *source, *eco);
 				}
 			}
 		}
 	}
 }
+
+//adds or subtracts eco, and returns how much was actually added or subtracted
+float changeEco(Form *form, float amnt) {
+	float *eco = getStat(form, ECO);
+	float diff = fabs(amnt);
+	if (eco) {
+	/*
+		if (amnt > 0) {
+			if (*eco + amnt > maxEco) {
+				diff = (*eco + amnt) - maxEco;
+				*eco = maxEco;
+			} else {
+				*eco = clampF(*eco +amnt, 0, maxEco);
+			}
+		} else if (amnt < 0) {
+			if (*eco + amnt < 0) {
+				diff = *eco;
+				*eco = 0;
+			} else {
+				*eco = clampF(*eco + amnt, 0, maxEco);
+			}
+		}
+		*/
+		if (amnt > 0) {
+			amnt = min(amnt, calcIntake(*eco));
+		} else {
+			amnt = min(amnt, *getStat(form, OUTPUT));
+		}
+		float start = *eco;
+		*eco = clampF(*eco + amnt, 0, maxEco);
+		diff = max(*eco, start) - min(*eco, start);
+	}
+	return diff;
+}
+
+
+void addEco(int x, int y, float amnt) {
+	if (equal(amnt, 0)) {
+		return;
+	}
+	Form *buff[MAXADDFORMS] = {0};
+	dfsDirt(x, y, MAXADDFORMS, buff);
+	for (int i = 0; i < MAXADDFORMS; i++) {
+		if (buff[i]) {
+			amnt = changeEco(buff[i], amnt);
+			if (equal(0, amnt) || amnt < 0) {
+				break;
+			}
+		}
+	}
+}
+
+float pullEco(int x, int y, float amnt) {
+	if (equal(amnt, 0)) {
+		return 0;
+	}
+	Form *buff[MAXPULLFORMS];
+	dfsDirt(x, y, MAXPULLFORMS, buff);
+	float pulled = 0;
+	for (int i = 0; i < MAXPULLFORMS; i++) {
+		if (!drawing) {printf("buff form %p\n", buff[i]);}
+		if (buff[i]) {
+			pulled += changeEco(buff[i], -amnt);
+			if (pulled >= amnt) {
+				break;
+			}
+		}
+	}
+	return pulled;
+}
+
 
 void ecoEvaporation(void *) {
 	World *w = getWorld();
@@ -124,84 +198,6 @@ void ecoEvaporation(void *) {
 			}
 		}
 	}
-}
-
-float checkSpread(int x, int y, float amnt) {
-	Form *f = checkStat(x, y, ECO);
-	if (f) {
-		float *check = getStat(f, ECO);
-		if (check) {
-			if ((amnt > 0 && *check < maxEco) || (amnt < 0 && *check > 0)) {
-				amnt = changeEco(f, amnt);
-			}
-		}
-	}
-	return amnt;
-}
-
-void addEco(int x, int y, float amnt) {
-	if (equal(amnt, 0)) {
-		return;
-	}
-
-	World *w = getWorld(); 
-	Form *buff[MAXADDFORMS] = {0};
-	dfsDirt(x, y, MAXADDFORMS, buff);
-	float pulled = 0;
-	for (int i = 0; i < MAXADDFORMS; i++) {
-		if (buff[i]) {
-			float *eco = getStat(buff[i], ECO);
-			amnt = changeEco(buff[i], amnt);
-			if (equal(0, amnt) || amnt < 0) {
-				break;
-			}
-		}
-	}
-}
-float pullEco(int x, int y, float amnt) {
-	if (equal(amnt, 0)) {
-		return 0;
-	}
-	Form *buff[MAXPULLFORMS];
-	dfsDirt(x, y, MAXPULLFORMS, buff);
-	float pulled = 0;
-	for (int i = 0; i < MAXPULLFORMS; i++) {
-		if (!drawing) {printf("buff form %p\n", buff[i]);}
-		if (buff[i]) {
-			float *eco = getStat(buff[i], ECO);
-			if (!drawing) {printf("pulling from %f with eco %f\n", buff[i], *eco);}
-			pulled += changeEco(buff[i], -amnt);
-			if (!drawing) {printf("now eco is %f\n", *eco);}
-			if (pulled >= amnt) {
-				break;
-			}
-		}
-	}
-	return pulled;
-}
-
-float changeEco(Form *f, float amnt) {
-	float *eco = getStat(f, ECO);
-	float diff = fabs(amnt);
-	if (eco) {
-		if (*eco + amnt > maxEco) {
-			diff = (*eco + amnt) - maxEco;
-			*eco = 1;
-		} else if (*eco + amnt < 0) {
-			diff = *eco;
-			*eco = 0;
-		} else {
-			*eco = clampF(*eco + amnt, 0, maxEco);
-		}
-		//setStat(f, "intake", calcIntake(*eco));
-		//dirtColor(f);
-		if (amnt > 0 && *eco > maxEco * 0.75f) {
-			if (randPercent() > 0.95f) {
-				//placeGrass(f->pos[0], f->pos[1]);
-			}
-		}
-	}
-	return diff;
 }
 
 void calcFlow(int x, int y) {

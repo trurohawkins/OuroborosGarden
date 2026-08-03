@@ -5,10 +5,10 @@ void addEco(int x, int y, float amnt);
 float pullEco(int x, int y, float amnt);
 
 void dirtFlow(void *);
-void spreadEco(float *source, float *output, int x, int y);
+void spreadEco(Form *from, int x, int y);
 void ecoEvaporation(void *);
 
-float changeEco(Form *f, float amnt);
+float changeEco(Form *form, float amnt);
 void dirtColor(Form *f);
 Form *checkSoil(int x, int y);
 
