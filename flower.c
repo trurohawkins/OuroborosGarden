@@ -11,7 +11,7 @@ Form *makeFlower() {
 	Form *f = makePlant();
 	f->id = FLOWER;
 	setStat(f, GROWTH, 1);
-	setStat(f, PULL, 0.2);
+	setStat(f, PULL, 0.1);
 	Nub *plant = findNub(f, PLANTNUB);
 	Plant *data = plant->data;
 	data->beat = 2;
@@ -63,7 +63,7 @@ bool growFlower(Form *f) {
 		rob->render = renderFlower;
 		data->cycle = 20;
 		setStat(f, GROWTH, 1);
-		setStat(f, PULL, 0.5);
+		//setStat(f, PULL, 0.5);
 		setStat(f, LOSS, 0.1);
 		//setStat(f, BEAT, 30);
 		setStat(f, ROOTS, 0.5);
@@ -105,21 +105,26 @@ void *renderFlower(void *data) {
 	}
 	float eco = clampF(*getStat(flower, ECO), 0, 1);
 	RenderCommand reco = {
-		.screenPos[0] = worldXToScreenX(flower->pos[0]),
-		.screenPos[1] = worldYToScreenY(flower->pos[1]),
 		.layer = FLOWERLAYER,
 		.type = 0,
 		.index = flowerStamps[plant->stage-1],
 	};
+	PosColor pc = {
+		.pos = {
+		.x = worldXToScreenX(flower->pos[0]),
+		.y = worldYToScreenY(flower->pos[1]),
+		}
+	};
 	if (plant->stage <= 2) {
-		reco.r = lerp(dying[0], sprout[0], eco);
-		reco.g = lerp(dying[1], sprout[1], eco);
-		reco.b = lerp(dying[2], sprout[2], eco);
+		pc.color[0] = lerp(dying[0], sprout[0], eco);
+		pc.color[1] = lerp(dying[1], sprout[1], eco);
+		pc.color[2] = lerp(dying[2], sprout[2], eco);
 	} else {
-		reco.r = lerp(dying[0], fruit[0], eco);
-		reco.g = lerp(dying[1], fruit[1], eco);
-		reco.b = lerp(dying[2], fruit[2], eco);
+		pc.color[0] = lerp(dying[0], fruit[0], eco);
+		pc.color[1] = lerp(dying[1], fruit[1], eco);
+		pc.color[2] = lerp(dying[2], fruit[2], eco);
 	}
+	memcpy(reco.data, &pc, sizeof(PosColor));
 	addRenderCommand(reco);
 	return NULL;
 }

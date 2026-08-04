@@ -142,7 +142,6 @@ float pullEco(int x, int y, float amnt) {
 	dfsDirt(x, y, MAXPULLFORMS, buff);
 	float pulled = 0;
 	for (int i = 0; i < MAXPULLFORMS; i++) {
-		if (!drawing) {printf("buff form %p\n", buff[i]);}
 		if (buff[i]) {
 			pulled += changeEco(buff[i], -amnt);
 			if (pulled >= amnt) {
@@ -239,15 +238,22 @@ void *renderDirt(void *data) {
 	Form *dirt = data;
 	float eco = *getStat(dirt, ECO);
 	RenderCommand reco = {
-		.screenPos[0] = worldXToScreenX(dirt->pos[0]),// + screenX/2 - frameDim[0]/2;
-		.screenPos[1] = worldYToScreenY(dirt->pos[1]),// + screenY/2 - frameDim[1]/2;
 		.type = 0,
 		.index = -1,
-		.r = lerp(dirtA[0], dirtB[0], eco),
-		.g = lerp(dirtA[1], dirtB[1], eco),
-		.b = lerp(dirtA[2], dirtB[2], eco),
 		.layer = DIRTLAYER,
 	};
+	PosColor pc = {
+		.pos = {
+			.x = worldXToScreenX(dirt->pos[0]),// + screenX/2 - frameDim[0]/2;
+			.y = worldYToScreenY(dirt->pos[1]),// + screenY/2 - frameDim[1]/2;
+		},
+		.color = {
+			lerp(dirtA[0], dirtB[0], eco),
+			lerp(dirtA[1], dirtB[1], eco),
+			lerp(dirtA[2], dirtB[2], eco)
+		},
+	};
+	memcpy(reco.data, &pc, sizeof(PosColor));
 	addRenderCommand(reco);
 	return NULL;//commands;
 }

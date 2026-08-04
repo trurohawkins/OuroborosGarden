@@ -49,8 +49,8 @@ bool growGrass(Form *g) {
 		rob->data = g;
 		rob->render = renderGrass;
 		setStat(g, GROWTH, 0.8);
-		//setStat(g, LOSS, 0.001);
-		setStat(g, LOSS, 0.02);
+		setStat(g, LOSS, 0.001);
+		setStat(g, LOSS, 0.0);
 		setStat(g, ROOTS, 0.25);
 		setStat(g, COVER, evaporation/5);
 		calcFlow(g->pos[0], g->pos[1]);
@@ -135,15 +135,23 @@ void *renderGrass(void *data) {
 	}
 	float eco = clampF(*getStat(grass, ECO), 0, 1);
 	RenderCommand reco = {
-		.screenPos[0] = worldXToScreenX(grass->pos[0]),// + screenX/2 - frameDim[0]/2;
-		.screenPos[1] = worldYToScreenY(grass->pos[1]),// + screenY/2 - frameDim[1]/2;
-		.r = lerp(grassA[0], grassB[0], eco),
-		.g = lerp(grassA[1], grassB[1], eco),
-		.b = lerp(grassA[2], grassB[2], eco),
 		.layer = GRASSLAYER,
 		.type = 0,
 		.index = grassStamps[plant->stage-1],
 	};
+	PosColor pc = {
+		.pos = {
+			.x = worldXToScreenX(grass->pos[0]),// + screenX/2 - frameDim[0]/2;
+			.y = worldYToScreenY(grass->pos[1]),// + screenY/2 - frameDim[1]/2;
+		},
+		.color = {
+			lerp(grassA[0], grassB[0], eco),
+			lerp(grassA[1], grassB[1], eco),
+			lerp(grassA[2], grassB[2], eco),
+		}
+	};
+	memcpy(reco.data, &pc, sizeof(PosColor));
+
 	addRenderCommand(reco);
 
 	return NULL;

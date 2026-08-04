@@ -28,7 +28,6 @@ int main(int argc, char **argv) {
 	Player *god = makePlayer(0, 0, 0);
 	addPlayer(god);
 	addControl(god, "K0 ", pressPause);
-
 	makeWorld(worldX, worldY);
 	setFrameDimension(worldX, worldY);
 	setFramePosition(worldX/2, worldY/2);
@@ -49,24 +48,7 @@ int main(int argc, char **argv) {
 	initPlants();
 
 	Snake *snake0 = makeSnake(worldX/2, worldY/2);
-	for (int x = 0; x < 5; x++) {
-		for (int y = 0; y < 5; y++) {
-			//addEco(0 + x, 35 + y, 1);
-		}
-	}
-	for (int i = 0; i < 8; i++) {
-		//placeGrass(randomInt(worldX), randomInt(worldY));
-	}
-	/*
-	Form *flower = placeFlower(40, 30);
-	for (int i = 0; i < 3; i++) {
-		growFlower(flower);
-	}
-	setStat(flower, ECO, 1.1);
-	*/
 
-	//int sign = createTextBox(8, 5, "poop");
-	//addUI(sign, 10, 10);
 	runWorld();
 
 	linkedList *curSnake = snakeList;
@@ -75,7 +57,6 @@ int main(int argc, char **argv) {
 		curSnake = curSnake->next;
 	}
 	freeListSaveObj(&snakeList);
-
 	endWorld();
 	return 0;
 }

@@ -241,15 +241,16 @@ void *renderSnake(void *data) {
 	RenderCommand reco = {
 		.type = 0,
 		.index = s->stamp,
-		.r = 255,
-		.g = 255,
-		.b = 255,
 		.layer = SNAKELAYER,
+	};
+	PosColor pc = {
+		.color = {255, 255, 255},
 	};
 	while (body) {
 		SnakeBody *sb = body->data;
-		reco.screenPos[0] = worldXToScreenX(sb->pos[0]);
-		reco.screenPos[1] = worldYToScreenY(sb->pos[1]);
+		pc.pos.x = worldXToScreenX(sb->pos[0]);
+		pc.pos.y = worldYToScreenY(sb->pos[1]);
+		memcpy(reco.data, &pc, sizeof(PosColor));
 		addRenderCommand(reco);
 		body = body->next;
 	}
