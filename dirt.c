@@ -2,12 +2,12 @@
 
 float dirtA[3] = {179.0, 89.0, 23.0};
 float dirtB[3] = {74.8, 22.4, 2.0};
-float intake[2] = {0.01, 0.1};
+float intake[2] = {0.0, 0.2};
 float output[2] = {0.05, 0.1};
 
 int dirtStats = 2;
 #define MAXADDFORMS 64
-#define MAXPULLFORMS 8
+#define MAXPULLFORMS 4
 
 Form *makeDirt() {
 	Form *dirt = makeForm(DIRT);
@@ -64,19 +64,9 @@ void spreadEco(Form *from, int x, int y) {
 			if (to && to->id == DIRT) {
 				float *eco = getStat(to, ECO);
 				if (*source > *eco) {
-					/*
-					float in = calcIntake(*eco);
-					//printf("at %f eco, intake is %f\n", *eco, calcIntake(*eco));
-					float diff = min(in, (*source - *eco) / 2);
-					diff = min (output, diff);
-					//printf("from source %f to eco %f, diff: %f\n", *source, *eco, diff);
-					*/
 					float flow = (*source - *eco) / 2;
 					flow = changeEco(to, flow);
 					changeEco(from, -flow);
-					//changeEco(source, -diff);
-					//changeEco(eco, diff);
-					//printf("now s: %f. e: %f\n", *source, *eco);
 				}
 			}
 		}
@@ -85,26 +75,12 @@ void spreadEco(Form *from, int x, int y) {
 
 //adds or subtracts eco, and returns how much was actually added or subtracted
 float changeEco(Form *form, float amnt) {
+	if (amnt == 0) {
+		return 0;
+	}
 	float *eco = getStat(form, ECO);
 	float diff = fabs(amnt);
 	if (eco) {
-	/*
-		if (amnt > 0) {
-			if (*eco + amnt > maxEco) {
-				diff = (*eco + amnt) - maxEco;
-				*eco = maxEco;
-			} else {
-				*eco = clampF(*eco +amnt, 0, maxEco);
-			}
-		} else if (amnt < 0) {
-			if (*eco + amnt < 0) {
-				diff = *eco;
-				*eco = 0;
-			} else {
-				*eco = clampF(*eco + amnt, 0, maxEco);
-			}
-		}
-		*/
 		if (amnt > 0) {
 			amnt = min(amnt, calcIntake(*eco));
 		} else {
@@ -143,7 +119,7 @@ float pullEco(int x, int y, float amnt) {
 	float pulled = 0;
 	for (int i = 0; i < MAXPULLFORMS; i++) {
 		if (buff[i]) {
-			pulled += changeEco(buff[i], -amnt);
+			pulled = changeEco(buff[i], -amnt);
 			if (pulled >= amnt) {
 				break;
 			}
@@ -327,6 +303,6 @@ void dfsDirt(int x, int y, int max, Form **buff) {
 }
 
 float calcIntake(float eco) {
-	return lerp(intake[1], intake[0], eco);
+	return lerp(intake[0], intake[1], eco);
 }
 

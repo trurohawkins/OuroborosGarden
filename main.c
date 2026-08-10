@@ -48,6 +48,7 @@ int main(int argc, char **argv) {
 	initPlants();
 
 	Snake *snake0 = makeSnake(worldX/2, worldY/2);
+	placeGrass(20, 20);
 
 	runWorld();
 

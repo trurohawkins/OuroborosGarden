@@ -49,8 +49,7 @@ bool growGrass(Form *g) {
 		rob->data = g;
 		rob->render = renderGrass;
 		setStat(g, GROWTH, 0.8);
-		setStat(g, LOSS, 0.001);
-		setStat(g, LOSS, 0.0);
+		setStat(g, LOSS, 0.01);
 		setStat(g, ROOTS, 0.25);
 		setStat(g, COVER, evaporation/5);
 		calcFlow(g->pos[0], g->pos[1]);

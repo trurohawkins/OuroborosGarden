@@ -94,6 +94,13 @@ void placeSnake(Snake *s) {
 			int y = sb->pos[1];
 
 			placeForm(s->self, x, y);
+			Form *soil = checkSoil(x, y);
+			if (soil) {
+				float *eco = getStat(soil, ECO);
+				if (*eco == 0) {
+					*eco = 0.1f;
+				}
+			}
 			addEco(x, y, ecoTrail);
 			cur = cur->next;
 		} else {
@@ -136,7 +143,7 @@ bool snakeCheck(Snake *s) {
 			Form *f = c->within[i];
 			if (f->id == FLOWER) {
 				Plant *p = getPlant(f);
-				if (p->stage >= 2) {
+				if (p->stage > 2) {
 					fruit = f;
 				}
 			}

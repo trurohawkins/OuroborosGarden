@@ -90,6 +90,7 @@ bool growFlower(Form *f) {
 		}
 	} else {
 		//changeBio(f->pos[0], f->pos[1], 0.05);
+		spreadFlower(f->pos[0], f->pos[1]);
 		addEco(f->pos[0], f->pos[1], *getStat(f, ECO));
 	}
 	return true;

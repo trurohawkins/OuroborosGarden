@@ -85,33 +85,35 @@ bool lifeCycle(Form *plant) {
 		float loss = *getStat(plant, LOSS); 
 		//if they lose too much they die
 		//if (stage < lifeTime && *eco - loss >= 0) {
+		if (!drawing) {printf("   eco loss %f\n", loss);}
 		if (*eco - loss >= 0) {
-			if (!drawing) {printf("   eco loss %f\n", loss);}
 			*eco -= loss;
 		} else {
 			return false;
 		}
 		int x = plant->pos[0];
 		int y = plant->pos[1];
+		Form *soil = checkSoil(x, y);
+		float *soilEco = getStat(soil, ECO);
+		if ((soilEco && equal(*soilEco, 0)) || !soilEco) {
+			return true;
+		}
 		float pull = *getStat(plant, PULL);
 		float *growth = getStat(plant, GROWTH);
 		if (!drawing) {printf("     pull: %f\n", pull);}
 		//pulling eco from the surrounding ground
-		if (*eco < *growth) {
-			pull = min(pull, *growth - *eco);
-			float gather = pullEco(x, y, pull);
-			if (gather > 0) {
-				if (!drawing) {printf("   eco gather %f\n", gather);}
-				*eco += gather;
-			}
-		}	else {
-			if (!drawing) {printf("    no eco gathered %f < %f\n", *eco, *growth);}
+		pull = min(pull, *growth - *eco);
+		float gather = pullEco(x, y, pull);
+		if (gather > 0) {
+			if (!drawing) {printf("   eco gather %f\n", gather);}
+			*eco = clampF(*eco + gather, 0, 1);
 		}
 		if (!drawing) {printf("     final eco: %f\n", *eco);}
 		// if they gather enough eco they grow
 		// if they are old enough
 		if (!drawing) {printf("    growth: %f. life: %d >= cycle %d\n", *growth, data->life, data->cycle);}
 		if (*eco >= *growth && data->life >= data->cycle) {
+			if (!drawing) {printf(    "GROW\n");}
 			if (grow(plant)) {
 				data->life = 0;
 			} else {
