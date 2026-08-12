@@ -44,9 +44,9 @@ void dirtFlow(void*) {
 							}
 						}
 					} else {
-						float *source = getStat(f, SOURCE);
-						if (source) {
-							addEco(x, y, *source);
+						float *src = getStat(f, SOURCE);
+						if (src) {
+							pushEco(x, y, *src);
 						}
 					}
 				}
@@ -90,6 +90,7 @@ float changeEco(Form *form, float amnt) {
 		*eco = clampF(*eco + amnt, 0, maxEco);
 		diff = max(*eco, start) - min(*eco, start);
 	}
+	worldChanged = true;
 	return diff;
 }
 
@@ -102,7 +103,9 @@ void addEco(int x, int y, float amnt) {
 	dfsDirt(x, y, MAXADDFORMS, buff);
 	for (int i = 0; i < MAXADDFORMS; i++) {
 		if (buff[i]) {
-			amnt = changeEco(buff[i], amnt);
+			int dist = manhattanDistance(x, y, buff[i]->pos[0], buff[i]->pos[1]);
+			float a = amnt / (2 * dist);
+			amnt = changeEco(buff[i], a);
 			if (equal(0, amnt) || amnt < 0) {
 				break;
 			}
@@ -119,7 +122,9 @@ float pullEco(int x, int y, float amnt) {
 	float pulled = 0;
 	for (int i = 0; i < MAXPULLFORMS; i++) {
 		if (buff[i]) {
-			pulled = changeEco(buff[i], -amnt);
+			int dist = manhattanDistance(x, y, buff[i]->pos[0], buff[i]->pos[1]);
+			float a = amnt / (2 * dist);
+			pulled = changeEco(buff[i], -a);
 			if (pulled >= amnt) {
 				break;
 			}
@@ -128,6 +133,23 @@ float pullEco(int x, int y, float amnt) {
 	return pulled;
 }
 
+void pushEco(int x, int y, float amnt) {
+	if (equal(amnt, 0)) {
+		return;
+	}
+	Form *buff[8];
+	dfsDirt(x, y, 8, buff);
+	for (int i = 0; i < 8; i++) {
+		Form *soil = buff[i];
+		float *eco = getStat(soil, ECO);
+		if (*eco == 0) {
+			*eco = evapMinimum;
+		}
+		int dist = manhattanDistance(x, y, buff[i]->pos[0], buff[i]->pos[1]);
+		amnt /= 2 * dist;
+		changeEco(soil, amnt);
+	}
+}
 
 void ecoEvaporation(void *) {
 	World *w = getWorld();
@@ -157,19 +179,23 @@ void ecoEvaporation(void *) {
 			}
 			if (dirt) {
 				if (evap < 0) {
+					float *eco = getStat(dirt, ECO);
+					if (*eco + evap < evapMinimum) {
+						evap = *eco - evapMinimum;
+					}
 					changeEco(dirt, evap);
 				}
 				/*
-				float *eco = getStat(dirt, "eco");
-				if (*eco == 0) {
-					float *bio = getStat(dirt, "bio");
-					if (*bio - bioEvap > 0) {
-						changeBio(x, y, -bioEvap);
-					} else {
-						changeBio(x, y, -(*bio));
-					}
-				}
-				*/
+					 float *eco = getStat(dirt, "eco");
+					 if (*eco == 0) {
+					 float *bio = getStat(dirt, "bio");
+					 if (*bio - bioEvap > 0) {
+					 changeBio(x, y, -bioEvap);
+					 } else {
+					 changeBio(x, y, -(*bio));
+					 }
+					 }
+					 */
 			}
 		}
 	}

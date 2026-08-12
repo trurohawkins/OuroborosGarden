@@ -11,6 +11,7 @@ float plantsInterval = 3.0 * spd;
 // soil
 int maxEco = 1;
 float evaporation = 0.02;
+float evapMinimum = 0.01;
 float spreadDither = 0.005;
 float bioEvap = 0.1;
 // snake
@@ -27,6 +28,7 @@ float flowerChance = 0.02f;
 #define SNAKE 2
 #define GRASS 3
 #define FLOWER 4
+#define WATER 5
 
 //stat IDs
 // dirt

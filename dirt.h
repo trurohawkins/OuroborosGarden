@@ -3,6 +3,7 @@ Form *makeDirt();
 
 void addEco(int x, int y, float amnt);
 float pullEco(int x, int y, float amnt);
+void pushEco(int x, int y, float amnt);
 
 void dirtFlow(void *);
 void spreadEco(Form *from, int x, int y);

@@ -92,16 +92,15 @@ void placeSnake(Snake *s) {
 			SnakeBody *sb = (SnakeBody*)cur->data;
 			int x = sb->pos[0];
 			int y = sb->pos[1];
-
-			placeForm(s->self, x, y);
 			Form *soil = checkSoil(x, y);
 			if (soil) {
 				float *eco = getStat(soil, ECO);
 				if (*eco == 0) {
 					*eco = 0.1f;
 				}
+				changeEco(soil, ecoTrail);
 			}
-			addEco(x, y, ecoTrail);
+			placeForm(s->self, x, y);
 			cur = cur->next;
 		} else {
 			//printf("bad body on snake %p\n", s);

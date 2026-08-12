@@ -8,6 +8,7 @@ bool drawing = true;
 #include "stat.c"
 #include "help.c"
 #include "dirt.c"
+#include "water.c"
 #include "plant.c"
 #include "snake.c"
 
@@ -33,14 +34,27 @@ int main(int argc, char **argv) {
 	setFramePosition(worldX/2, worldY/2);
 
 	World *w = getWorld();
+	initWater();
+	int radius = 4;
+	for (int x = -radius; x < radius; x++) {
+		for (int y = -radius; y < radius; y++) {
+			int xp = worldX/2 + x;
+			int yp = worldY/2 + y;
+			if (distance(xp, yp, worldX/2, worldY/2) < radius) {
+				placeWater(xp, yp);
+			}
+		}
+	}
 	for (int x = 0; x < w->x; x++) {
 		for (int y = 0; y < w->y; y++) {
-			placeForm(makeDirt(), x, y);
-			if (randPercent() < grassChance) {
-				placeGrass(x, y);
-			}
-			if (randPercent() < flowerChance) {
-				placeFlower(x, y);
+			if (!checkFormID(x, y, WATER)) {
+				placeForm(makeDirt(), x, y);
+				if (randPercent() < grassChance) {
+					placeGrass(x, y);
+				}
+				if (randPercent() < flowerChance) {
+					placeFlower(x, y);
+				}
 			}
 		}
 	}
@@ -48,10 +62,10 @@ int main(int argc, char **argv) {
 	initPlants();
 
 	Snake *snake0 = makeSnake(worldX/2, worldY/2);
-	placeGrass(20, 20);
 
 	runWorld();
 
+	freeWater();
 	linkedList *curSnake = snakeList;
 	while (curSnake) {
 		freeSnake(curSnake->data);
