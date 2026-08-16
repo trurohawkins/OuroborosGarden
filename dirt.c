@@ -90,7 +90,7 @@ float changeEco(Form *form, float amnt) {
 		*eco = clampF(*eco + amnt, 0, maxEco);
 		diff = max(*eco, start) - min(*eco, start);
 	}
-	worldChanged = true;
+	renderNewShot = true;
 	return diff;
 }
 
