@@ -1,6 +1,7 @@
 #include "snake.h"
 
 int snakeCount = 0;
+int staggerTime = 3;
 
 Snake *makeSnake(int xPos, int yPos) {
 	Snake *s = calloc(1, sizeof(Snake));
@@ -145,6 +146,9 @@ bool snakeCheck(Snake *s) {
 				if (p->stage > 2) {
 					fruit = f;
 				}
+			} else if (f->id == STONE) {
+				snakeStagger(s, true);
+				return false;
 			}
 		}
 	}
@@ -193,6 +197,19 @@ void snakeMovement(void *snake) {
 			s->dir = preDir;
 			return;
 		}
+	} else {
+		s->staggered--;
+		if (s->staggered == 0) {
+			snakeStagger(s, false);
+		}
+	}
+}
+
+void snakeStagger(Snake *s, bool staggered) {
+	if (staggered) {
+		s->staggered = staggerTime;
+	} else {
+		
 	}
 }
 

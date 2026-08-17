@@ -7,6 +7,7 @@ void makeGarden() {
 
 	World *w = getWorld();
 	initWater();
+	initStone();
 	
 	for (int i = 0; i < 3; i++) {
 		int xp = randRange(0, worldX);
@@ -15,15 +16,24 @@ void makeGarden() {
 		placeCircle(placeWater, xp, yp, radius);
 	}
 
+	for (int i = 0; i < 8; i++) {
+		int xp = randRange(0, worldX);
+		int yp = randRange(0, worldY);
+		int radius = randRange(4, 5);
+		placeCircle(placeStone, xp, yp, radius);
+	}
+
 	for (int x = 0; x < w->x; x++) {
 		for (int y = 0; y < w->y; y++) {
 			if (!checkFormID(x, y, WATER)) {
 				placeForm(makeDirt(), x, y);
-				if (randPercent() < grassChance) {
-					placeGrass(x, y);
-				}
-				if (randPercent() < flowerChance) {
-					placeFlower(x, y);
+				if (!checkFormID(x, y, STONE)) {
+					if (randPercent() < grassChance) {
+						placeGrass(x, y);
+					}
+					if (randPercent() < flowerChance) {
+						placeFlower(x, y);
+					}
 				}
 			}
 		}
@@ -65,6 +75,7 @@ void renderGarden() {
 
 void endGarden() {
 	freeWater();
+	freeStone();
 	linkedList *curSnake = snakeList;
 	while (curSnake) {
 		freeSnake(curSnake->data);

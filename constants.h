@@ -29,6 +29,7 @@ float flowerChance = 0;//.02f;
 #define GRASS 3
 #define FLOWER 4
 #define WATER 5
+#define STONE 6
 
 //stat IDs
 // dirt

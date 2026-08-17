@@ -27,6 +27,7 @@ void turnSnake(Snake *s, int direction);
 bool snakeCheck(Snake *s);
 bool moveSnake(Snake *s);
 void snakeMovement(void *s);
+void snakeStagger(Snake *s, bool staggered);
 
 void snakeStep(void *s, float val);
 void snakeUp(void *s, float val);

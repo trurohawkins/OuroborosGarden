@@ -9,6 +9,7 @@ bool drawing = true;
 #include "help.c"
 #include "dirt.c"
 #include "water.c"
+#include "stone.c"
 #include "plant.c"
 #include "snake.c"
 
