@@ -16,11 +16,14 @@ void initWater() {
 }
 
 void placeWater(int x, int y) {
-	int *pos = calloc(2, sizeof(int));
-	pos[0] = x;
-	pos[1] = y;
-	addToList(&body, pos);
-	placeForm(water, x, y);
+	World *w = getWorld();
+	if (x >= 0 && y >= 0 && x < w->x && y < w->y) {
+		int *pos = calloc(2, sizeof(int));
+		pos[0] = x;//(x % w->x + w->x) % w->x;
+		pos[1] = y;//(y % w->y + w->y) % w->y;
+		addToList(&body, pos);
+		placeForm(water, pos[0], pos[1]);
+	}
 }
 
 void *renderWater(void *data) {

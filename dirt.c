@@ -137,17 +137,22 @@ void pushEco(int x, int y, float amnt) {
 	if (equal(amnt, 0)) {
 		return;
 	}
-	Form *buff[8];
-	dfsDirt(x, y, 8, buff);
-	for (int i = 0; i < 8; i++) {
-		Form *soil = buff[i];
-		float *eco = getStat(soil, ECO);
-		if (*eco == 0) {
-			*eco = evapMinimum;
+	int pow = 4;
+	Form *buff[pow] = {};
+	dfsDirt(x, y, pow, buff);
+	for (int i = 0; i < pow; i++) {
+		if (buff[i]) {
+			Form *soil = buff[i];
+			float *eco = getStat(soil, ECO);
+			if (eco) {
+				if (*eco == 0) {
+					*eco = evapMinimum;
+				}
+				int dist = manhattanDistance(x, y, buff[i]->pos[0], buff[i]->pos[1]);
+				amnt /= 2 * dist;
+				changeEco(soil, amnt);
+			}
 		}
-		int dist = manhattanDistance(x, y, buff[i]->pos[0], buff[i]->pos[1]);
-		amnt /= 2 * dist;
-		changeEco(soil, amnt);
 	}
 }
 

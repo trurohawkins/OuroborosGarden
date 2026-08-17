@@ -20,9 +20,7 @@ typedef struct {
 
 GameState GM;
 
-void startGarden();
-void makeGarden();
-void endGarden();
+#include "garden.c"
 
 void pressUp(void *guy, float val);
 void pressLeft(void *guy, float val);
@@ -32,14 +30,6 @@ void pressSpace(void *, float val);
 
 void pauseGame(void *, float val);
 void resumeGame();
-
-void renderGarden() {
-	if (GM.curMenu) {
-		addMenu(GM.curMenu);
-	} else {
-		renderWorld();
-	}
-}
 
 int main(int argc, char **argv) {
 	if (argc > 1) {
@@ -102,56 +92,6 @@ int main(int argc, char **argv) {
 	return 0;
 }
 
-void startGarden() {
-	GM.curMenu = NULL;
-	makeGarden();
-}
-
-void makeGarden() {
-	makeWorld(worldX, worldY);
-	setFrameDimension(worldX, worldY);
-	setFramePosition(worldX/2, worldY/2);
-
-	World *w = getWorld();
-	initWater();
-	int radius = 4;
-	for (int x = -radius; x < radius; x++) {
-		for (int y = -radius; y < radius; y++) {
-			int xp = worldX/2 + x;
-			int yp = worldY/2 + y;
-			if (distance(xp, yp, worldX/2, worldY/2) < radius) {
-				placeWater(xp, yp);
-			}
-		}
-	}
-	for (int x = 0; x < w->x; x++) {
-		for (int y = 0; y < w->y; y++) {
-			if (!checkFormID(x, y, WATER)) {
-				placeForm(makeDirt(), x, y);
-				if (randPercent() < grassChance) {
-					placeGrass(x, y);
-				}
-				if (randPercent() < flowerChance) {
-					placeFlower(x, y);
-				}
-			}
-		}
-	}
-
-	initPlants();
-
-	Snake *snake0 = makeSnake(worldX/2, worldY/2);
-}
-
-void endGarden() {
-	freeWater();
-	linkedList *curSnake = snakeList;
-	while (curSnake) {
-		freeSnake(curSnake->data);
-		curSnake = curSnake->next;
-	}
-	freeListSaveObj(&snakeList);
-}
 
 void pressUp(void *gm, float val) {
 	if (val == 1) { 
