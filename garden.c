@@ -8,10 +8,10 @@ void makeGarden() {
 	World *w = getWorld();
 	initWater();
 	
-	for (int i = 0; i < 9; i++) {
+	for (int i = 0; i < 3; i++) {
 		int xp = randRange(0, worldX);
 		int yp = randRange(0, worldY);
-		int radius = randRange(3, 10);
+		int radius = randRange(4, 6);
 		placeCircle(placeWater, xp, yp, radius);
 	}
 
