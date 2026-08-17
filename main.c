@@ -11,6 +11,7 @@ bool drawing = true;
 #include "water.c"
 #include "stone.c"
 #include "plant.c"
+#include "rainbow.c"
 #include "snake.c"
 
 typedef struct {
@@ -147,10 +148,13 @@ void pauseGame(void *gm, float val) {
 		if (GM->curMenu == GM->startMenu) {
 			exitGame();
 		} else if (GM->curMenu == NULL) {
+			toggleGamePause();
 			GM->curMenu = GM->pauseMenu;
 		} else {
+			toggleGamePause();
 			GM->curMenu = NULL;
 		}
+		renderNewShot = true;
 	}
 }
 

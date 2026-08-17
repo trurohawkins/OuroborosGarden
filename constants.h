@@ -2,7 +2,7 @@
 int worldX = 80;
 int worldY = 40;
 
-const float spd = 0.1;
+const float spd = 1;
 float spreadInterval = 0.5 * spd;
 float evapInterval = 10.0 * spd;
 float moveInterval = 0.7 * spd;
@@ -15,7 +15,7 @@ float evapMinimum = 0.05;
 float spreadDither = 0.005;
 float bioEvap = 0.1;
 // snake
-int baseSnake = 6;
+int baseSnake = 9;
 float ecoTrail = 0.1f;
 float plantTrail = 0.03;
 //plants
@@ -30,6 +30,7 @@ float flowerChance = 0;//.02f;
 #define FLOWER 4
 #define WATER 5
 #define STONE 6
+#define RAINBOW 7
 
 //stat IDs
 // dirt
@@ -44,8 +45,9 @@ float flowerChance = 0;//.02f;
 #define COVER 7
 
 //sprite layering
-#define SNAKELAYER 3
-#define FLOWERLAYER 2
+#define SNAKELAYER 4
+#define FLOWERLAYER 3
+#define RAINBOWLAYER 2
 #define GRASSLAYER 1
 #define DIRTLAYER 0
 

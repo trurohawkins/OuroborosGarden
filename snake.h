@@ -10,6 +10,7 @@ typedef struct Snake {
 	linkedList *body;
 	SnakeBody *butt;
 	Form *self;
+	linkedList *rainbows;
 	int dir;
 	int newDir;
 	int stamp;
@@ -28,6 +29,8 @@ bool snakeCheck(Snake *s);
 bool moveSnake(Snake *s);
 void snakeMovement(void *s);
 void snakeStagger(Snake *s, bool staggered);
+void ouroboros(Snake *s);
+void spaceCheck(Snake *s, int x, int y);
 
 void snakeStep(void *s, float val);
 void snakeUp(void *s, float val);

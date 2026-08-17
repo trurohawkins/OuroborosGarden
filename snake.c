@@ -185,6 +185,7 @@ bool moveSnake(Snake *s) {
 		cur = cur->next;
 	}
 	placeSnake(s);
+	ouroboros(s);
 	return true;
 }
 
@@ -197,6 +198,7 @@ void snakeMovement(void *snake) {
 			s->dir = preDir;
 			return;
 		}
+		checkAndDelete(&s->rainbows, checkRainbow, freeRainbow);
 	} else {
 		s->staggered--;
 		if (s->staggered == 0) {
@@ -210,6 +212,24 @@ void snakeStagger(Snake *s, bool staggered) {
 		s->staggered = staggerTime;
 	} else {
 		
+	}
+}
+
+void ouroboros(Snake *s) {
+	SnakeBody *head = s->body->data;
+	SnakeBody *neck = s->body->next->data;
+	spaceCheck(s, head->pos[0], head->pos[1]);
+	spaceCheck(s, neck->pos[0], neck->pos[1]);
+	spaceCheck(s, s->butt->pos[0], s->butt->pos[1]);
+}
+
+void spaceCheck(Snake *s, int x, int y) {
+	for (int i = 0; i < 4; i++) {
+		int *d = getDir4((s->dir+i)%4);
+		Rainbow *r = fill(x + d[0], y + d[1]);
+		if (r != 0) {
+			addToList(&s->rainbows, r);
+		}
 	}
 }
 
@@ -252,6 +272,7 @@ void freeSnake(void *s) {
 
 	removeSnake(snake);
 	freeForm(snake->self);
+	deleteList(&snake->rainbows, freeRainbow);
 
 	freeList(&snake->body);
 	free(snake);

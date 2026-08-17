@@ -11,7 +11,7 @@ void initWater() {
 		Nub *ren = growRenderNub(water);
 		RenderObject *rob = ren->data;
 		rob->data = water;
-		rob->render= renderWater;
+		rob->render = renderWater;
 	}
 }
 
@@ -27,7 +27,7 @@ void placeWater(int x, int y) {
 }
 
 void *renderWater(void *data) {
-	Form *water = data;
+	//Form *water = data;
 	RenderCommand reco = {
 		.type = 0,
 		.index = -1,
