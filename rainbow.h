@@ -7,12 +7,20 @@ typedef struct {
 	intList *border;
 	intList *full;
 
+	int centerX;
+	int centerY;
+	float *colors;
+	int colorOffset;
+	int changeInterval;
+	int changeTimer;
+	float ecoAmount;
 } Rainbow;
 
 Rainbow *newRainbow();
 void actualizeRainbow(Rainbow *r);
 void placeRainbow(Rainbow *r);
 void removeRainbow(Rainbow *r);
+int rainbowAction(void *r, Action *a, float delta);
 
 void recFill(Rainbow *r, int x, int y);
 Rainbow *fill(int startX, int startY);

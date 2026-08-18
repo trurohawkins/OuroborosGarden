@@ -1,5 +1,7 @@
 #include "rainbow.h"
 
+float ecoMax = 0.5;
+
 Rainbow *newRainbow() {
 	World *w = getWorld();
 	Rainbow *r = calloc(1, sizeof(Rainbow));
@@ -18,12 +20,16 @@ void actualizeRainbow(Rainbow *r) {
 	RenderObject *rob = ren->data;
 	rob->data = r;
 	rob->render = renderRainbow;
-	/*
-	Actor *actor = makeActor(r->self);
-	Action *action = makeAction(rainbowAction, t);
+	Actor *actor = makeFormActor(r->self);
+	Action *action = makeAction(0, rainbowAction, r);
 	addAction(actor, action);
 	addActor(actor);
-	*/
+
+	r->colorOffset = randomInt(6);
+	r->changeInterval = 30;
+	r->changeTimer = 0;
+
+	r->ecoAmount = ecoMax;
 }
 
 void placeRainbow(Rainbow *r) {
@@ -47,6 +53,24 @@ void removeRainbow(Rainbow *r) {
 	}
 }
 
+int rainbowAction(void *r, Action *a, float delta) {
+	Rainbow *rb = (Rainbow*)a->data;
+	//printf("rainbow action %p\n", rb);
+	if (rb->changeTimer < rb->changeInterval) {
+		rb->changeTimer++;
+	} else {
+		rb->changeTimer = 0;
+		rb->colorOffset = (rb->colorOffset + 1) % 14;
+		intList *cur = rb->full;
+		while (cur) {
+			int x = cur->data;
+			int y = cur->next->data;
+			pushEco(x, y, rb->ecoAmount);
+
+			cur = cur->next->next;
+		}
+	}
+}
 
 void recFill(Rainbow *r, int x, int y) {
 	//printf("%p rec fill check %i, %i\n", r->map, x, y);
@@ -105,6 +129,7 @@ Rainbow *fill(int startX, int startY) {
 }
 
 void *renderRainbow(void *data) {
+	return 0;
 	Rainbow *r = data;
 	RenderCommand reco = {
 		.type = 0,
@@ -132,7 +157,6 @@ void *renderRainbow(void *data) {
 
 bool checkRainbow(void *r) {
 	Rainbow *rb = r;
-	debugWrite("checking rainbow\n");
 	bool check = checkBorder(r);
 	return check;
 }
@@ -196,11 +220,10 @@ void freeRainbow(void *r) {
 	Rainbow *rb = r;
 	removeRainbow(rb);
 	if (rb->self) { // in case rainbow hasnt been actualized
-		/*
-		Actor *a = rb->self->actor;
-		removeActor(rb->self->actor);
-		deleteActor(a);
+		Actor *a = findNub(rb->self, 2)->data;
+		a->deleteMe = true;
 		free(rb->colors);
+		/*
 		freeAnim(rb->anim);
 		*/
 		freeForm(rb->self);

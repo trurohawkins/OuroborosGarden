@@ -13,14 +13,14 @@ void makeGarden() {
 		int xp = randRange(0, worldX);
 		int yp = randRange(0, worldY);
 		int radius = randRange(4, 6);
-		placeCircle(placeWater, xp, yp, radius);
+		//placeCircle(placeWater, xp, yp, radius);
 	}
 
 	for (int i = 0; i < 8; i++) {
 		int xp = randRange(0, worldX);
 		int yp = randRange(0, worldY);
 		int radius = randRange(4, 5);
-		placeCircle(placeStone, xp, yp, radius);
+		//placeCircle(placeStone, xp, yp, radius);
 	}
 
 	for (int x = 0; x < w->x; x++) {
