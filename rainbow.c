@@ -25,6 +25,7 @@ void actualizeRainbow(Rainbow *r) {
 	addAction(actor, action);
 	addActor(actor);
 
+	setRainbow(&r);
 	r->colorOffset = randomInt(6);
 	r->changeInterval = 30;
 	r->changeTimer = 0;
@@ -33,6 +34,10 @@ void actualizeRainbow(Rainbow *r) {
 }
 
 void placeRainbow(Rainbow *r) {
+	int highX = -1;
+	int lowX = 99999; // arbitrary high value
+	int highY = -1;
+	int lowY = 99999; // arbitrary high value
 	intList *cur = r->full;
 	while (cur) {
 		int x = cur->data;
@@ -40,8 +45,21 @@ void placeRainbow(Rainbow *r) {
 		if (!checkFormID(x, y, RAINBOW)) {
 			placeForm(r->self, x, y);
 		}
+
+		if (x < lowX) {
+			lowX = x;
+		} else if (x > highX) {
+			highX = x;
+		}
+		if (y < lowY) {
+			lowY = y;
+		} else if (y > highY) {
+			highY = y;
+		}
 		cur = cur->next->next;
 	}
+	r->centerX = lowX + ((highX - lowX) / 2);
+	r->centerY = lowY + ((highY - lowY) / 2);
 }
 
 void removeRainbow(Rainbow *r) {
@@ -129,7 +147,6 @@ Rainbow *fill(int startX, int startY) {
 }
 
 void *renderRainbow(void *data) {
-	return 0;
 	Rainbow *r = data;
 	RenderCommand reco = {
 		.type = 0,
@@ -140,13 +157,15 @@ void *renderRainbow(void *data) {
 	while (cur) {
 		int x = cur->data;
 		int y = cur->next->data;
+		float d = max(abs(x - r->centerX), abs(y - r->centerY));
+		int place = ((int)(r->colorOffset + d) % 14);
 		PosColor pc = {
 			.pos = {
 				.x = worldXToScreenX(x),
 				.y = worldYToScreenY(y),
 			},
 			.color = {
-				255, 255, 255
+				r->colors[place], r->colors[place+1], r->colors[place+2]
 			},
 		};
 		memcpy(reco.data, &pc, sizeof(PosColor));
@@ -191,6 +210,46 @@ bool checkBorder(Rainbow *r) {
 	return false;
 }
 
+void setRainbow(Rainbow **r) {
+	Rainbow *rb = *r;
+	//rb->colors = calloc(42, sizeof(float));
+	float size = sizeof(float) * 3;
+
+	float red[3] = {150.0, 15.0, 28.0};
+	memcpy(rb->colors, red, size);
+	float redO[3] = {187.0, 0, 0};
+	memcpy(rb->colors+3, redO, size);
+
+	float orange[3] = {196.0, 71.0, 20.0};
+	memcpy(rb->colors+6, orange, size);
+	float orangeY[3] = {226.0, 99.0, 5.0};
+	memcpy(rb->colors+9, orangeY, size);
+
+	float yellow[3] = {225.0, 145.0, 15.0};
+	memcpy(rb->colors+12, yellow, size);
+	float yellowG[3] = {241.0, 195.0, 11.0};
+	memcpy(rb->colors+15, yellowG, size);
+
+	float green[3] = {134.0, 177.0, 0};
+	memcpy(rb->colors+18, green, size);
+	float greenB[3] = {16.0, 141.0, 9.0};
+	memcpy(rb->colors+21, greenB, size);
+	
+	float blue[3] = {4.0, 163.0, 114.0};
+	memcpy(rb->colors+24, blue, size);
+	float blueI[3] = {17.0, 121.0, 126.0};
+	memcpy(rb->colors+27, blueI, size);
+
+	float indigo[3] = {8.0, 25.0, 141.0};
+	memcpy(rb->colors+30, indigo, size);
+	float indigoV[3] = {69.0, 5.0, 174.0};
+	memcpy(rb->colors+33, indigoV, size);
+
+	float violet[3] = {114.0, 0, 136.0};
+	memcpy(rb->colors+36, violet,  size);
+	float violetR[3] = {124.0, 12.0, 87.0};
+	memcpy(rb->colors+39, violetR,  size);
+}
 
 
 void freeRainbowData(Rainbow *r) {
@@ -222,7 +281,6 @@ void freeRainbow(void *r) {
 	if (rb->self) { // in case rainbow hasnt been actualized
 		Actor *a = findNub(rb->self, 2)->data;
 		a->deleteMe = true;
-		free(rb->colors);
 		/*
 		freeAnim(rb->anim);
 		*/

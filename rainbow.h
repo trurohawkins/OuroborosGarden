@@ -9,7 +9,7 @@ typedef struct {
 
 	int centerX;
 	int centerY;
-	float *colors;
+	float colors[42];
 	int colorOffset;
 	int changeInterval;
 	int changeTimer;
@@ -27,6 +27,7 @@ Rainbow *fill(int startX, int startY);
 void *renderRainbow(void *data);
 bool checkRainbow(void *r);
 bool checkBorder(Rainbow *r);
+void setRainbow(Rainbow **r);
 
 void freeRainbowData(Rainbow *r);
 void freeRainbow(void *r);
