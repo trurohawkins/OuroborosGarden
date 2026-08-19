@@ -20,6 +20,7 @@ void actualizeRainbow(Rainbow *r) {
 	RenderObject *rob = ren->data;
 	rob->data = r;
 	rob->render = renderRainbow;
+
 	Actor *actor = makeFormActor(r->self);
 	Action *action = makeAction(0, rainbowAction, r);
 	addAction(actor, action);
@@ -281,9 +282,6 @@ void freeRainbow(void *r) {
 	if (rb->self) { // in case rainbow hasnt been actualized
 		Actor *a = findNub(rb->self, 2)->data;
 		a->deleteMe = true;
-		/*
-		freeAnim(rb->anim);
-		*/
 		freeForm(rb->self);
 	}
 	freeRainbowData(rb);

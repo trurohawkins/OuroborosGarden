@@ -95,20 +95,28 @@ void spreadGrass(Form *g) {
 	}
 }
 
-void grassColor(Form *g) {
+Color grassColor(Form *g) {
 	float eco = *getStat(g, ECO);
 	float growth = *getStat(g, GROWTH);
 	// should be some sort of stasis point
 	// if the plant has less eco than stasis its dying
 	// if more its growing
-	float ct = eco;// / 0.5;//growth;
-	Nub *sigil = findNub(g, 1);
-	if (sigil) {
-		Sigil *skin = findNub(g, 1)->data;
-		skin->r = lerp(grassA[0], grassB[0], ct);
-		skin->g = lerp(grassA[1], grassB[1], ct);
-		skin->b = lerp(grassA[2], grassB[2], ct);
+	Color c = {
+		.vals = {
+			lerp(grassA[0], grassB[0], eco),
+			lerp(grassA[1], grassB[1], eco),
+			lerp(grassA[2], grassB[2], eco),
+		},
+	};
+}
+
+int grassStamp(Form *grass) {
+	Nub *plantNub = findNub(grass, PLANTNUB);
+	Plant *plant = plantNub->data;
+	if (!plant) {
+		return -1;
 	}
+	return plant->stage - 1;
 }
 
 Form *checkGrass(int x, int y) {
@@ -138,16 +146,43 @@ void *renderGrass(void *data) {
 		.type = 0,
 		.index = grassStamps[plant->stage-1],
 	};
+	Color color = {
+		.vals = {
+			lerp(grassA[0], grassB[0], eco),
+			lerp(grassA[1], grassB[1], eco),
+			lerp(grassA[2], grassB[2], eco),
+		},
+	};
+	if (reco.index > -1) {
+		bool figure = false;
+		Form *dirt = 0;
+		World *w = getWorld();
+		int wi = grass->pos[1] * w->x + grass->pos[0];
+		Cell c = theWorld.map[wi];
+		for (int i = 0; i < FORMS_PER_CELL; i++) {
+			if (c.within[i]) {
+				int id = c.within[i]->id;
+				if (id == SNAKE || id == FLOWER || id == POOP) {
+					figure = true;
+				} else if (id == DIRT) {
+					dirt = c.within[i];
+				}
+			}
+		}
+		if (figure && dirt) {
+			reco.index = -1;
+			Color d = dirtColor(dirt);
+			for (int i = 0; i < 3; i++) {
+				color.vals[i] = lerp(color.vals[i], d.vals[i], 0.5);
+			}
+		}
+	}
 	PosColor pc = {
 		.pos = {
 			.x = worldXToScreenX(grass->pos[0]),// + screenX/2 - frameDim[0]/2;
 			.y = worldYToScreenY(grass->pos[1]),// + screenY/2 - frameDim[1]/2;
 		},
-		.color = {
-			lerp(grassA[0], grassB[0], eco),
-			lerp(grassA[1], grassB[1], eco),
-			lerp(grassA[2], grassB[2], eco),
-		}
+		.color = color,
 	};
 	memcpy(reco.data, &pc, sizeof(PosColor));
 

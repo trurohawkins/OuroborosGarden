@@ -15,7 +15,9 @@ float evapMinimum = 0.05;
 float spreadDither = 0.005;
 float bioEvap = 0.1;
 // snake
-int baseSnake = 15;
+int baseSnake = 11;
+int fullStomach = 3;
+int deathEco = 5;
 float ecoTrail = 0.1f;
 float plantTrail = 0.03;
 //plants
@@ -27,10 +29,11 @@ float flowerChance = 0.02f;
 #define PLANT 1
 #define SNAKE 2
 #define GRASS 3
-#define FLOWER 4
-#define WATER 5
-#define STONE 6
-#define RAINBOW 7
+#define POOP 4
+#define FLOWER 5
+#define WATER 6
+#define STONE 7
+#define RAINBOW 8
 
 //stat IDs
 // dirt
@@ -45,8 +48,9 @@ float flowerChance = 0.02f;
 #define COVER 7
 
 //sprite layering
-#define SNAKELAYER 4
-#define FLOWERLAYER 3
+#define SNAKELAYER 5
+#define FLOWERLAYER 4
+#define POOPLAYER 3
 #define RAINBOWLAYER 2
 #define GRASSLAYER 1
 #define DIRTLAYER 0

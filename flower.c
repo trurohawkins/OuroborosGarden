@@ -117,13 +117,13 @@ void *renderFlower(void *data) {
 		}
 	};
 	if (plant->stage <= 2) {
-		pc.color[0] = lerp(dying[0], sprout[0], eco);
-		pc.color[1] = lerp(dying[1], sprout[1], eco);
-		pc.color[2] = lerp(dying[2], sprout[2], eco);
+		pc.color.vals[0] = lerp(dying[0], sprout[0], eco);
+		pc.color.vals[1] = lerp(dying[1], sprout[1], eco);
+		pc.color.vals[2] = lerp(dying[2], sprout[2], eco);
 	} else {
-		pc.color[0] = lerp(dying[0], fruit[0], eco);
-		pc.color[1] = lerp(dying[1], fruit[1], eco);
-		pc.color[2] = lerp(dying[2], fruit[2], eco);
+		pc.color.vals[0] = lerp(dying[0], fruit[0], eco);
+		pc.color.vals[1] = lerp(dying[1], fruit[1], eco);
+		pc.color.vals[2] = lerp(dying[2], fruit[2], eco);
 	}
 	memcpy(reco.data, &pc, sizeof(PosColor));
 	addRenderCommand(reco);

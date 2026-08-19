@@ -43,7 +43,9 @@ void *renderWater(void *data) {
 				.y = worldYToScreenY(pos[1]),
 			},
 			.color = {
-				50, 100, 200
+				.vals = {
+					50, 100, 200
+				}
 			},
 		};
 		memcpy(reco.data, &pc, sizeof(PosColor));

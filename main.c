@@ -11,6 +11,7 @@ bool drawing = true;
 #include "water.c"
 #include "stone.c"
 #include "plant.c"
+#include "poop.c"
 #include "rainbow.c"
 #include "snake.c"
 

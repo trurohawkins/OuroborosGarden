@@ -8,7 +8,7 @@ void makeGarden() {
 	World *w = getWorld();
 	initWater();
 	initStone();
-	
+
 	for (int i = 0; i < 3; i++) {
 		int xp = randRange(0, worldX);
 		int yp = randRange(0, worldY);

@@ -12,8 +12,12 @@ Snake *makeSnake(int xPos, int yPos) {
 	s->body = makeList();
 	addToList(&s->body, sb);
 
-	addTimedEvent(snakeMovement, s, moveInterval);
-
+	s->eNum = addTimedEvent(snakeAction, s, moveInterval);
+	s->stomach = fullStomach;
+	s->pooInterval = 50;
+	s->pooLength = 5;
+	
+	s->pNum = snakeCount;
 	Player *player = checkPlayer(snakeCount+1);
 	if (player == 0) {
 		player = makePlayer(s, snakeCount+1, 0);
@@ -82,6 +86,32 @@ void growSnake(Snake *s) {
 	addToList(&s->body, s->butt);
 	placeForm(s->self, tail[0], tail[1]);
 	free(tail);
+}
+
+void shrinkSnake(Snake *s) {
+	linkedList *cur = s->body;
+	SnakeBody *tail = 0;
+	int roto = -1;
+	while (cur != 0) {
+		SnakeBody *sb = cur->data;
+		// we dotn wanna shrink passed 2 pieces, head and butt
+		if (cur->data != s->body->data) {
+			if (cur->next && cur->next->next == 0) {
+				tail = cur->next->data;
+				free(cur->next);
+				cur->next = 0;
+				s->butt = cur->data;
+				s->butt->roto = roto;
+				//s->butt->sprite = 1;
+			}
+		}
+		roto = sb->roto;
+		cur = cur->next;
+	}
+	if (tail) {
+		removeForm(s->self, tail->pos[0], tail->pos[1]);
+		free(tail);
+	}
 }
 
 void placeSnake(Snake *s) {
@@ -156,6 +186,9 @@ bool snakeCheck(Snake *s) {
 		removeForm(fruit, fruit->pos[0], fruit->pos[1]);
 		freeForm(fruit);
 		growSnake(s);
+		if (s->stomach < fullStomach) {
+			s->stomach++;
+		}
 	}
 	return true;
 }
@@ -189,16 +222,26 @@ bool moveSnake(Snake *s) {
 	return true;
 }
 
-void snakeMovement(void *snake) {
+void snakeAction(void *snake) {
 	Snake *s = snake;
+	if (s->pooCounter >= s->pooInterval) {
+		s->pooCounter = -s->pooLength;
+	} else {
+		s->pooCounter++;
+	}
+
 	if (s->staggered == 0) {
-		int preDir = s->dir;
-		s->dir = s->newDir;
-		if (!moveSnake(s)) {
-			s->dir = preDir;
-			return;
+		if (s->pooCounter >= 0) {
+			int preDir = s->dir;
+			s->dir = s->newDir;
+			if (!moveSnake(s)) {
+				s->dir = preDir;
+				return;
+			}
+			checkAndDelete(&s->rainbows, checkRainbow, freeRainbow);
+		} else if (s->pooCounter == -1) {
+			snakePoop(s);
 		}
-		checkAndDelete(&s->rainbows, checkRainbow, freeRainbow);
 	} else {
 		s->staggered--;
 		if (s->staggered == 0) {
@@ -214,6 +257,22 @@ void snakeStagger(Snake *s, bool staggered) {
 		
 	}
 }
+
+void snakePoop(Snake *s) {
+	if (s->stomach > 0) {
+		s->stomach--;
+		int pos[2] = {s->butt->pos[0], s->butt->pos[1]};
+		Form *p = makePoop();
+		placeForm(p, pos[0], pos[1]);
+	} else {
+		if (countSnakeParts(s) > 8) {
+			shrinkSnake(s);
+		} else {
+			snakeDie(s);
+		}
+	}
+}
+
 
 void ouroboros(Snake *s) {
 	SnakeBody *head = s->body->data;
@@ -264,6 +323,33 @@ void snakeRight(void *s, float val) {
 	if (val == 1) {
 		turnSnake(s, 3);
 	}
+}
+
+int countSnakeParts(Snake *s) {
+	linkedList *cur = s->body;
+	int count = 0;
+	while (cur != 0) {
+		count++;
+		cur = cur->next;
+	}
+	return count;
+}
+
+void snakeDie(Snake *s) {
+	linkedList *cur = s->body;
+	while (cur) {
+		SnakeBody *sb = cur->data;
+		pushEco(sb->pos[0], sb->pos[1], deathEco);
+		cur = cur->next;
+	}
+	removeFromList(&snakeList, s);
+	Player *p = checkPlayer(s->pNum + 1);
+	if (p) {
+		p->active = false;
+	}
+	//remvoe audio movement
+	unscheduleEvent(s->eNum);
+	freeSnake(s);
 }
 
 

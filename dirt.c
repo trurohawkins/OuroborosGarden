@@ -230,17 +230,6 @@ void calcFlow(int x, int y) {
 	}
 }
 
-void dirtColor(Form *f) {
-	float eco = *getStat(f, ECO);
-	Sigil *skin = findNub(f, 1)->data;
-	skin->r = lerp(dirtA[0], dirtB[0], eco);
-	skin->g = lerp(dirtA[1], dirtB[1], eco);
-	skin->b = lerp(dirtA[2], dirtB[2], eco);
-	char buffer[100];
-	sprintf(buffer, "%f = dirt: %i, %i, %i\n", eco, skin->r, skin->g, skin->b);
-	//debugWrite(buffer);
-}
-
 void *renderDirt(void *data) {
 	Form *dirt = data;
 	float eco = *getStat(dirt, ECO);
@@ -255,15 +244,30 @@ void *renderDirt(void *data) {
 			.y = worldYToScreenY(dirt->pos[1]),// + screenY/2 - frameDim[1]/2;
 		},
 		.color = {
-			lerp(dirtA[0], dirtB[0], eco),
-			lerp(dirtA[1], dirtB[1], eco),
-			lerp(dirtA[2], dirtB[2], eco)
+			.vals = {
+				lerp(dirtA[0], dirtB[0], eco),
+				lerp(dirtA[1], dirtB[1], eco),
+				lerp(dirtA[2], dirtB[2], eco)
+			}
 		},
 	};
 	memcpy(reco.data, &pc, sizeof(PosColor));
 	addRenderCommand(reco);
 	return NULL;//commands;
 }
+
+Color dirtColor(Form *dirt) {
+	float eco = *getStat(dirt, ECO);
+	Color col = {
+			.vals = {
+				lerp(dirtA[0], dirtB[0], eco),
+				lerp(dirtA[1], dirtB[1], eco),
+				lerp(dirtA[2], dirtB[2], eco)
+			}
+	};
+	return col;
+}
+
 
 Form *checkSoil(int x, int y) {
 	Cell *c = getCell(x, y);

@@ -11,10 +11,22 @@ typedef struct Snake {
 	SnakeBody *butt;
 	Form *self;
 	linkedList *rainbows;
+
+	int stamp;
 	int dir;
 	int newDir;
-	int stamp;
+
 	int staggered;
+
+	int stomach;
+	int pooCounter;
+	int pooInterval;
+	int pooLength;
+
+	// for player event
+	int pNum;
+	//for audio event
+	int eNum;
 } Snake;
 
 Snake *makeSnake(int xPos, int yPos);
@@ -27,10 +39,11 @@ void removeSnake(Snake *s);
 void turnSnake(Snake *s, int direction);
 bool snakeCheck(Snake *s);
 bool moveSnake(Snake *s);
-void snakeMovement(void *s);
+void snakeAction(void *s);
 void snakeStagger(Snake *s, bool staggered);
 void ouroboros(Snake *s);
 void spaceCheck(Snake *s, int x, int y);
+void snakePoop(Snake *s);
 
 void snakeStep(void *s, float val);
 void snakeUp(void *s, float val);
@@ -38,6 +51,8 @@ void snakeLeft(void *s, float val);
 void snakeDown(void *s, float val);
 void snakeRight(void *s, float val);
 
+int countSnakeParts(Snake *s);
+void snakeDie(Snake *s);
 
 void freeSnake(void *s);
 void *renderSnake(void *data);
