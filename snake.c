@@ -29,6 +29,9 @@ Snake *makeSnake(int xPos, int yPos) {
 			addControl(player, "K0D", snakeRight);
 			addControl(player, "K0P", snakeStep);
 		}
+	} else {
+		//probably on a restart and need to update snake
+		player->self = s;
 	}
 	placeSnake(s);
 	for (int i = 0; i < baseSnake - 1;  i++ ) {
@@ -343,18 +346,17 @@ void snakeDie(Snake *s) {
 		cur = cur->next;
 	}
 	removeFromList(&snakeList, s);
-	Player *p = checkPlayer(s->pNum + 1);
-	if (p) {
-		p->active = false;
-	}
-	//remvoe audio movement
-	unscheduleEvent(s->eNum);
 	freeSnake(s);
 }
 
 
 void freeSnake(void *s) {
 	Snake *snake = s;
+	Player *p = checkPlayer(snake->pNum + 1);
+	removePlayer(p);
+	freePlayer(p);
+	//remvoe audio movement
+	unscheduleEvent(snake->eNum);
 
 	removeSnake(snake);
 	freeForm(snake->self);

@@ -82,5 +82,7 @@ void endGarden() {
 		curSnake = curSnake->next;
 	}
 	freeListSaveObj(&snakeList);
+	snakeCount = 0;
+	snakeList = 0;
 }
 

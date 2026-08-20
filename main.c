@@ -33,6 +33,7 @@ void pressSpace(void *, float val);
 
 void pauseGame(void *, float val);
 void resumeGame();
+void restartGame();
 
 int main(int argc, char **argv) {
 	if (argc > 1) {
@@ -65,15 +66,17 @@ int main(int argc, char **argv) {
 
 	Menu *pauseMenu = makeMenu(1, 3, 20, 10);
 	play = getButton(pauseMenu, 0, 2);
-	nameButton(play, "play");
-	play->func = resumeGame;
+	nameButton(play, "resume");
+	play->func = &resumeGame;
 
 	Button *restart = getButton(pauseMenu, 0, 1);
 	nameButton(restart, "restart");
+	restart->func = &restartGame;
 
 	exit = getButton(pauseMenu, 0, 0);
 	nameButton(exit, "exit");
 	exit->func = &exitGame;
+
  	pauseMenu->pos[0] = 0.48f; 
 	pauseMenu->pos[1] = 0.3f;
 
@@ -152,14 +155,24 @@ void pauseGame(void *gm, float val) {
 			toggleGamePause();
 			GM->curMenu = GM->pauseMenu;
 		} else {
-			toggleGamePause();
-			GM->curMenu = NULL;
+			resumeGame();
 		}
 		renderNewShot = true;
 	}
 }
 
 void resumeGame() {
+	toggleGamePause();
 	GM.curMenu = NULL;
+	renderNewShot = true;
+}
+
+void restartGame() {
+	clearTimedEvents();
+	endGarden();
+	freeWorld();
+	toggleGamePause();
+	GM.curMenu = GM.startMenu;
+	renderNewShot = true;
 }
 
