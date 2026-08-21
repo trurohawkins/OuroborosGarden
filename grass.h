@@ -1,3 +1,4 @@
+#pragma once
 Form *makeGrass();
 bool placeGrass(int x, int y);
 bool growGrass(Form *g);

@@ -2,7 +2,7 @@
 int worldX = 80;
 int worldY = 40;
 
-const float spd = 1;
+const float spd = 0.6;
 float spreadInterval = 0.5 * spd;
 float evapInterval = 10.0 * spd;
 float moveInterval = 0.7 * spd;

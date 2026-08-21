@@ -66,7 +66,7 @@ void *renderPoop(void *data) {
 		},
 		.color = {
 			.vals = {
-				120, 20, 60
+				13, 194, 79
 			},
 		},
 	};

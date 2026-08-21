@@ -29,7 +29,7 @@ void plantsAction(void *) {
 			for (int i = 0; i < FORMS_PER_CELL; i++) {
 				if (c->within[i]) {
 					Form *plant = c->within[i];
-					if (findNub(plant, PLANTNUB)) {// && plant->id != 2 && plant->id != 3) {
+					if (findNub(plant, PLANTNUB)) {// && plant->id != 2 && plant->id != 3) 
 						if (!lifeCycle(plant)) {
 							//addToList(&dead, plant);
 							plantDie(plant);
@@ -84,7 +84,7 @@ bool lifeCycle(Form *plant) {
 		if (!drawing) {printf("    starting eco %f\n", *eco);}
 		float loss = *getStat(plant, LOSS); 
 		//if they lose too much they die
-		//if (stage < lifeTime && *eco - loss >= 0) {
+		//if (stage < lifeTime && *eco - loss >= 0) 
 		if (!drawing) {printf("   eco loss %f\n", loss);}
 		if (*eco - loss >= 0) {
 			*eco -= loss;
@@ -96,13 +96,15 @@ bool lifeCycle(Form *plant) {
 		Form *soil = checkSoil(x, y);
 		float *soilEco = getStat(soil, ECO);
 		if ((soilEco && equal(*soilEco, 0)) || !soilEco) {
-			return true;
+			if (!drawing) {printf("	soilEco %p: %f\n", soilEco, *soilEco);}
+			//return true;
 		}
 		float pull = *getStat(plant, PULL);
 		float *growth = getStat(plant, GROWTH);
 		if (!drawing) {printf("     pull: %f\n", pull);}
 		//pulling eco from the surrounding ground
 		pull = min(pull, *growth - *eco);
+		if (!drawing) {printf("     pull == %f\n", pull);}
 		float gather = pullEco(x, y, pull);
 		if (gather > 0) {
 			if (!drawing) {printf("   eco gather %f\n", gather);}

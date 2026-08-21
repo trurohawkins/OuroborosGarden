@@ -85,7 +85,6 @@ int main(int argc, char **argv) {
 	GM.curMenu = startMenu;
 	//makeGarden();
 	quickExit = false;
-
 	runWorld();
 
 	if (GM.curMenu != startMenu) {
@@ -157,14 +156,14 @@ void pauseGame(void *gm, float val) {
 		} else {
 			resumeGame();
 		}
-		renderNewShot = true;
+		screenChanged(0, 0);
 	}
 }
 
 void resumeGame() {
 	toggleGamePause();
 	GM.curMenu = NULL;
-	renderNewShot = true;
+	screenChanged(0, 0);
 }
 
 void restartGame() {
@@ -173,6 +172,6 @@ void restartGame() {
 	freeWorld();
 	toggleGamePause();
 	GM.curMenu = GM.startMenu;
-	renderNewShot = true;
+	screenChanged(0, 0);
 }
 

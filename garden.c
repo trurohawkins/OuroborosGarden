@@ -6,8 +6,9 @@ void makeGarden() {
 	setFramePosition(worldX/2, worldY/2);
 
 	World *w = getWorld();
-	initWater();
 	initStone();
+	initWater();
+	initPlants();
 
 	for (int i = 0; i < 3; i++) {
 		int xp = randRange(0, worldX);
@@ -38,8 +39,6 @@ void makeGarden() {
 			}
 		}
 	}
-
-	initPlants();
 
 	makeSnake(worldX/2, worldY/2);
 }

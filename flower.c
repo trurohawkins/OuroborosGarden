@@ -3,9 +3,10 @@
 float flowerGrowth = 0.5;
 float fullFower = 3;
 
-float fruit[3] = {255, 0, 255};
-float sprout[3] = {100, 100, 155};
-float dying[3] = {100, 75, 50};
+float fruit[3] = {188, 23, 239};
+float sprout[3] = {23, 164, 239};
+float fDying[3] = {239, 23, 103};
+float sDying[3] = {23, 239, 194};
 
 Form *makeFlower() {
 	Form *f = makePlant();
@@ -25,8 +26,11 @@ Form *placeFlower(int x, int y) {
 		Form *dirt = checkSoil(x, y);
 		if (dirt) {
 			Form *flower = makeFlower();
-			placeForm(flower, x, y);
-			return flower;
+			if (placeForm(flower, x, y)) {
+				return flower;
+			} else {
+				freeForm(flower);
+			}
 		}
 	}
 	return NULL;
@@ -117,13 +121,13 @@ void *renderFlower(void *data) {
 		}
 	};
 	if (plant->stage <= 2) {
-		pc.color.vals[0] = lerp(dying[0], sprout[0], eco);
-		pc.color.vals[1] = lerp(dying[1], sprout[1], eco);
-		pc.color.vals[2] = lerp(dying[2], sprout[2], eco);
+		pc.color.vals[0] = lerp(sDying[0], sprout[0], eco);
+		pc.color.vals[1] = lerp(sDying[1], sprout[1], eco);
+		pc.color.vals[2] = lerp(sDying[2], sprout[2], eco);
 	} else {
-		pc.color.vals[0] = lerp(dying[0], fruit[0], eco);
-		pc.color.vals[1] = lerp(dying[1], fruit[1], eco);
-		pc.color.vals[2] = lerp(dying[2], fruit[2], eco);
+		pc.color.vals[0] = lerp(fDying[0], fruit[0], eco);
+		pc.color.vals[1] = lerp(fDying[1], fruit[1], eco);
+		pc.color.vals[2] = lerp(fDying[2], fruit[2], eco);
 	}
 	memcpy(reco.data, &pc, sizeof(PosColor));
 	addRenderCommand(reco);

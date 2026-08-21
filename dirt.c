@@ -1,7 +1,7 @@
 #include "dirt.h"
 
-float dirtA[3] = {179.0, 89.0, 23.0};
-float dirtB[3] = {74.8, 22.4, 2.0};
+float dirtA[3] = {203, 102, 12};
+float dirtB[3] = {79, 30, 3};
 float intake[2] = {0.0, 0.2};
 float output[2] = {0.05, 0.1};
 
@@ -65,6 +65,7 @@ void spreadEco(Form *from, int x, int y) {
 				float *eco = getStat(to, ECO);
 				if (*source > *eco) {
 					float flow = (*source - *eco) / 2;
+
 					flow = changeEco(to, flow);
 					changeEco(from, -flow);
 				}
@@ -90,7 +91,7 @@ float changeEco(Form *form, float amnt) {
 		*eco = clampF(*eco + amnt, 0, maxEco);
 		diff = max(*eco, start) - min(*eco, start);
 	}
-	renderNewShot = true;
+	screenChanged(0, 0);
 	return diff;
 }
 
@@ -123,7 +124,7 @@ float pullEco(int x, int y, float amnt) {
 	for (int i = 0; i < MAXPULLFORMS; i++) {
 		if (buff[i]) {
 			int dist = manhattanDistance(x, y, buff[i]->pos[0], buff[i]->pos[1]);
-			float a = amnt / (2 * dist);
+			float a = dist > 0 ? amnt / (2 * dist) : amnt;
 			pulled = changeEco(buff[i], -a);
 			if (pulled >= amnt) {
 				break;

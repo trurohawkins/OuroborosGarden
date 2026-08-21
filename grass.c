@@ -1,6 +1,6 @@
 #include "grass.h"
-float grassA[3] = {250.2, 210.2, 85.7};
-float grassB[3] = {46.0, 173.0, 49.0};
+float grassA[3] = {165, 153, 7};
+float grassB[3] = {24, 101, 2};
 
 Form *makeGrass() {
 	Form *grass = makePlant();
@@ -19,15 +19,13 @@ Form *makeGrass() {
 bool placeGrass(int x, int y) {
 	if (!checkGrass(x, y)) {
 		Form *dirt = checkSoil(x, y);
-		if (dirt) {// && *getStat(dirt, ECO) > 0.75f) {
+		if (dirt) {
 			Form *grass = makeGrass();
-			placeForm(grass, x, y);
-			/*
-				 TileSet *ts = getTile(2);
-				 editData(ts->color, (int)grass->pos[0], (int)grass->pos[1], 0, 1);
-				 addToList(&grassList, grass);// makePos(x, y));
-				 */
-			return true;
+			if (placeForm(grass, x, y)) {
+				return true;
+			} else {
+				freeForm(grass);
+			}
 		}
 	}
 	return false;
