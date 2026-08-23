@@ -21,7 +21,7 @@ Snake *makeSnake(int xPos, int yPos) {
 
 	s->eNum = addTimedEvent(snakeAction, s, moveInterval);
 	s->stomach = fullStomach;
-	s->pooInterval = 50;
+	s->pooInterval = 100;
 	s->pooLength = 5;
 	
 	s->pNum = snakeCount;
@@ -206,6 +206,7 @@ bool snakeCheck(Snake *s) {
 	incPos(posCheck, posCheck+1, d[0], d[1]);
 	Cell *c = getCell(posCheck[0], posCheck[1]);
 	Form *fruit = 0;
+	Form *crush = 0;
 	for (int i = 0; i < FORMS_PER_CELL; i++) {
 		if (c->within[i]) {
 			Form *f = c->within[i];
@@ -213,6 +214,8 @@ bool snakeCheck(Snake *s) {
 				Plant *p = getPlant(f);
 				if (p->stage > 2) {
 					fruit = f;
+				} else if (p->stage > 0) {
+					crush = f;
 				}
 			} else if (f->id == STONE) {
 				snakeStagger(s, true);
@@ -226,6 +229,11 @@ bool snakeCheck(Snake *s) {
 		growSnake(s);
 		if (s->stomach < fullStomach) {
 			s->stomach++;
+		}
+	}
+	if (crush != 0) {
+		if (crush->id == FLOWER) {
+			plantDie(crush);
 		}
 	}
 	return true;
