@@ -21,7 +21,7 @@ Snake *makeSnake(int xPos, int yPos) {
 
 	s->eNum = addTimedEvent(snakeAction, s, moveInterval);
 	s->stomach = fullStomach;
-	s->pooInterval = 5;//0;
+	s->pooInterval = 50;
 	s->pooLength = 5;
 	
 	s->pNum = snakeCount;
