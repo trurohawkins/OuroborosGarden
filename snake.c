@@ -3,6 +3,13 @@
 int snakeCount = 0;
 int staggerTime = 3;
 
+// head: 0 - 3
+// butt: 4 - 7
+// body straight: 8 - 11
+// body bent0: 12 - 15
+// body bent1: 16 - 19
+int snakeStamps[20] = {-1};
+
 Snake *makeSnake(int xPos, int yPos) {
 	Snake *s = calloc(1, sizeof(Snake));
 	s->self = makeForm(SNAKE);
@@ -14,7 +21,7 @@ Snake *makeSnake(int xPos, int yPos) {
 
 	s->eNum = addTimedEvent(snakeAction, s, moveInterval);
 	s->stomach = fullStomach;
-	s->pooInterval = 50;
+	s->pooInterval = 5;//0;
 	s->pooLength = 5;
 	
 	s->pNum = snakeCount;
@@ -44,8 +51,36 @@ Snake *makeSnake(int xPos, int yPos) {
 	RenderObject *rob = ren->data;
 	rob->data = s;
 	rob->render = renderSnake;
+	
+	if (snakeStamps[0] == -1) {
+		snakeStamps[0] = createStamp("\u28FE", "\u28F7");
+		snakeStamps[1] = createStamp("\u28BE", "\u28FF");
+		snakeStamps[2] = createStamp("\u28BF", "\u287F");
+		snakeStamps[3] = createStamp("\u28FF", "\u2877");
 
-	s->stamp = createStamp("@");
+		snakeStamps[4] = createStamp("\u28BF", "\u287F");
+		snakeStamps[5] = createStamp("\u28FF", "\u2877");
+		snakeStamps[6] = createStamp("\u28FE", "\u28F7");
+		snakeStamps[7] = createStamp("\u28BE", "\u28FF");
+
+		//snakeStamps[4] = createStamp("\u28BE", "\u2877");
+		snakeStamps[8] = createStamp("\u28FF", "\u28FF");
+		snakeStamps[9] = createStamp("\u28FF", "\u28FF");
+		snakeStamps[10] = createStamp("\u28FF", "\u28FF");
+		snakeStamps[11] = createStamp("\u28FF", "\u28FF");
+		//snakeStamps[4] = createStamp("\u28B8", "\u2847");
+
+		snakeStamps[12] = createStamp("\u28FF", "\u28FF");
+		snakeStamps[13] = createStamp("\u28FF", "\u28FF");
+		snakeStamps[14] = createStamp("\u28FF", "\u28FF");
+		snakeStamps[15] = createStamp("\u28FF", "\u28FF");
+
+		snakeStamps[16] = createStamp("\u28FF", "\u28FF");
+		snakeStamps[17] = createStamp("\u28FF", "\u28FF");
+		snakeStamps[18] = createStamp("\u28FF", "\u28FF");
+		snakeStamps[19] = createStamp("\u28FF", "\u28FF");
+
+	}
 	return s;
 }
 
@@ -70,7 +105,7 @@ void growSnake(Snake *s) {
 				if (head) {
 					sb->sprite = 0;
 				} else {
-					sb->sprite = 2;
+					sb->sprite = 8;
 				}
 				break;
 			} else {
@@ -84,7 +119,7 @@ void growSnake(Snake *s) {
 	int *dir = getDir4((s->dir+2) % 4);
 	incPos(tail, tail + 1, dir[0], dir[1]);
 	s->butt = makeBody(tail[0], tail[1]);
-	s->butt->sprite = 1;
+	s->butt->sprite = 4;
 	s->butt->roto = (xyToDir4(dir) + 2) % 4;
 	addToList(&s->body, s->butt);
 	placeForm(s->self, tail[0], tail[1]);
@@ -105,7 +140,7 @@ void shrinkSnake(Snake *s) {
 				cur->next = 0;
 				s->butt = cur->data;
 				s->butt->roto = roto;
-				//s->butt->sprite = 1;
+				s->butt->sprite = 4;
 			}
 		}
 		roto = sb->roto;
@@ -211,8 +246,32 @@ bool moveSnake(Snake *s) {
 		SnakeBody *sb = (SnakeBody*)cur->data;
 		// if the direction doesn't match copy new direction for movement
 		int d[2] = {pre[0] - sb->pos[0], pre[1] - sb->pos[1]};
+		if (pre[0] == -5) {
+			sb->roto = s->dir;
+		} else if (abs(d[0]) > 1 || abs(d[1]) > 1) {
+			d[0] = sign(d[0]) * -1;
+			d[1] = sign(d[1]) * -1;
+			sb->roto = xyToDir4(d);
+		} else {
+			sb->roto = xyToDir4(d);
+		}
 		if (pre[0] != -5 && (dir[0] != d[0] || dir[1] != d[1])) {
+			if (sb->sprite >= 8) {
+				int preD = xyToDir4(dir);
+				int newD = xyToDir4(d);
+				if ((preD + 1) % 4 == newD) {
+					sb->sprite = 12;
+				} else {
+					sb->sprite = 16;
+				}
+			} else if (sb->sprite == 4) {
+				sb->roto = xyToDir4(dir);
+			}
 			memcpy(dir, d, sizeof(int)*2);
+		} else {
+			if (sb->sprite > 8) {
+				sb->sprite = 8;
+			}
 		}
 		//save current pos
 		memcpy(pre, sb->pos, sizeof(int) * 2);
@@ -372,18 +431,21 @@ void *renderSnake(void *data) {
 	linkedList *body = s->body;
 	RenderCommand reco = {
 		.type = 0,
-		.index = s->stamp,
-		.layer = SNAKELAYER,
+		.layer = SNAKELAYER+1,
 	};
 	PosColor pc = {
 		.color = {255, 255, 255},
 	};
 	while (body) {
 		SnakeBody *sb = body->data;
+		reco.index = snakeStamps[sb->sprite+sb->roto];
 		pc.pos.x = worldXToScreenX(sb->pos[0]);
 		pc.pos.y = worldYToScreenY(sb->pos[1]);
 		memcpy(reco.data, &pc, sizeof(PosColor));
 		addRenderCommand(reco);
+		if (reco.index != snakeStamps[4]) {
+			reco.layer = SNAKELAYER;
+		}
 		body = body->next;
 	}
 	return commands;

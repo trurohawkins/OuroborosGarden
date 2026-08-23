@@ -39,7 +39,7 @@ void makeGarden() {
 			}
 		}
 	}
-
+	placeFlower(10, 10);
 	makeSnake(worldX/2, worldY/2);
 }
 

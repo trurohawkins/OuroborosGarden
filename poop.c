@@ -12,7 +12,7 @@ Form *makePoop() {
 	rob->render = renderPoop;
 
 	if (pooStamp == -1) {
-		pooStamp = createStamp("&");
+		pooStamp = createStamp("\U0001694B", 0);
 	}
 
 	Actor *actor = makeFormActor(poo);

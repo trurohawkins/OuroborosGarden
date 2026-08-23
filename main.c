@@ -41,6 +41,7 @@ int main(int argc, char **argv) {
 	}
 	startWorld(drawing, true);
 	renderFunc = &renderGarden;
+	setRenderStride(2, 1);
 	Player *god = makePlayer(&GM, 0, 0);
 	addPlayer(god);
 	addControl(god, "K0W", pressUp);

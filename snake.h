@@ -12,7 +12,6 @@ typedef struct Snake {
 	Form *self;
 	linkedList *rainbows;
 
-	int stamp;
 	int dir;
 	int newDir;
 

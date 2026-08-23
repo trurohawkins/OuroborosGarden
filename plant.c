@@ -10,14 +10,15 @@ void initPlants() {
 	addTimedEvent(plantsAction, 0, plantsInterval);
 	addTimedEvent(dirtFlow, 0, spreadInterval);
 	addTimedEvent(ecoEvaporation, 0, evapInterval);
-	grassStamps[0] = createStamp("\u2591");//("\u2261");
-	grassStamps[1] = createStamp("\u2592");
-	grassStamps[2] = createStamp("\u2593");
+	grassStamps[0] = createStamp("\u2591", "\u2591");//("\u2261");
+	grassStamps[1] = createStamp("\u2592", "\u2592");
+	grassStamps[2] = createStamp("\u2593", "\u2593");
 	grassStamps[3] = -1;
-	flowerStamps[0] = createStamp("o");
-	flowerStamps[1] = createStamp("0");
-	flowerStamps[2] = createStamp("$");
-	flowerStamps[3] = createStamp("!");
+	flowerStamps[0] = createStamp("\U0001683D", 0);
+	flowerStamps[1] = createStamp("\U00016912", 0);
+	flowerStamps[2] = createStamp("\uAA51", 0);
+	flowerStamps[3] = createStamp("\U0001F73E", 0);
+	//flowerStamps[3] = createStamp("\U000168E6", 0);
 }
 
 void plantsAction(void *) {
