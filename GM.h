@@ -5,6 +5,7 @@ typedef struct {
 	Menu *curMenu;
 	Menu *startMenu;
 	Menu *pauseMenu;
+	Menu *winScreen;
 
 	int level;
 	bool won;
@@ -20,6 +21,7 @@ void freeMenus();
 void plantCount(int amnt);
 void checkPlants();
 void endLevel();
+void loadLevel();
 
 void pressUp(void *guy, float val);
 void pressLeft(void *guy, float val);

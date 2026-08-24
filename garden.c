@@ -77,9 +77,8 @@ void startGarden() {
 void renderGarden() {
 	if (GM.curMenu) {
 		addMenu(GM.curMenu);
-	} else {
-		renderWorld();
 	}
+		renderWorld();
 }
 
 void endGarden() {

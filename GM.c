@@ -50,6 +50,13 @@ void makeMenus() {
 
 	GM.curMenu = startMenu;
 
+	GM.winScreen = makeMenu(1, 1, 20, 20);
+	Button *win = getButton(GM.winScreen, 0, 0);
+	nameButton(win, "YOU WIN!!!");
+	win->func = &loadLevel;
+	GM.winScreen->pos[0] = 0.5;
+	GM.winScreen->pos[1] = 0.5;
+
 }
 
 void plantCount(int amnt) {
@@ -64,6 +71,7 @@ void checkPlants() {
 		GM.won = true;
 		// win next level!!!
 		GM.level++;
+		GM.curMenu = GM.winScreen;
 	}
 }
 
@@ -116,11 +124,7 @@ void pressSpace(void *gm, float val) {
 		if (GM->curMenu) {
 			pressButton(GM->curMenu);
 		} else {
-			if (!GM->won) {
-				toggleGamePause();
-			} else {
-				loadLevel();
-			}
+			toggleGamePause();
 		}
 	}
 }
@@ -133,7 +137,7 @@ void pauseGame(void *gm, float val) {
 		} else if (GM->curMenu == NULL) {
 			toggleGamePause();
 			GM->curMenu = GM->pauseMenu;
-		} else {
+		} else if (GM->curMenu != GM->winScreen) {
 			resumeGame();
 		}
 		screenChanged(0, 0);
