@@ -20,7 +20,7 @@ Snake *makeSnake(int xPos, int yPos) {
 	addToList(&s->body, sb);
 
 	s->eNum = addTimedEvent(snakeAction, s, moveInterval);
-	s->stomach = fullStomach;
+	s->stomach = 0;//fullStomach;
 	s->pooInterval = 100;
 	s->pooLength = 5;
 	

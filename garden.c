@@ -8,13 +8,36 @@ void makeGarden() {
 	initStone();
 	initWater();
 	initPlants();
-	
+
 	generateLevel(GM.level);
 }
 
 void generateLevel(int level) {
 	World *w = getWorld();
+	int spawnPos[2] = {worldX/2, worldY/2};
 	if (level == 0) {
+		spawnPos[1] -= 10;
+		placeCircle(placeWater, spawnPos[0], spawnPos[1], 6);
+		int island[2] = {spawnPos[0] - 3, spawnPos[1] + 20};
+		placeCircle(placeWater, island[0], island[1], 4);
+		
+		for (int i = -1; i < 4; i++) {
+			int *dir = getDir4(i);
+			int pos[2] = {island[0] + dir[0], island[1] + dir[1]};
+			removeForm(water, pos[0], pos[1]);
+			Form *dirt = placeDirt(pos[0], pos[1]);
+			float *eco = getStat(dirt, ECO);
+			*eco = 1;
+		}
+		Form *flower = placeFlower(island[0], island[1]);
+		grow(flower);
+		grow(flower);
+		float *eco = getStat(flower, ECO);
+		*eco = 1;
+		Plant *p = getPlant(flower);
+		p->life = p->cycle - 4;
+	} else if (level == 1) {
+	} else {
 		for (int i = 0; i < 3; i++) {
 			int xp = randRange(0, worldX);
 			int yp = randRange(0, worldY);
@@ -29,27 +52,25 @@ void generateLevel(int level) {
 			placeCircle(placeStone, xp, yp, radius);
 		}
 
-		for (int x = 0; x < w->x; x++) {
-			for (int y = 0; y < w->y; y++) {
-				if (!checkFormID(x, y, WATER)) {
-					placeForm(makeDirt(), x, y);
-					if (!checkFormID(x, y, STONE)) {
-						if (randPercent() < grassChance) {
-							placeGrass(x, y);
-						}
-						if (randPercent() < flowerChance) {
-							placeFlower(x, y);
-						}
+	}
+	for (int x = 0; x < w->x; x++) {
+		for (int y = 0; y < w->y; y++) {
+			if (!checkFormID(x, y, WATER)) {
+				placeDirt(x, y);
+				if (!checkFormID(x, y, STONE)) {
+					if (randPercent() < grassChance) {
+						placeGrass(x, y);
+					}
+					if (randPercent() < flowerChance) {
+						placeFlower(x, y);
 					}
 				}
 			}
 		}
-		placeFlower(10, 10);
-		makeSnake(worldX/2, worldY/2);
-	} else if (level == 1) {
-		makeSnake(worldX/2, worldY/2);
-	
 	}
+
+	makeSnake(spawnPos[0], spawnPos[1]);
+
 
 }
 
@@ -78,7 +99,7 @@ void renderGarden() {
 	if (GM.curMenu) {
 		addMenu(GM.curMenu);
 	}
-		renderWorld();
+	renderWorld();
 }
 
 void endGarden() {

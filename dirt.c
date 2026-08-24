@@ -23,6 +23,18 @@ Form *makeDirt() {
 	return dirt;
 }
 
+Form *placeDirt(int x, int y) {
+	if (!checkFormID(x, y, DIRT)) {
+		Form *dirt = makeDirt();
+		if (!placeForm(dirt, x, y)) {
+			freeForm(dirt);
+		} else {
+			return dirt;
+		}
+	}
+	return NULL;
+}
+
 void dirtFlow(void*) {
 	World *w = getWorld();
 	for (int x = 0; x < w->x; x++) {
@@ -262,11 +274,11 @@ void *renderDirt(void *data) {
 Color dirtColor(Form *dirt) {
 	float eco = *getStat(dirt, ECO);
 	Color col = {
-			.vals = {
-				lerp(dirtA[0], dirtB[0], eco),
-				lerp(dirtA[1], dirtB[1], eco),
-				lerp(dirtA[2], dirtB[2], eco)
-			}
+		.vals = {
+			lerp(dirtA[0], dirtB[0], eco),
+			lerp(dirtA[1], dirtB[1], eco),
+			lerp(dirtA[2], dirtB[2], eco)
+		}
 	};
 	return col;
 }

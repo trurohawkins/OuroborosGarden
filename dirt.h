@@ -1,5 +1,6 @@
 #pragma once
 Form *makeDirt();
+Form *placeDirt(int x, int y);
 
 void addEco(int x, int y, float amnt);
 float pullEco(int x, int y, float amnt);

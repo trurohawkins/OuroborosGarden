@@ -24,7 +24,7 @@ Form *makeFlower() {
 Form *placeFlower(int x, int y) {
 	if (!checkFormID(x, y, FLOWER)) {
 		Form *dirt = checkSoil(x, y);
-		if (dirt) {
+		if (checkFormID(x, y, DIRT)) {
 			Form *flower = makeFlower();
 			if (placeForm(flower, x, y)) {
 				return flower;
