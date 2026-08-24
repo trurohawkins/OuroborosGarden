@@ -72,6 +72,7 @@ bool growFlower(Form *f) {
 		//setStat(f, BEAT, 30);
 		setStat(f, ROOTS, 0.5);
 		calcFlow(f->pos[0], f->pos[1]);
+		plantCount(1);
 	} else if (data->stage < 5) {
 		//Anim *anim = ((Anim**)f->anim)[0];
 		//changeSprite(anim, *stage - 1);

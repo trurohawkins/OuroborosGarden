@@ -5,42 +5,52 @@ void makeGarden() {
 	setFrameDimension(worldX, worldY);
 	setFramePosition(worldX/2, worldY/2);
 
-	World *w = getWorld();
 	initStone();
 	initWater();
 	initPlants();
+	
+	generateLevel(GM.level);
+}
 
-	for (int i = 0; i < 3; i++) {
-		int xp = randRange(0, worldX);
-		int yp = randRange(0, worldY);
-		int radius = randRange(4, 6);
-		//placeCircle(placeWater, xp, yp, radius);
-	}
+void generateLevel(int level) {
+	World *w = getWorld();
+	if (level == 0) {
+		for (int i = 0; i < 3; i++) {
+			int xp = randRange(0, worldX);
+			int yp = randRange(0, worldY);
+			int radius = randRange(4, 6);
+			placeCircle(placeWater, xp, yp, radius);
+		}
 
-	for (int i = 0; i < 8; i++) {
-		int xp = randRange(0, worldX);
-		int yp = randRange(0, worldY);
-		int radius = randRange(4, 5);
-		//placeCircle(placeStone, xp, yp, radius);
-	}
+		for (int i = 0; i < 8; i++) {
+			int xp = randRange(0, worldX);
+			int yp = randRange(0, worldY);
+			int radius = randRange(4, 5);
+			placeCircle(placeStone, xp, yp, radius);
+		}
 
-	for (int x = 0; x < w->x; x++) {
-		for (int y = 0; y < w->y; y++) {
-			if (!checkFormID(x, y, WATER)) {
-				placeForm(makeDirt(), x, y);
-				if (!checkFormID(x, y, STONE)) {
-					if (randPercent() < grassChance) {
-						placeGrass(x, y);
-					}
-					if (randPercent() < flowerChance) {
-						placeFlower(x, y);
+		for (int x = 0; x < w->x; x++) {
+			for (int y = 0; y < w->y; y++) {
+				if (!checkFormID(x, y, WATER)) {
+					placeForm(makeDirt(), x, y);
+					if (!checkFormID(x, y, STONE)) {
+						if (randPercent() < grassChance) {
+							placeGrass(x, y);
+						}
+						if (randPercent() < flowerChance) {
+							placeFlower(x, y);
+						}
 					}
 				}
 			}
 		}
+		placeFlower(10, 10);
+		makeSnake(worldX/2, worldY/2);
+	} else if (level == 1) {
+		makeSnake(worldX/2, worldY/2);
+	
 	}
-	placeFlower(10, 10);
-	makeSnake(worldX/2, worldY/2);
+
 }
 
 void placeCircle(void (*place)(int,int), int xPos, int yPos, int radius) {

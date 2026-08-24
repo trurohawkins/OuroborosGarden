@@ -186,10 +186,12 @@ void ecoEvaporation(void *) {
 			if (dirt) {
 				if (evap < 0) {
 					float *eco = getStat(dirt, ECO);
-					if (*eco + evap < evapMinimum) {
-						evap = *eco - evapMinimum;
+					if (*eco > evapMinimum) {
+						if (*eco + evap < evapMinimum) {
+							evap = *eco - evapMinimum;
+						}
+						changeEco(dirt, evap);
 					}
-					changeEco(dirt, evap);
 				}
 				/*
 					 float *eco = getStat(dirt, "eco");

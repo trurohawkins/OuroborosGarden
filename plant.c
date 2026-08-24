@@ -21,28 +21,6 @@ void initPlants() {
 	//flowerStamps[3] = createStamp("\U000168E6", 0);
 }
 
-void plantsAction(void *) {
-	World *w = getWorld();
-	linkedList *dead = 0;
-	for (int x = 0; x < w->x; x++) {
-		for (int y = 0; y < w->y; y++) {
-			Cell *c = &w->map[(y*w->x)+x];
-			for (int i = 0; i < FORMS_PER_CELL; i++) {
-				if (c->within[i]) {
-					Form *plant = c->within[i];
-					if (findNub(plant, PLANTNUB)) {// && plant->id != 2 && plant->id != 3) 
-						if (!lifeCycle(plant)) {
-							//addToList(&dead, plant);
-							plantDie(plant);
-						}
-					}
-				}
-			}
-			//deleteList(&dead, plantDie);
-		}
-	}
-}
-
 Form *makePlant() {
 	Form *plant = makeForm(PLANT);//0.2, 0.7, 0.5, 1, 1);
 	Nub *plantNub = growNub(plant);
@@ -59,6 +37,27 @@ Form *makePlant() {
 	// affects evaporation in dirt
 	addStat(plant, COVER, 0);
 	return plant;
+}
+
+void plantsAction(void *) {
+	World *w = getWorld();
+	linkedList *dead = 0;
+	for (int x = 0; x < w->x; x++) {
+		for (int y = 0; y < w->y; y++) {
+			Cell *c = &w->map[(y*w->x)+x];
+			for (int i = 0; i < FORMS_PER_CELL; i++) {
+				if (c->within[i]) {
+					Form *plant = c->within[i];
+					if (findNub(plant, PLANTNUB)) {// && plant->id != 2 && plant->id != 3) 
+						if (!lifeCycle(plant)) {
+							plantDie(plant);
+						}
+					}
+				}
+			}
+		}
+	}
+	checkPlants();
 }
 
 Plant *getPlant(Form *p) {
@@ -126,7 +125,6 @@ bool lifeCycle(Form *plant) {
 				return false;
 			}
 		}
-		plantEco(plant);
 	}
 	return true;
 }
@@ -143,12 +141,7 @@ void plantDie(void *plant) {
 	Form *p = plant;
 	removeForm(plant, p->pos[0], p->pos[1]);
 	freeForm(plant);
-}
-
-void plantEco(Form *plant) {
-	if (plant->id == GRASS) {
-		//grassColor(plant);
-	}
+	plantCount(-1);
 }
 
 #include "grass.c"

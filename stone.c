@@ -53,6 +53,17 @@ void *renderStone(void *data) {
 }
 
 void freeStone() {
-	freeList(&stoneBody);
+	if (stoneBody) {
+		linkedList *cur = stoneBody;
+		while (cur) {
+			int *pos = cur->data;
+			removeForm(stone, pos[0], pos[1]);
+			cur = cur->next;
+		}
+		freeList(&stoneBody);
+	}
+	freeForm(stone);
+	stoneBody = 0;
+	stone = 0;
 }
 

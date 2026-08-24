@@ -51,6 +51,7 @@ bool growGrass(Form *g) {
 		setStat(g, ROOTS, 0.25);
 		setStat(g, COVER, evaporation/5);
 		calcFlow(g->pos[0], g->pos[1]);
+		plantCount(1);
 	} else if (data->stage == 2) {
 		//changeBio(g->pos[0], g->pos[1], 0.25);
 		//setStat(g, CYCLE, 25);

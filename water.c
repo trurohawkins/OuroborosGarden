@@ -79,5 +79,16 @@ void *renderWater(void *data) {
 }
 
 void freeWater() {
-	freeList(&waterBody);
+	if (waterBody) {
+		linkedList *cur = waterBody;
+		while (cur) {
+			int *pos = cur->data;
+			removeForm(water, pos[0], pos[1]);
+			cur = cur->next;
+		}
+		freeList(&waterBody);
+	}
+	freeForm(water);
+	waterBody = 0;
+	water = 0;
 }

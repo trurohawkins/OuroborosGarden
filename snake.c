@@ -165,7 +165,7 @@ void placeSnake(Snake *s) {
 			if (soil) {
 				float *eco = getStat(soil, ECO);
 				if (*eco == 0) {
-					*eco = 0.1f;
+					*eco = evapMinimum;
 				}
 				changeEco(soil, ecoTrail);
 			}

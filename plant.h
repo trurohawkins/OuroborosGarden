@@ -1,4 +1,5 @@
 #pragma once
+#include "GM.h"
 
 typedef struct {
 	int life;//counter
@@ -17,5 +18,3 @@ Form *makePlant();
 bool lifeCycle(Form *plant);
 bool grow(Form *plant);
 void plantDie(void *plant);
-void plantEco(Form *plant);
-
