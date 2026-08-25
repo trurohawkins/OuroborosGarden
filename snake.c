@@ -26,6 +26,7 @@ Snake *makeSnake(int xPos, int yPos) {
 	s->pooInterval = 100;
 	s->pooLength = 5;
 	s->eco = 100;	
+	s->newDir = 1;
 	s->pNum = snakeCount;
 	Player *player = checkPlayer(snakeCount+1);
 	if (player == 0) {
@@ -302,6 +303,13 @@ bool moveSnake(Snake *s) {
 	if (!snakeCheck(s)) {
 		return false;
 	}
+	if (!s->grown) {
+		if (countSnakeParts(s) < baseSnake) {
+			growSnake(s);
+		} else {
+			s->grown = true;
+		}
+	}
 	removeSnake(s);
 	int pre[2] = {-5, -5};
 	int dir[2];
@@ -347,13 +355,6 @@ bool moveSnake(Snake *s) {
 		cur = cur->next;
 	}
 	placeSnake(s);
-	if (!s->grown) {
-		if (countSnakeParts(s) < baseSnake) {
-			growSnake(s);
-		} else {
-			s->grown = true;
-		}
-	}
 	ouroboros(s);
 	return true;
 }
@@ -483,6 +484,7 @@ float percentSnakeEco(Snake *s) {
 	}
 	return clamp(eco / count, 0, 1);
 }
+
 void snakeDie(Snake *s) {
 	linkedList *cur = s->body;
 	while (cur) {
