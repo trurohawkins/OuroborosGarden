@@ -25,19 +25,21 @@ Snake *makeSnake(int xPos, int yPos) {
 	s->stomach = fullStomach;
 	s->pooInterval = 100;
 	s->pooLength = 5;
-	s->eco = 100;	
-	s->newDir = 1;
 	s->pNum = snakeCount;
 	Player *player = checkPlayer(snakeCount+1);
 	if (player == 0) {
 		player = makePlayer(s, snakeCount+1, 0);
 		addPlayer(player);
 		if (snakeCount == 0) {
-			addControl(player, "K0W", snakeUp);
-			addControl(player, "K0A", snakeLeft);
-			addControl(player, "K0S", snakeDown);
-			addControl(player, "K0D", snakeRight);
-			addControl(player, "K0P", snakeStep);
+			addKeyControl(player, 'W', snakeUp);
+			addKeyControl(player, 'A', snakeLeft);
+			addKeyControl(player, 'S', snakeDown);
+			addKeyControl(player, 'D', snakeRight);
+			addKeyControl(player, 'P', snakeStep);
+			addKeyControl(player, 129, snakeUp);
+			addKeyControl(player, 130, snakeLeft);
+			addKeyControl(player, 131, snakeDown);
+			addKeyControl(player, 132, snakeRight);
 		}
 	} else {
 		//probably on a restart and need to update snake

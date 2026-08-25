@@ -19,7 +19,6 @@ typedef struct Snake {
 
 	int staggered;
 	
-	float eco;
 	int stomach;
 	int pooCounter;
 	int pooInterval;

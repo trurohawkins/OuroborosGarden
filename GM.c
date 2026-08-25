@@ -1,7 +1,7 @@
 #include "GM.h"
 
 GameMaster GM  = {
-	.level = 1,
+	.level = 0,
 	.curPlants = 0,
 	.plantGoal = 400,
 };
@@ -9,12 +9,17 @@ GameMaster GM  = {
 void makeMenus() {
 	Player *god = makePlayer(&GM, 0, 0);
 	addPlayer(god);
-	addControl(god, "K0W", pressUp);
-	addControl(god, "K0A", pressLeft);
-	addControl(god, "K0S", pressDown);
-	addControl(god, "K0D", pressRight);
-	addControl(god, "K0 ", pressSpace);
-	addControl(god, "K0\x1B", pauseGame);
+	addKeyControl(god, 'W', pressUp);
+	addKeyControl(god, 129, pressUp);
+	addKeyControl(god, 'A', pressLeft);
+	addKeyControl(god, 130, pressLeft);
+	addKeyControl(god, 'S', pressDown);
+	addKeyControl(god, 131, pressDown);
+	addKeyControl(god, 'D', pressRight);
+	addKeyControl(god, 132, pressRight);
+	addKeyControl(god, ' ', pressSpace);
+	addKeyControl(god, '\x0D', pressSpace);
+	addKeyControl(god, '\x1B', pauseGame);
 
 	Menu *startMenu = makeMenu(1, 2, 20, 10);
 	Button *play = getButton(startMenu, 0, 1);

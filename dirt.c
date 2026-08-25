@@ -2,7 +2,7 @@
 
 float dirtA[3] = {203, 102, 12};
 float dirtB[3] = {79, 30, 3};
-float intake[2] = {0.01, 0.2};
+float intake[2] = {0.02, 0.2};
 float output[2] = {0.05, 0.1};
 
 int dirtStats = 2;

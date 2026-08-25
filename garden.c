@@ -31,7 +31,7 @@ void generateLevel(int level) {
 		}
 		Form *flower = placeFlower(island[0], island[1]);
 		grow(flower);
-		//grow(flower);
+		grow(flower);
 		float *eco = getStat(flower, ECO);
 		*eco = 1;
 		Plant *p = getPlant(flower);
