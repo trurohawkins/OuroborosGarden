@@ -2,6 +2,7 @@
 
 int snakeCount = 0;
 int staggerTime = 3;
+int fullBodyEco = 20;
 
 // head: 0 - 3
 // butt: 4 - 7
@@ -17,13 +18,14 @@ Snake *makeSnake(int xPos, int yPos) {
 	SnakeBody *sb = makeBody(xPos, yPos);
 	sb->roto = s->dir;
 	s->body = makeList();
+
 	addToList(&s->body, sb);
 
 	s->eNum = addTimedEvent(snakeAction, s, moveInterval);
-	s->stomach = 0;//fullStomach;
+	s->stomach = fullStomach;
 	s->pooInterval = 100;
 	s->pooLength = 5;
-	
+	s->eco = 100;	
 	s->pNum = snakeCount;
 	Player *player = checkPlayer(snakeCount+1);
 	if (player == 0) {
@@ -41,9 +43,11 @@ Snake *makeSnake(int xPos, int yPos) {
 		player->self = s;
 	}
 	placeSnake(s);
+	/*
 	for (int i = 0; i < baseSnake - 1;  i++ ) {
 		growSnake(s);
 	}
+	*/
 
 	addToList(&snakeList, s);
 	snakeCount++;
@@ -53,33 +57,70 @@ Snake *makeSnake(int xPos, int yPos) {
 	rob->render = renderSnake;
 	
 	if (snakeStamps[0] == -1) {
-		snakeStamps[0] = createStamp("\u28FE", "\u28F7");
-		snakeStamps[1] = createStamp("\u28BE", "\u28FF");
-		snakeStamps[2] = createStamp("\u28BF", "\u287F");
-		snakeStamps[3] = createStamp("\u28FF", "\u2877");
+		bool braille = false;
+		//braille
+		if (braille) {
+			snakeStamps[0] = createStamp("\u28FE", "\u28F7");
+			snakeStamps[1] = createStamp("\u28BE", "\u28FF");
+			snakeStamps[2] = createStamp("\u28BF", "\u287F");
+			snakeStamps[3] = createStamp("\u28FF", "\u2877");
+			
 
-		snakeStamps[4] = createStamp("\u28BF", "\u287F");
-		snakeStamps[5] = createStamp("\u28FF", "\u2877");
-		snakeStamps[6] = createStamp("\u28FE", "\u28F7");
-		snakeStamps[7] = createStamp("\u28BE", "\u28FF");
+			snakeStamps[4] = createStamp("\u28BF", "\u287F");
+			snakeStamps[5] = createStamp("\u28FF", "\u2877");
+			snakeStamps[6] = createStamp("\u28FE", "\u28F7");
+			snakeStamps[7] = createStamp("\u28BE", "\u28FF");
+			//snakeStamps[4] = createStamp("\u28BE", "\u2877");
+			snakeStamps[8] = createStamp("\u28FF", "\u28FF");
+			snakeStamps[9] = createStamp("\u28FF", "\u28FF");
+			snakeStamps[10] = createStamp("\u28FF", "\u28FF");
+			snakeStamps[11] = createStamp("\u28FF", "\u28FF");
+			//snakeStamps[4] = createStamp("\u28B8", "\u2847");
 
-		//snakeStamps[4] = createStamp("\u28BE", "\u2877");
-		snakeStamps[8] = createStamp("\u28FF", "\u28FF");
-		snakeStamps[9] = createStamp("\u28FF", "\u28FF");
-		snakeStamps[10] = createStamp("\u28FF", "\u28FF");
-		snakeStamps[11] = createStamp("\u28FF", "\u28FF");
-		//snakeStamps[4] = createStamp("\u28B8", "\u2847");
+			snakeStamps[12] = createStamp("\u28FF", "\u28FF");
+			snakeStamps[13] = createStamp("\u28FF", "\u28FF");
+			snakeStamps[14] = createStamp("\u28FF", "\u28FF");
+			snakeStamps[15] = createStamp("\u28FF", "\u28FF");
 
-		snakeStamps[12] = createStamp("\u28FF", "\u28FF");
-		snakeStamps[13] = createStamp("\u28FF", "\u28FF");
-		snakeStamps[14] = createStamp("\u28FF", "\u28FF");
-		snakeStamps[15] = createStamp("\u28FF", "\u28FF");
+			snakeStamps[16] = createStamp("\u28FF", "\u28FF");
+			snakeStamps[17] = createStamp("\u28FF", "\u28FF");
+			snakeStamps[18] = createStamp("\u28FF", "\u28FF");
+			snakeStamps[19] = createStamp("\u28FF", "\u28FF");
+		} else {
+			char *head = "\u2588";
+			snakeStamps[0] = createStamp(head, head);
+			snakeStamps[1] = createStamp(head, head);
+			snakeStamps[2] = createStamp(head, head);
+			snakeStamps[3] = createStamp(head, head);
+			/*
+			snakeStamps[0] = createStamp("\u2588", "\u2584");
+			snakeStamps[1] = createStamp("\u2584", "\u2588");
+			snakeStamps[2] = createStamp("\u2580", "\u2588");
+			snakeStamps[3] = createStamp("\u2588", "\u2580");
+			*/
+			
+			char *bod0 = "\u259A";
+			char *butt = bod0;//"\u2588"; 
+			snakeStamps[4] = createStamp(butt, butt);
+			snakeStamps[5] = createStamp(butt, butt);
+			snakeStamps[6] = createStamp(butt, butt);
+			snakeStamps[7] = createStamp(butt, butt);
 
-		snakeStamps[16] = createStamp("\u28FF", "\u28FF");
-		snakeStamps[17] = createStamp("\u28FF", "\u28FF");
-		snakeStamps[18] = createStamp("\u28FF", "\u28FF");
-		snakeStamps[19] = createStamp("\u28FF", "\u28FF");
+			snakeStamps[8] = createStamp(bod0, bod0);
+			snakeStamps[9] = createStamp(bod0, bod0);
+			snakeStamps[10] = createStamp(bod0, bod0);
+			snakeStamps[11] = createStamp(bod0, bod0);
 
+			snakeStamps[12] = createStamp(bod0, bod0);
+			snakeStamps[13] = createStamp(bod0, bod0);
+			snakeStamps[14] = createStamp(bod0, bod0);
+			snakeStamps[15] = createStamp(bod0, bod0);
+			
+			snakeStamps[16] = createStamp(bod0, bod0);
+			snakeStamps[17] = createStamp(bod0, bod0);
+			snakeStamps[18] = createStamp(bod0, bod0);
+			snakeStamps[19] = createStamp(bod0, bod0);
+		}
 	}
 	return s;
 }
@@ -90,6 +131,7 @@ SnakeBody *makeBody(int xp, int yp) {
 	sb->pos[1] = yp;
 	sb->roto = 1;
 	sb->sprite = 0;
+	sb->eco = fullBodyEco;
 	return sb;
 }
 
@@ -161,6 +203,22 @@ void placeSnake(Snake *s) {
 			SnakeBody *sb = (SnakeBody*)cur->data;
 			int x = sb->pos[0];
 			int y = sb->pos[1];
+			if (checkFormID(x, y, WATER)) {
+				if (sb->eco < fullBodyEco) {
+					sb->eco += 1;
+				}
+			}
+			Form *soil = checkSoil(x, y);
+			if (soil) {
+				if (sb->eco - ecoTrail > 0) {
+					sb->eco -= addEco(x, y, ecoTrail);
+				}
+				if (randPercent() < plantTrail) {
+					placeGrass(x, y);
+				}
+			}
+
+			/*
 			Form *soil = checkSoil(x, y);
 			if (soil) {
 				float *eco = getStat(soil, ECO);
@@ -169,6 +227,7 @@ void placeSnake(Snake *s) {
 				}
 				changeEco(soil, ecoTrail);
 			}
+			*/
 			placeForm(s->self, x, y);
 			cur = cur->next;
 		} else {
@@ -288,6 +347,13 @@ bool moveSnake(Snake *s) {
 		cur = cur->next;
 	}
 	placeSnake(s);
+	if (!s->grown) {
+		if (countSnakeParts(s) < baseSnake) {
+			growSnake(s);
+		} else {
+			s->grown = true;
+		}
+	}
 	ouroboros(s);
 	return true;
 }
@@ -405,6 +471,18 @@ int countSnakeParts(Snake *s) {
 	return count;
 }
 
+float percentSnakeEco(Snake *s) {
+	linkedList *cur = s->body;
+	float eco = 0;
+	int count = 0;
+	while (cur != 0) {
+		SnakeBody *sb = cur->data;
+		eco += sb->eco / fullBodyEco;
+		count++;
+		cur = cur->next;
+	}
+	return clamp(eco / count, 0, 1);
+}
 void snakeDie(Snake *s) {
 	linkedList *cur = s->body;
 	while (cur) {
@@ -433,6 +511,9 @@ void freeSnake(void *s) {
 	free(snake);
 }
 
+float snakeHealth[3] = {255, 255, 255};
+float snakeDeath[3] = {150, 150, 150};
+
 void *renderSnake(void *data) {
 	Snake *s = data;
 	linkedList *commands = 0;
@@ -441,9 +522,19 @@ void *renderSnake(void *data) {
 		.type = 0,
 		.layer = SNAKELAYER+1,
 	};
+	float eco = (float)s->stomach / (float)fullStomach;//percentSnakeEco(s);
 	PosColor pc = {
-		.color = {255, 255, 255},
+		.color = {
+			lerp(snakeDeath[0], snakeHealth[0], eco),
+			lerp(snakeDeath[1], snakeHealth[1], eco),
+			lerp(snakeDeath[2], snakeHealth[2], eco),
+		},
 	};
+	char buff[100];
+	if (pc.color.vals[0] == 0) {
+		sprintf(buff, "%f eco made black\n", eco);
+		debugWrite(buff);
+	}
 	while (body) {
 		SnakeBody *sb = body->data;
 		reco.index = snakeStamps[sb->sprite+sb->roto];

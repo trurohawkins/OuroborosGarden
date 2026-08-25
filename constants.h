@@ -2,25 +2,25 @@
 int worldX = 40;
 int worldY = 40;
 
-const float spd = 0.8;
-float spreadInterval = 0.5 * spd;
-float evapInterval = 10.0 * spd;
-float rainInterval = 5.0 * spd;
-float moveInterval = 0.7 * spd;
-float plantsInterval = 3.0 * spd;
+const float spd = 0.4;
+float spreadInterval = 4.0 * spd;
+float moveInterval = 1.0 * spd;
+float plantsInterval = 4.0 * spd;
+float evapInterval = 8.0 * spd;
+float rainInterval = 16.0 * spd;
 
 // soil
 int maxEco = 1;
-float evaporation = 0.02;
+float evaporation = 0.05;
 float evapMinimum = 0.05;
-float rainAmount = 0.01;
+float rainAmount = 0.05;
 float spreadDither = 0.005;
 float bioEvap = 0.1;
 // snake
-int baseSnake = 9;
+int baseSnake = 10;
 int fullStomach = 3;
 int deathEco = 5;
-float ecoTrail = 0.1f;
+float ecoTrail = 1.0f;
 float plantTrail = 0.03;
 //plants
 float grassChance = 0;//.65f;

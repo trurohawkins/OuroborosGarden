@@ -3,6 +3,8 @@ typedef struct SnakeBody {
 	int pos[2];
 	int roto;
 	int sprite;
+
+	float eco;
 } SnakeBody;
 
 typedef struct Snake {
@@ -16,11 +18,13 @@ typedef struct Snake {
 	int newDir;
 
 	int staggered;
-
+	
+	float eco;
 	int stomach;
 	int pooCounter;
 	int pooInterval;
 	int pooLength;
+	bool grown;
 
 	// for player event
 	int pNum;
@@ -51,6 +55,7 @@ void snakeDown(void *s, float val);
 void snakeRight(void *s, float val);
 
 int countSnakeParts(Snake *s);
+float percentSnakeEco(Snake *s);
 void snakeDie(Snake *s);
 
 void freeSnake(void *s);

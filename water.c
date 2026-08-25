@@ -7,7 +7,7 @@ void initWater() {
 	if (!water) {
 		water = makeForm(WATER);
 		initStats(water, 1);
-		addStat(water, SOURCE, 0.05f);
+		addStat(water, SOURCE, 0.015f);
 		Nub *ren = growRenderNub(water);
 		RenderObject *rob = ren->data;
 		rob->data = water;

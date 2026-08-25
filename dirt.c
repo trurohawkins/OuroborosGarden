@@ -2,11 +2,11 @@
 
 float dirtA[3] = {203, 102, 12};
 float dirtB[3] = {79, 30, 3};
-float intake[2] = {0.0, 0.2};
+float intake[2] = {0.01, 0.2};
 float output[2] = {0.05, 0.1};
 
 int dirtStats = 2;
-#define MAXADDFORMS 64
+#define MAXADDFORMS 4
 #define MAXPULLFORMS 4
 
 Form *makeDirt() {
@@ -35,36 +35,65 @@ Form *placeDirt(int x, int y) {
 	return NULL;
 }
 
-void dirtFlow(void*) {
+void dirtCell(int x, int y) {
 	World *w = getWorld();
-	for (int x = 0; x < w->x; x++) {
-		for (int y = 0; y < w->y; y++) {
-			Cell *c = &w->map[(y * w->x) + x];
-			for (int i = 0; i < FORMS_PER_CELL; i++) {
-				Form *f = c->within[i];
-				if (f) {
-					if (f->id == DIRT) {
-						float *eco = getStat(f, ECO);
-						if (eco && !equal(*eco, 0)) {
-							int start = 0;//randomInt(4);
-							for (int j = 0; j < 4; j++) {
-								int p[2] = {x, y};
-								int index = (start + j) % 4;
-								int *d4 = getDir4(index);
-								incPos(p, p+1, d4[0], d4[1]);
-								spreadEco(f, p[0], p[1]);
-							}
-						}
-					} else {
-						float *src = getStat(f, SOURCE);
-						if (src) {
-							pushEco(x, y, *src);
-						}
+	Cell *c = &w->map[(y * w->x) + x];
+	for (int i = 0; i < FORMS_PER_CELL; i++) {
+		Form *f = c->within[i];
+		if (f) {
+			if (f->id == DIRT) {
+				float *eco = getStat(f, ECO);
+				if (eco && !equal(*eco, 0)) {
+					int start = 0;//randomInt(4);
+					for (int j = 0; j < 4; j++) {
+						int p[2] = {x, y};
+						int index = (start + j) % 4;
+						int *d4 = getDir4(index);
+						incPos(p, p+1, d4[0], d4[1]);
+						spreadEco(f, p[0], p[1]);
 					}
+				}
+			} else {
+				float *src = getStat(f, SOURCE);
+				if (src) {
+					addEco(x, y, *src);
 				}
 			}
 		}
 	}
+}
+
+int dir = 0;
+
+void dirtFlow(void*) {
+	World *w = getWorld();
+	if (dir == 0) {
+		for (int x = 0; x < w->x; x++) {
+			for (int y = 0; y < w->y; y++) {
+				dirtCell(x, y);
+			}
+		}
+	} else if (dir == 1) {
+		for (int x = w->x-1; x >= 0; x--) {
+			for (int y = w->y-1; y >= 0; y--) {
+				dirtCell(x, y);
+			}
+		}
+	} else if (dir == 2) {
+			for (int y = 0; y < w->y; y++) {
+		for (int x = 0; x < w->x; x++) {
+				dirtCell(x, y);
+			}
+		}
+	} else if (dir == 3) {
+			for (int y = w->y-1; y >= 0; y--) {
+		for (int x = w->x-1; x >= 0; x--) {
+				dirtCell(x, y);
+			}
+		}
+	}
+	dir = (dir + 1) % 4;
+
 }
 
 void spreadEco(Form *from, int x, int y) {
@@ -108,22 +137,28 @@ float changeEco(Form *form, float amnt) {
 }
 
 
-void addEco(int x, int y, float amnt) {
+float addEco(int x, int y, float amnt) {
 	if (equal(amnt, 0)) {
-		return;
+		return 0;
 	}
+	float startAmnt = amnt;
 	Form *buff[MAXADDFORMS] = {0};
 	dfsDirt(x, y, MAXADDFORMS, buff);
 	for (int i = 0; i < MAXADDFORMS; i++) {
 		if (buff[i]) {
 			int dist = manhattanDistance(x, y, buff[i]->pos[0], buff[i]->pos[1]);
 			float a = amnt / (2 * dist);
-			amnt = changeEco(buff[i], a);
-			if (equal(0, amnt) || amnt < 0) {
+			a = changeEco(buff[i], a);
+			if (amnt - a > 0) {
+				amnt -= a;
+			} else {
+				amnt = 0;
+				//if (equal(0, amnt) || amnt < 0) {
 				break;
 			}
 		}
 	}
+	return startAmnt - amnt;
 }
 
 float pullEco(int x, int y, float amnt) {
@@ -197,13 +232,15 @@ void ecoEvaporation(void *) {
 			}
 			if (dirt) {
 				if (evap < 0) {
-					float *eco = getStat(dirt, ECO);
-					if (*eco > evapMinimum) {
-						if (*eco + evap < evapMinimum) {
-							evap = *eco - evapMinimum;
-						}
-						changeEco(dirt, evap);
-					}
+					/*
+						 float *eco = getStat(dirt, ECO);
+						 if (*eco > evapMinimum) {
+						 if (*eco + evap < evapMinimum) {
+						 evap = *eco - evapMinimum;
+						 }
+						 */
+					changeEco(dirt, evap);
+					//}
 				}
 				/*
 					 float *eco = getStat(dirt, "eco");

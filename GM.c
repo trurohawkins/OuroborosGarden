@@ -3,7 +3,7 @@
 GameMaster GM  = {
 	.level = 0,
 	.curPlants = 0,
-	.plantGoal = 20,
+	.plantGoal = 400,
 };
 
 void makeMenus() {
@@ -154,6 +154,7 @@ void endLevel() {
 	clearTimedEvents();
 	endGarden();
 	freeWorld();
+	deleteActorLists();
 }
 
 void restartGame() {
