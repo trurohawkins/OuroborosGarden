@@ -48,6 +48,7 @@ float flowerChance = 0;//.02f;
 #define LOSS 5
 #define ROOTS 6
 #define COVER 7
+#define BLOCK 8
 
 //sprite layering
 #define SNAKELAYER 5

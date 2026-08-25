@@ -10,7 +10,7 @@ Form *makeGrass() {
 	Nub *plantNub = findNub(grass, PLANTNUB);
 	Plant *data = plantNub->data;
 	data->beat = 1;
-	data->cycle = 5;
+	data->cycle = 4;
 	data->lifeTime = 4;
 
 	return grass;
@@ -51,7 +51,6 @@ bool growGrass(Form *g) {
 		setStat(g, ROOTS, 0.25);
 		setStat(g, COVER, evaporation/5);
 		calcFlow(g->pos[0], g->pos[1]);
-		plantCount(1);
 	} else if (data->stage == 2) {
 		//changeBio(g->pos[0], g->pos[1], 0.25);
 		//setStat(g, CYCLE, 25);

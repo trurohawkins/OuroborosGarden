@@ -121,14 +121,19 @@ bool lifeCycle(Form *plant) {
 		// if they are old enough
 		if (!drawing) {printf("    growth: %f. life: %d >= cycle %d\n", *growth, data->life, data->cycle);}
 		if (*eco >= *growth && data->life >= data->cycle) {
-			if (!drawing) {printf(    "GROW\n");}
-			if (grow(plant)) {
-				data->life = 0;
-			} else {
-				return false;
-			}
-			if  (data->stage > data->lifeTime) {
-				return false;
+			if (!checkStat(x, y, BLOCK)) {
+				if (!drawing) {printf(    "GROW\n");}
+				if (grow(plant)) {
+					data->life = 0;
+					if (data->stage == 1) {
+						plantCount(1);
+					}
+				} else {
+					return false;
+				}
+				if  (data->stage > data->lifeTime) {
+					return false;
+				}
 			}
 		}
 	}

@@ -1,7 +1,7 @@
 #include "snake.h"
 
 int snakeCount = 0;
-int staggerTime = 3;
+int staggerTime = 5;
 int fullBodyEco = 20;
 
 // head: 0 - 3

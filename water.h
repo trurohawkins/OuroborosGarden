@@ -2,6 +2,6 @@
 
 void initWater();
 void rain(void *);
-void placeWater(int x, int y);
+Form *placeWater(int x, int y);
 void *renderWater(void *data);
 void freeWater();

@@ -1,7 +1,7 @@
 #include "GM.h"
 
 GameMaster GM  = {
-	.level = 0,
+	.level = 1,
 	.curPlants = 0,
 	.plantGoal = 400,
 };

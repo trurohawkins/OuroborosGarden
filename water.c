@@ -39,7 +39,7 @@ void rain(void *) {
 
 }
 
-void placeWater(int x, int y) {
+Form *placeWater(int x, int y) {
 	World *w = getWorld();
 	if (x >= 0 && y >= 0 && x < w->x && y < w->y) {
 		int *pos = calloc(2, sizeof(int));
@@ -47,7 +47,9 @@ void placeWater(int x, int y) {
 		pos[1] = y;//(y % w->y + w->y) % w->y;
 		addToList(&waterBody, pos);
 		placeForm(water, pos[0], pos[1]);
+		return water;
 	}
+	return NULL;
 }
 
 void *renderWater(void *data) {

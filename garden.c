@@ -37,6 +37,12 @@ void generateLevel(int level) {
 		Plant *p = getPlant(flower);
 		p->life = p->cycle - 4;
 	} else if (level == 1) {
+		placeCircle(placeWater, spawnPos[0], spawnPos[1], 4);
+
+		placeCircle(placeWater, 0, 0, 5);
+		placeCircle(placeStone, worldX/2, 0, 4);
+		placeCircle(placeStone, 0, worldY/2, 4);
+
 	} else {
 		for (int i = 0; i < 3; i++) {
 			int xp = randRange(0, worldX);
@@ -74,7 +80,7 @@ void generateLevel(int level) {
 
 }
 
-void placeCircle(void (*place)(int,int), int xPos, int yPos, int radius) {
+void placeCircle(Form* (*place)(int,int), int xPos, int yPos, int radius) {
 	World *w = getWorld();
 	for (int x = -radius; x < radius; x++) {
 		for (int y = -radius; y < radius; y++) {

@@ -65,7 +65,7 @@ bool growFlower(Form *f) {
 		RenderObject *rob = ren->data;
 		rob->data = f;
 		rob->render = renderFlower;
-		data->cycle = 20;
+		data->cycle = 8;
 		setStat(f, GROWTH, 1);
 		//setStat(f, PULL, 0.5);
 		setStat(f, LOSS, 0.1);

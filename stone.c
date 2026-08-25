@@ -6,8 +6,9 @@ linkedList *stoneBody = 0;
 void initStone() {
 	if (!stone) {
 		stone = makeForm(STONE);
-		initStats(stone, 1);
+		initStats(stone, 2);
 		addStat(stone, COVER, 0.05f);
+		addStat(stone, BLOCK, 1);
 		Nub *ren = growRenderNub(stone);
 		RenderObject *rob = ren->data;
 		rob->data = stone;
@@ -15,7 +16,7 @@ void initStone() {
 	}
 }
 
-void placeStone(int x, int y) {
+Form *placeStone(int x, int y) {
 	World *w = getWorld();
 	if (x >= 0 && y >= 0 && x < w->x && y < w->y) {
 		int *pos = calloc(2, sizeof(int));
@@ -23,7 +24,9 @@ void placeStone(int x, int y) {
 		pos[1] = y;//(y % w->y + w->y) % w->y;
 		addToList(&stoneBody, pos);
 		placeForm(stone, pos[0], pos[1]);
+		return stone;
 	}
+	return NULL;
 }
 
 void *renderStone(void *data) {
