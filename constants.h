@@ -25,7 +25,7 @@ float ecoTrail = 1.0f;
 float plantTrail = 0.03;
 //plants
 float grassChance = 0;//.65f;
-float flowerChance = 0.01;//.02f;
+float flowerChance = 0.02;//.02f;
 
 //Form IDs
 #define DIRT 0

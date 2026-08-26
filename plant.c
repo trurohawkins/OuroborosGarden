@@ -20,7 +20,7 @@ void initPlants() {
 	flowerStamps[2] = createStamp("\u03D8", 0);//#","P");
 	//flowerStamps[2] = createStamp("\u26B5", 0);//#","P");
 	//flowerStamps[3] = createStamp("\u26B9", 0);
-	flowerStamps[3] = createStamp("\u03A6", 0);
+	flowerStamps[3] = createStamp("*", 0);
 	/*
 	flowerStamps[0] = createStamp("\U0001683D", 0);
 	flowerStamps[1] = createStamp("\U00016912", 0);

@@ -17,7 +17,7 @@ Form *makeFlower() {
 	Nub *plant = findNub(f, PLANTNUB);
 	Plant *data = plant->data;
 	data->beat = 1;
-	data->cycle = 10;
+	data->cycle = 8;
 	data->lifeTime = 4;
 	return f;
 }
@@ -66,7 +66,6 @@ bool growFlower(Form *f) {
 		RenderObject *rob = ren->data;
 		rob->data = f;
 		rob->render = renderFlower;
-		data->cycle = 9;
 		setStat(f, GROWTH, 1);
 		//setStat(f, PULL, 0.5);
 		setStat(f, LOSS, 0.1);
@@ -84,10 +83,9 @@ bool growFlower(Form *f) {
 			setStat(f, LOSS, 0.05);
 		} else if (data->stage == 3) {
 			//changeBio(f->pos[0], f->pos[1], -0.5);
-			data->cycle = 9;
 			setStat(f, COVER, 0.01);
 		} else if (data->stage == 4) {
-			data->cycle = 25;
+			data->cycle = 16;
 			setStat(f, ROOTS, 0);
 			calcFlow(f->pos[0], f->pos[1]);
 			//setStat(f, LOSS, 0);
