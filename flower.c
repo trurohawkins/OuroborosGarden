@@ -13,9 +13,10 @@ Form *makeFlower() {
 	f->id = FLOWER;
 	setStat(f, GROWTH, 1);
 	setStat(f, PULL, 0.1);
+	setStat(f, LOSS, 0.02);
 	Nub *plant = findNub(f, PLANTNUB);
 	Plant *data = plant->data;
-	data->beat = 2;
+	data->beat = 1;
 	data->cycle = 10;
 	data->lifeTime = 4;
 	return f;
@@ -65,7 +66,7 @@ bool growFlower(Form *f) {
 		RenderObject *rob = ren->data;
 		rob->data = f;
 		rob->render = renderFlower;
-		data->cycle = 8;
+		data->cycle = 9;
 		setStat(f, GROWTH, 1);
 		//setStat(f, PULL, 0.5);
 		setStat(f, LOSS, 0.1);

@@ -43,6 +43,9 @@ void generateLevel(int level) {
 		placeCircle(placeStone, worldX/2, 0, 4);
 		placeCircle(placeStone, 0, worldY/2, 4);
 
+	} else if (level == 2) {
+		placeFlower(30, 10);
+
 	} else {
 		for (int i = 0; i < 3; i++) {
 			int xp = randRange(0, worldX);
@@ -76,8 +79,6 @@ void generateLevel(int level) {
 	}
 
 	makeSnake(spawnPos[0], spawnPos[1]);
-
-
 }
 
 void placeCircle(Form* (*place)(int,int), int xPos, int yPos, int radius) {

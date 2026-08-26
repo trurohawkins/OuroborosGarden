@@ -15,9 +15,12 @@ void initPlants() {
 	grassStamps[2] = createStamp("\u2593", "\u2593");
 	grassStamps[3] = -1;
 	flowerStamps[0] = createStamp("\u26BA",0);
-	flowerStamps[1] = createStamp("\u26B6",0);
-	flowerStamps[2] = createStamp("\u26B5", 0);//#","P");
-	flowerStamps[3] = createStamp("\u26B9", 0);
+	//flowerStamps[1] = createStamp("\u26B6",0);
+	flowerStamps[1] = createStamp("\u2021",0);
+	flowerStamps[2] = createStamp("\u03D8", 0);//#","P");
+	//flowerStamps[2] = createStamp("\u26B5", 0);//#","P");
+	//flowerStamps[3] = createStamp("\u26B9", 0);
+	flowerStamps[3] = createStamp("\u03A6", 0);
 	/*
 	flowerStamps[0] = createStamp("\U0001683D", 0);
 	flowerStamps[1] = createStamp("\U00016912", 0);
@@ -95,7 +98,12 @@ bool lifeCycle(Form *plant) {
 		if (*eco - loss >= 0) {
 			*eco -= loss;
 		} else {
-			return false;
+			// seeds dont die but do lose water
+			if (data->stage > 0) {
+				return false;
+			} else {
+				*eco = 0;
+			}
 		}
 		int x = plant->pos[0];
 		int y = plant->pos[1];

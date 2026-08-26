@@ -2,7 +2,7 @@
 int worldX = 40;
 int worldY = 40;
 
-const float spd = 0.4;
+const float spd = 0.2;
 float spreadInterval = 4.0 * spd;
 float moveInterval = 1.0 * spd;
 float plantsInterval = 4.0 * spd;
@@ -17,14 +17,15 @@ float rainAmount = 0.05;
 float spreadDither = 0.005;
 float bioEvap = 0.1;
 // snake
-int baseSnake = 10;
+int baseSnake = 4;
+int deadSnake = 2;
 int fullStomach = 3;
 int deathEco = 5;
 float ecoTrail = 1.0f;
 float plantTrail = 0.03;
 //plants
 float grassChance = 0;//.65f;
-float flowerChance = 0;//.02f;
+float flowerChance = 0.01;//.02f;
 
 //Form IDs
 #define DIRT 0

@@ -2,7 +2,7 @@
 
 int snakeCount = 0;
 int staggerTime = 5;
-int fullBodyEco = 20;
+float fullBodyEco = 20;
 
 // head: 0 - 3
 // butt: 4 - 7
@@ -22,7 +22,7 @@ Snake *makeSnake(int xPos, int yPos) {
 	addToList(&s->body, sb);
 
 	s->eNum = addTimedEvent(snakeAction, s, moveInterval);
-	s->stomach = fullStomach;
+	s->stomach = 0;//fullStomach;
 	s->pooInterval = 100;
 	s->pooLength = 5;
 	s->pNum = snakeCount;
@@ -207,14 +207,19 @@ void placeSnake(Snake *s) {
 			int x = sb->pos[0];
 			int y = sb->pos[1];
 			if (checkFormID(x, y, WATER)) {
-				if (sb->eco < fullBodyEco) {
+				if (sb->eco + 1 < fullBodyEco) {
 					sb->eco += 1;
+				} else {
+					sb->eco = fullBodyEco;
 				}
 			}
 			Form *soil = checkSoil(x, y);
 			if (soil) {
 				if (sb->eco - ecoTrail > 0) {
 					sb->eco -= addEco(x, y, ecoTrail);
+				} else {
+					addEco(x, y, sb->eco);
+					sb->eco = 0;
 				}
 				if (randPercent() < plantTrail) {
 					placeGrass(x, y);
@@ -289,9 +294,11 @@ bool snakeCheck(Snake *s) {
 		removeForm(fruit, fruit->pos[0], fruit->pos[1]);
 		freeForm(fruit);
 		growSnake(s);
+		/*
 		if (s->stomach < fullStomach) {
 			s->stomach++;
 		}
+		*/
 	}
 	if (crush != 0) {
 		if (crush->id == FLOWER) {
@@ -398,18 +405,18 @@ void snakeStagger(Snake *s, bool staggered) {
 }
 
 void snakePoop(Snake *s) {
-	if (s->stomach > 0) {
-		s->stomach--;
-		int pos[2] = {s->butt->pos[0], s->butt->pos[1]};
-		Form *p = makePoop();
-		placeForm(p, pos[0], pos[1]);
-	} else {
-		if (countSnakeParts(s) > 8) {
+	//if (s->stomach > 0) {
+		//s->stomach--;
+	//} else {
+		if (countSnakeParts(s) > deadSnake) {
+			int pos[2] = {s->butt->pos[0], s->butt->pos[1]};
+			Form *p = makePoop();
+			placeForm(p, pos[0], pos[1]);
 			shrinkSnake(s);
 		} else {
 			snakeDie(s);
 		}
-	}
+	//}
 }
 
 
@@ -526,22 +533,18 @@ void *renderSnake(void *data) {
 		.type = 0,
 		.layer = SNAKELAYER+1,
 	};
-	float eco = (float)s->stomach / (float)fullStomach;//percentSnakeEco(s);
-	PosColor pc = {
-		.color = {
-			lerp(snakeDeath[0], snakeHealth[0], eco),
-			lerp(snakeDeath[1], snakeHealth[1], eco),
-			lerp(snakeDeath[2], snakeHealth[2], eco),
-		},
-	};
-	char buff[100];
-	if (pc.color.vals[0] == 0) {
-		sprintf(buff, "%f eco made black\n", eco);
-		debugWrite(buff);
-	}
+	//float eco = percentSnakeEco(s);//(float)s->stomach / (float)fullStomach;
 	while (body) {
 		SnakeBody *sb = body->data;
 		reco.index = snakeStamps[sb->sprite+sb->roto];
+		float eco = sb->eco / fullBodyEco;
+		PosColor pc = {
+			.color = {
+				lerp(snakeDeath[0], snakeHealth[0], eco),
+				lerp(snakeDeath[1], snakeHealth[1], eco),
+				lerp(snakeDeath[2], snakeHealth[2], eco),
+			},
+		};
 		pc.pos.x = worldXToScreenX(sb->pos[0]);
 		pc.pos.y = worldYToScreenY(sb->pos[1]);
 		memcpy(reco.data, &pc, sizeof(PosColor));
