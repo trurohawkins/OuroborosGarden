@@ -84,7 +84,7 @@ int rainbowAction(void *r, Action *a, float delta) {
 		while (cur) {
 			int x = cur->data;
 			int y = cur->next->data;
-			pushEco(x, y, rb->ecoAmount);
+			addEco(x, y, rb->ecoAmount);
 
 			cur = cur->next->next;
 		}
@@ -159,7 +159,7 @@ void *renderRainbow(void *data) {
 		int x = cur->data;
 		int y = cur->next->data;
 		float d = max(abs(x - r->centerX), abs(y - r->centerY));
-		int place = ((int)(r->colorOffset + d) % 14);
+		int place = ((int)(r->colorOffset + d) % 14) * 3;
 		PosColor pc = {
 			.pos = {
 				.x = worldXToScreenX(x),
@@ -213,7 +213,9 @@ bool checkBorder(Rainbow *r) {
 
 void setRainbow(Rainbow **r) {
 	Rainbow *rb = *r;
+	memcpy(rb->colors, rainbowColors, 42 * sizeof(float));
 	//rb->colors = calloc(42, sizeof(float));
+	/*
 	float size = sizeof(float) * 3;
 
 	float red[3] = {150.0, 15.0, 28.0};
@@ -250,8 +252,39 @@ void setRainbow(Rainbow **r) {
 	memcpy(rb->colors+36, violet,  size);
 	float violetR[3] = {124.0, 12.0, 87.0};
 	memcpy(rb->colors+39, violetR,  size);
+	*/
 }
 
+float rainbowColors[42] = {
+	//red
+	150.0, 15.0, 28.0,
+	//red orange
+	187.0, 0, 0,
+	//orange
+	196.0, 71.0, 20.0,
+	//orange yellow
+	226.0, 99.0, 5.0,
+	//yellow
+	225.0, 145.0, 15.0,
+	//yellow green
+	241.0, 195.0, 11.0,
+	//green
+	134.0, 177.0, 0,
+	//green blue
+	16.0, 141.0, 9.0,
+	//blue
+	4.0, 163.0, 114.0,
+	//blue indigo
+	17.0, 121.0, 126.0,
+	//indigo
+	8.0, 25.0, 141.0,
+	//indigo violet
+	69.0, 5.0, 174.0,
+	//violet
+	114.0, 0, 136.0,
+	//viloet red
+	124.0, 12.0, 87.0,
+};
 
 void freeRainbowData(Rainbow *r) {
 	//printf("free rainbow data\n");

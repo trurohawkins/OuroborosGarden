@@ -32,3 +32,4 @@ void setRainbow(Rainbow **r);
 void freeRainbowData(Rainbow *r);
 void freeRainbow(void *r);
 
+extern float rainbowColors[42];

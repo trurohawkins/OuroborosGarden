@@ -2,7 +2,7 @@
 int worldX = 40;
 int worldY = 40;
 
-const float spd = 0.2;
+const float spd = 0.3;
 float spreadInterval = 4.0 * spd;
 float moveInterval = 1.0 * spd;
 float plantsInterval = 4.0 * spd;
@@ -17,7 +17,7 @@ float rainAmount = 0.05;
 float spreadDither = 0.005;
 float bioEvap = 0.1;
 // snake
-int baseSnake = 4;
+int baseSnake = 5;
 int deadSnake = 2;
 int fullStomach = 3;
 int deathEco = 5;
