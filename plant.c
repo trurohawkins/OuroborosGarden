@@ -14,15 +14,19 @@ void initPlants() {
 	grassStamps[1] = createStamp("\u2592", "\u2592");
 	grassStamps[2] = createStamp("\u2593", "\u2593");
 	grassStamps[3] = -1;
-	flowerStamps[0] = createStamp("\u26BA",0);
-	//flowerStamps[1] = createStamp("\u26B6",0);
-	flowerStamps[1] = createStamp("\u2021",0);
-	//flowerStamps[2] = createStamp("\u03D8", 0);//#","P");
+	flowerStamps[0] = createStamp("\u26BA", 0);
+	flowerStamps[1] = createStamp("\u2021", 0);
 	flowerStamps[2] = createStamp("\u2BDE", 0);//#","P");
+	flowerStamps[3] = createStamp("\u2B53", 0);
+	flowerStamps[4] = createStamp(0, "\u26BA");
+	flowerStamps[5] = createStamp(0, "\u2021");
+	flowerStamps[6] = createStamp(0, "\u2BDE");//#","P");
+	flowerStamps[7] = createStamp(0, "\u2B53");
+	//flowerStamps[1] = createStamp("\u26B6",0);
+	//flowerStamps[2] = createStamp("\u03D8", 0);//#","P");
 	//flowerStamps[2] = createStamp("\u26B5", 0);//#","P");
 	//flowerStamps[3] = createStamp("\u26B9", 0);
 	//flowerStamps[3] = createStamp("\u047D", 0);
-	flowerStamps[3] = createStamp("\u2B53", 0);
 	/*
 	flowerStamps[0] = createStamp("\U0001683D", 0);
 	flowerStamps[1] = createStamp("\U00016912", 0);

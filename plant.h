@@ -8,6 +8,8 @@ typedef struct {
 
 	int stage;
 	int lifeTime;// how many stages until death
+
+	int type;//used for multiple sprites
 } Plant;
 
 

@@ -22,6 +22,7 @@ Form *makeFlower() {
 	data->beat = 1;
 	data->cycle = 8;
 	data->lifeTime = 4;
+	data->type = randomInt(2);
 	return f;
 }
 
@@ -111,11 +112,12 @@ void *renderFlower(void *data) {
 	if (!plant) {
 		return NULL;
 	}
+	int type = plant->type * 4;
 	float eco = clampF(*getStat(flower, ECO), 0, 1);
 	RenderCommand reco = {
 		.layer = FLOWERLAYER,
 		.type = 0,
-		.index = flowerStamps[plant->stage-1],
+		.index = flowerStamps[type + (plant->stage-1)],
 	};
 	PosColor pc = {
 		.pos = {
