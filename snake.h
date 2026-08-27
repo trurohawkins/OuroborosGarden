@@ -16,7 +16,8 @@ typedef struct Snake {
 
 	int dir;
 	int newDir;
-
+	
+	int state;
 	int staggered;
 	
 	int stomach;

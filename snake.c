@@ -1,7 +1,7 @@
 #include "snake.h"
 
 int snakeCount = 0;
-int staggerTime = 5;
+int staggerTime = 20;
 float fullBodyEco = 20;
 
 // head: 0 - 3
@@ -24,7 +24,7 @@ Snake *makeSnake(int xPos, int yPos) {
 	s->eNum = addTimedEvent(snakeAction, s, moveInterval);
 	s->stomach = 0;//fullStomach;
 	s->pooInterval = 100;
-	s->pooLength = 5;
+	s->pooLength = 10;
 	s->pNum = snakeCount;
 	Player *player = checkPlayer(snakeCount+1);
 	if (player == 0) {
@@ -101,11 +101,21 @@ Snake *makeSnake(int xPos, int yPos) {
 			snakeStamps[2] = createStamp("\u2580", "\u2588");
 			snakeStamps[3] = createStamp("\u2588", "\u2580");
 			*/
-			char *head = "\U0001F784";
-			snakeStamps[0] = createStamp(head, head);
-			snakeStamps[1] = createStamp(head, head);
-			snakeStamps[2] = createStamp(head, head);
-			snakeStamps[3] = createStamp(head, head);
+			char *normFace = "\U0001F784";
+			snakeStamps[0] = createStamp(normFace, normFace);
+			char *xEyes = "\U0001F7AE";
+			snakeStamps[1] = createStamp(xEyes, xEyes);
+			char *stunEyes = "\U0001F7B7";
+			snakeStamps[2] = createStamp(stunEyes, stunEyes);
+			//char *pooEyes = "\u18D5";
+			//char *pooEyes = "\u05D7";
+			//char *pooEyes = "\u2040";
+			//char *pooEyes = "\u2E1A";
+			//snakeStamps[0] = createStamp(pooEyes, 0);
+			char *pooEyes = "\u2322";
+			snakeStamps[3] = createStamp(pooEyes, pooEyes);
+			//snakeStamps[0] = createStamp(">", "<");
+			//snakeStamps[0] = createStamp("n", "n");
 			
 			char *bod0 = "\u259A";
 			char *butt = bod0;//"\u2588"; 
@@ -230,17 +240,6 @@ void placeSnake(Snake *s) {
 					placeGrass(x, y);
 				}
 			}
-
-			/*
-			Form *soil = checkSoil(x, y);
-			if (soil) {
-				float *eco = getStat(soil, ECO);
-				if (*eco == 0) {
-					*eco = evapMinimum;
-				}
-				changeEco(soil, ecoTrail);
-			}
-			*/
 			placeForm(s->self, x, y);
 			cur = cur->next;
 		} else {
@@ -377,26 +376,39 @@ void snakeAction(void *snake) {
 	Snake *s = snake;
 	if (s->pooCounter >= s->pooInterval) {
 		s->pooCounter = -s->pooLength;
+		if (countSnakeParts(s) > deadSnake) {
+			if (s->staggered == 0) {
+				s->state = 3;
+			}
+		} else {
+			s->state = 1;
+		}
 	} else {
 		s->pooCounter++;
 	}
 
-	if (s->staggered == 0) {
-		if (s->pooCounter >= 0) {
-			int preDir = s->dir;
-			s->dir = s->newDir;
-			if (!moveSnake(s)) {
-				s->dir = preDir;
-				return;
-			}
-			checkAndDelete(&s->rainbows, checkRainbow, freeRainbow);
-		} else if (s->pooCounter == -1) {
-			snakePoop(s);
+	if (s->staggered == 0 && s->pooCounter >= 0) {
+		int preDir = s->dir;
+		s->dir = s->newDir;
+		if (!moveSnake(s)) {
+			s->dir = preDir;
+			return;
 		}
-	} else {
-		s->staggered--;
-		if (s->staggered == 0) {
-			snakeStagger(s, false);
+		checkAndDelete(&s->rainbows, checkRainbow, freeRainbow);
+	} else  {
+		if (s->staggered > 0) {
+			s->staggered--;
+			if (s->staggered == 0) {
+				snakeStagger(s, false);
+			}
+		}
+		if (s->pooCounter == -1) {
+			if (s->staggered == 0) {
+				s->state = 0;
+			} else {
+				s->state = 2;
+			}
+			snakePoop(s);
 		}
 	}
 }
@@ -404,8 +416,9 @@ void snakeAction(void *snake) {
 void snakeStagger(Snake *s, bool staggered) {
 	if (staggered) {
 		s->staggered = staggerTime;
+		s->state = 2;
 	} else {
-		
+		s->state = 0;
 	}
 }
 
@@ -552,6 +565,7 @@ void *renderSnake(void *data) {
 		pc.pos.x = worldXToScreenX(sb->pos[0]);
 		pc.pos.y = worldYToScreenY(sb->pos[1]);
 		memcpy(reco.data, &pc, sizeof(PosColor));
+		//snake head
 		if (body->data == s->body->data) {
 			reco.index = -1;//snakeStamps[sb->sprite+sb->roto];
 			addRenderCommand(reco);
@@ -559,8 +573,11 @@ void *renderSnake(void *data) {
 				pc.color.vals[i] = 0;
 			}
 			memcpy(reco.data, &pc, sizeof(PosColor));
+			reco.index = snakeStamps[s->state];
+		} else {
+			reco.index = snakeStamps[sb->sprite+sb->roto];
 		}
-		reco.index = snakeStamps[sb->sprite+sb->roto];
+		//body/snake face
 		addRenderCommand(reco);
 		if (reco.index != snakeStamps[4]) {
 			reco.layer = SNAKELAYER;

@@ -17,6 +17,7 @@ Form *makePoop() {
 		//snowman
 		//pooStamp = createStamp("\u26C7", 0);
 		//pooStamp = createStamp("\u28F0", "\u28E7");
+		//char *stamp = "\u07F7";
 		char *stamp = "\u25FC";
 		pooStamp[0] = createStamp(0, stamp);
 		pooStamp[1] = createStamp(stamp, 0);
