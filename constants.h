@@ -37,6 +37,7 @@ float flowerChance = 0.02;//.02f;
 #define WATER 6
 #define STONE 7
 #define RAINBOW 8
+#define FLOATY 9
 
 //stat IDs
 // dirt
@@ -52,6 +53,7 @@ float flowerChance = 0.02;//.02f;
 #define BLOCK 8
 
 //sprite layering
+#define UILAYER 6
 #define SNAKELAYER 5
 #define FLOWERLAYER 4
 #define POOPLAYER 3

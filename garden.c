@@ -77,7 +77,6 @@ void generateLevel(int level) {
 			}
 		}
 	}
-
 	makeSnake(spawnPos[0], spawnPos[1]);
 }
 

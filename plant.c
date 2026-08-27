@@ -165,9 +165,16 @@ bool grow(Form *plant) {
 
 void plantDie(void *plant) {
 	Form *p = plant;
+	Plant *data = getPlant(plant);
+	if  (data->stage < data->lifeTime) {
+		Form *flo = makeFloaty(0);
+		placeForm(flo, p->pos[0], p->pos[1]);
+
+	}
 	removeForm(plant, p->pos[0], p->pos[1]);
 	freeForm(plant);
 	plantCount(-1);
+
 }
 
 #include "grass.c"

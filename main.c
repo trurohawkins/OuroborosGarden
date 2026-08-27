@@ -7,6 +7,7 @@ bool drawing = true;
 #include "constants.h"
 #include "stat.c"
 #include "help.c"
+#include "floaty.c"
 #include "dirt.c"
 #include "water.c"
 #include "stone.c"
