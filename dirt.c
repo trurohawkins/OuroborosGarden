@@ -354,8 +354,8 @@ void dfsDirt(int x, int y, int max, Form **buff) {
 		int back = 2;
 		while (front < back) {
 			int cur[2] = {queue[front], queue[front+1]};
-			Form *f = checkStat(cur[0], cur[1], ECO);
-			if (f && f->id == DIRT) {
+			Form *f = checkFormID(cur[0], cur[1], DIRT);//Stat(cur[0], cur[1], ECO);
+			if (f) {// && f->id == DIRT) {
 				buff[count] = f;
 				if (count + 1 < max) {
 					count++;

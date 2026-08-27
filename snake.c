@@ -90,17 +90,22 @@ Snake *makeSnake(int xPos, int yPos) {
 			snakeStamps[18] = createStamp("\u28FF", "\u28FF");
 			snakeStamps[19] = createStamp("\u28FF", "\u28FF");
 		} else {
+			/*
 			char *head = "\u2588";
 			snakeStamps[0] = createStamp(head, head);
 			snakeStamps[1] = createStamp(head, head);
 			snakeStamps[2] = createStamp(head, head);
 			snakeStamps[3] = createStamp(head, head);
-			/*
 			snakeStamps[0] = createStamp("\u2588", "\u2584");
 			snakeStamps[1] = createStamp("\u2584", "\u2588");
 			snakeStamps[2] = createStamp("\u2580", "\u2588");
 			snakeStamps[3] = createStamp("\u2588", "\u2580");
 			*/
+			char *head = "\U0001F784";
+			snakeStamps[0] = createStamp(head, head);
+			snakeStamps[1] = createStamp(head, head);
+			snakeStamps[2] = createStamp(head, head);
+			snakeStamps[3] = createStamp(head, head);
 			
 			char *bod0 = "\u259A";
 			char *butt = bod0;//"\u2588"; 
@@ -491,7 +496,7 @@ float percentSnakeEco(Snake *s) {
 		count++;
 		cur = cur->next;
 	}
-	return clamp(eco / count, 0, 1);
+	return eco / count;
 }
 
 void snakeDie(Snake *s) {
@@ -533,24 +538,36 @@ void *renderSnake(void *data) {
 		.type = 0,
 		.layer = SNAKELAYER+1,
 	};
-	//float eco = percentSnakeEco(s);//(float)s->stomach / (float)fullStomach;
+	float eco = percentSnakeEco(s);//(float)s->stomach / (float)fullStomach;
+	PosColor pc = {
+		.color = {
+			lerp(snakeDeath[0], snakeHealth[0], eco),
+			lerp(snakeDeath[1], snakeHealth[1], eco),
+			lerp(snakeDeath[2], snakeHealth[2], eco),
+		},
+	};
 	while (body) {
 		SnakeBody *sb = body->data;
-		reco.index = snakeStamps[sb->sprite+sb->roto];
-		float eco = sb->eco / fullBodyEco;
-		PosColor pc = {
-			.color = {
-				lerp(snakeDeath[0], snakeHealth[0], eco),
-				lerp(snakeDeath[1], snakeHealth[1], eco),
-				lerp(snakeDeath[2], snakeHealth[2], eco),
-			},
-		};
+		//float eco = sb->eco / fullBodyEco;
 		pc.pos.x = worldXToScreenX(sb->pos[0]);
 		pc.pos.y = worldYToScreenY(sb->pos[1]);
 		memcpy(reco.data, &pc, sizeof(PosColor));
+		if (body->data == s->body->data) {
+			reco.index = -1;//snakeStamps[sb->sprite+sb->roto];
+			addRenderCommand(reco);
+			for (int i = 0; i < 3; i++) {
+				pc.color.vals[i] = 0;
+			}
+			memcpy(reco.data, &pc, sizeof(PosColor));
+		}
+		reco.index = snakeStamps[sb->sprite+sb->roto];
 		addRenderCommand(reco);
 		if (reco.index != snakeStamps[4]) {
 			reco.layer = SNAKELAYER;
+			for (int i = 0; i < 3; i++) {
+				pc.color.vals[i] = lerp(snakeDeath[0], snakeHealth[0], eco);
+			}
+
 		}
 		body = body->next;
 	}
