@@ -5,8 +5,13 @@ float fullFower = 3;
 
 //float sprout[3] = {23, 164, 239};
 //float sDying[3] = {23, 239, 194};
-float sprout[3] = {255, 114, 23};
-float sDying[3] = {242, 173, 0};
+
+//float sprout[3] = {255, 114, 23};
+//float sDying[3] = {242, 173, 0};
+float sprout[3] = {2, 158, 8};
+float sDying[3] = {211, 184, 30};
+
+
 float fruit[3] = {188, 23, 239};
 //float fDying[3] = {239, 23, 103};
 float fDying[3] = {255, 0, 100};

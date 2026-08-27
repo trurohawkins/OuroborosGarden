@@ -1,7 +1,9 @@
 #include "dirt.h"
 
-float dirtA[3] = {203, 102, 12};
-float dirtB[3] = {79, 30, 3};
+//float dirtDry[3] = {203, 102, 12};
+//float dirtDry[3] = {154, 94, 23};
+float dirtDry[3] = {186, 91, 43};
+float dirtWet[3] = {79, 30, 3};
 float intake[2] = {0.02, 0.2};
 float output[2] = {0.05, 0.1};
 
@@ -297,9 +299,9 @@ void *renderDirt(void *data) {
 		},
 		.color = {
 			.vals = {
-				lerp(dirtA[0], dirtB[0], eco),
-				lerp(dirtA[1], dirtB[1], eco),
-				lerp(dirtA[2], dirtB[2], eco)
+				lerp(dirtDry[0], dirtWet[0], eco),
+				lerp(dirtDry[1], dirtWet[1], eco),
+				lerp(dirtDry[2], dirtWet[2], eco)
 			}
 		},
 	};
@@ -312,9 +314,9 @@ Color dirtColor(Form *dirt) {
 	float eco = *getStat(dirt, ECO);
 	Color col = {
 		.vals = {
-			lerp(dirtA[0], dirtB[0], eco),
-			lerp(dirtA[1], dirtB[1], eco),
-			lerp(dirtA[2], dirtB[2], eco)
+			lerp(dirtDry[0], dirtWet[0], eco),
+			lerp(dirtDry[1], dirtWet[1], eco),
+			lerp(dirtDry[2], dirtWet[2], eco)
 		}
 	};
 	return col;
