@@ -19,6 +19,7 @@ typedef struct Snake {
 	
 	int state;
 	int staggered;
+	bool moving;
 	
 	int stomach;
 	int pooCounter;

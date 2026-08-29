@@ -369,6 +369,7 @@ bool moveSnake(Snake *s) {
 	}
 	placeSnake(s);
 	ouroboros(s);
+	s->moving = true;
 	return true;
 }
 
@@ -415,8 +416,11 @@ void snakeAction(void *snake) {
 
 void snakeStagger(Snake *s, bool staggered) {
 	if (staggered) {
-		s->staggered = staggerTime;
-		s->state = 2;
+		if (s->moving) {
+			s->staggered = staggerTime;
+			s->state = 2;
+			s->moving = false;
+		}
 	} else {
 		s->state = 0;
 	}
