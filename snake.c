@@ -574,7 +574,7 @@ void *renderSnake(void *data) {
 			reco.index = -1;//snakeStamps[sb->sprite+sb->roto];
 			addRenderCommand(reco);
 			for (int i = 0; i < 3; i++) {
-				pc.color.vals[i] = 0;
+				pc.color.rgb[i] = 0;
 			}
 			memcpy(reco.data, &pc, sizeof(PosColor));
 			reco.index = snakeStamps[s->state];
@@ -586,7 +586,7 @@ void *renderSnake(void *data) {
 		if (reco.index != snakeStamps[4]) {
 			reco.layer = SNAKELAYER;
 			for (int i = 0; i < 3; i++) {
-				pc.color.vals[i] = lerp(snakeDeath[0], snakeHealth[0], eco);
+				pc.color.rgb[i] = lerp(snakeDeath[0], snakeHealth[0], eco);
 			}
 
 		}

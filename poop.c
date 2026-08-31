@@ -91,7 +91,7 @@ void *renderPoop(void *data) {
 			.y = worldYToScreenY(poo->pos[1]),
 		},
 		.color = {
-			.vals = {
+			.rgb = {
 				//13, 194, 79
 				//255, 255, 255
 				r, g, b	

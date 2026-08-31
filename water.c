@@ -69,7 +69,7 @@ void *renderWater(void *data) {
 				.y = worldYToScreenY(pos[1]),
 			},
 			.color = {
-				.vals = {
+				.rgb = {
 					50, 100, 200
 				}
 			},

@@ -298,7 +298,7 @@ void *renderDirt(void *data) {
 			.y = worldYToScreenY(dirt->pos[1]),// + screenY/2 - frameDim[1]/2;
 		},
 		.color = {
-			.vals = {
+			.rgb = {
 				lerp(dirtDry[0], dirtWet[0], eco),
 				lerp(dirtDry[1], dirtWet[1], eco),
 				lerp(dirtDry[2], dirtWet[2], eco)
@@ -313,7 +313,7 @@ void *renderDirt(void *data) {
 Color dirtColor(Form *dirt) {
 	float eco = *getStat(dirt, ECO);
 	Color col = {
-		.vals = {
+		.rgb = {
 			lerp(dirtDry[0], dirtWet[0], eco),
 			lerp(dirtDry[1], dirtWet[1], eco),
 			lerp(dirtDry[2], dirtWet[2], eco)

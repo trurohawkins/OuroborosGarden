@@ -69,7 +69,7 @@ void *renderFloaty(void *data) {
 			.y = worldYToScreenY(flo->pos[1]),
 		},
 		.color = {
-			.vals = {
+			.rgb = {
 				floatColors[0], floatColors[1], floatColors[2]
 			},
 		},

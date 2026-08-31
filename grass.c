@@ -100,7 +100,7 @@ Color grassColor(Form *g) {
 	// if the plant has less eco than stasis its dying
 	// if more its growing
 	Color c = {
-		.vals = {
+		.rgb = {
 			lerp(grassA[0], grassB[0], eco),
 			lerp(grassA[1], grassB[1], eco),
 			lerp(grassA[2], grassB[2], eco),
@@ -145,7 +145,7 @@ void *renderGrass(void *data) {
 		.index = grassStamps[plant->stage-1],
 	};
 	Color color = {
-		.vals = {
+		.rgb = {
 			lerp(grassA[0], grassB[0], eco),
 			lerp(grassA[1], grassB[1], eco),
 			lerp(grassA[2], grassB[2], eco),
@@ -171,7 +171,7 @@ void *renderGrass(void *data) {
 			reco.index = -1;
 			Color d = dirtColor(dirt);
 			for (int i = 0; i < 3; i++) {
-				color.vals[i] = lerp(color.vals[i], d.vals[i], 0.5);
+				color.rgb[i] = lerp(color.rgb[i], d.rgb[i], 0.5);
 			}
 		}
 	}
