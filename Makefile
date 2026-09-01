@@ -32,7 +32,7 @@ GAMEDIR = $(ENGINEDIR)GameCore/
 GAMEINC = $(GAMEDIR)include/
 GAMELIB = $(GAMEDIR)lib/
 
-FORMDIR = $(ENGINEDIR)Form/
+FORMDIR = $(ENGINEDIR)
 FORMINC = $(FORMDIR)include/
 FORMLIB = $(FORMDIR)lib/
 
@@ -93,6 +93,7 @@ $(AUDIOLIB)lib$(AUDIO).a:
 clean:
 	rm -f *.o *.d
 	$(MAKE) clean -C $(ENGINEDIR)
+	git submodule foreach '$(MAKE) fclean'
 
 fclean:
 	rm -rf $(TARGET) *.o *.d lsan.supp
