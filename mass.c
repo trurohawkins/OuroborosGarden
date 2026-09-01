@@ -61,7 +61,6 @@ void moveMass(Mass *m, int xd, int yd) {
 		if (cur->data) {
 			int *pos = cur->data;
 			incPos(pos, pos + 1, xd, yd);
-			//memcpy(cur->data, pos, sizeof(int) * 2);
 		}
 	}
 
