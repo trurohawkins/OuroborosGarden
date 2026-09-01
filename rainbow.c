@@ -158,18 +158,16 @@ void *renderRainbow(void *data) {
 	while (cur) {
 		int x = cur->data;
 		int y = cur->next->data;
+		reco.pos.x = worldXToScreenX(x);
+		reco.pos.y = worldYToScreenY(y);
 		float d = max(abs(x - r->centerX), abs(y - r->centerY));
 		int place = ((int)(r->colorOffset + d) % 14) * 3;
-		PosColor pc = {
-			.pos = {
-				.x = worldXToScreenX(x),
-				.y = worldYToScreenY(y),
-			},
-			.color = {
+		Color col = {
+			.rgb = {
 				r->colors[place], r->colors[place+1], r->colors[place+2]
 			},
 		};
-		memcpy(reco.data, &pc, sizeof(PosColor));
+		memcpy(reco.data, &col, sizeof(Color));
 		addRenderCommand(reco);
 		cur = cur->next->next;
 	}

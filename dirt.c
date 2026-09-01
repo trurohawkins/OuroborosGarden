@@ -291,21 +291,19 @@ void *renderDirt(void *data) {
 		.type = 0,
 		.index = -1,
 		.layer = DIRTLAYER,
-	};
-	PosColor pc = {
 		.pos = {
 			.x = worldXToScreenX(dirt->pos[0]),// + screenX/2 - frameDim[0]/2;
 			.y = worldYToScreenY(dirt->pos[1]),// + screenY/2 - frameDim[1]/2;
 		},
-		.color = {
-			.rgb = {
-				lerp(dirtDry[0], dirtWet[0], eco),
-				lerp(dirtDry[1], dirtWet[1], eco),
-				lerp(dirtDry[2], dirtWet[2], eco)
-			}
-		},
 	};
-	memcpy(reco.data, &pc, sizeof(PosColor));
+	Color col = {
+		.rgb = {
+			lerp(dirtDry[0], dirtWet[0], eco),
+			lerp(dirtDry[1], dirtWet[1], eco),
+			lerp(dirtDry[2], dirtWet[2], eco)
+		}
+	};
+	memcpy(reco.data, &col, sizeof(Color));
 	addRenderCommand(reco);
 	return NULL;//commands;
 }

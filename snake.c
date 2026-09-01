@@ -556,39 +556,37 @@ void *renderSnake(void *data) {
 		.layer = SNAKELAYER+1,
 	};
 	float eco = percentSnakeEco(s);//(float)s->stomach / (float)fullStomach;
-	PosColor pc = {
-		.color = {
+	Color col = {
+		.rgb = {
 			lerp(snakeDeath[0], snakeHealth[0], eco),
 			lerp(snakeDeath[1], snakeHealth[1], eco),
 			lerp(snakeDeath[2], snakeHealth[2], eco),
 		},
 	};
+	memcpy(reco.data, &col, sizeof(Color));
 	while (body) {
 		SnakeBody *sb = body->data;
 		//float eco = sb->eco / fullBodyEco;
-		pc.pos.x = worldXToScreenX(sb->pos[0]);
-		pc.pos.y = worldYToScreenY(sb->pos[1]);
-		memcpy(reco.data, &pc, sizeof(PosColor));
+		reco.pos.x = worldXToScreenX(sb->pos[0]);
+		reco.pos.y = worldYToScreenY(sb->pos[1]);
 		//snake head
 		if (body->data == s->body->data) {
 			reco.index = -1;//snakeStamps[sb->sprite+sb->roto];
 			addRenderCommand(reco);
 			for (int i = 0; i < 3; i++) {
-				pc.color.rgb[i] = 0;
+				col.rgb[i] = 0;
 			}
-			memcpy(reco.data, &pc, sizeof(PosColor));
+			memcpy(reco.data, &col, sizeof(Color));
 			reco.index = snakeStamps[s->state];
-		} else {
-			reco.index = snakeStamps[sb->sprite+sb->roto];
-		}
-		//body/snake face
-		addRenderCommand(reco);
-		if (reco.index != snakeStamps[4]) {
+			addRenderCommand(reco);
 			reco.layer = SNAKELAYER;
 			for (int i = 0; i < 3; i++) {
-				pc.color.rgb[i] = lerp(snakeDeath[0], snakeHealth[0], eco);
+				col.rgb[i] = lerp(snakeDeath[0], snakeHealth[0], eco);
 			}
-
+			memcpy(reco.data, &col, sizeof(Color));
+		} else {
+			reco.index = snakeStamps[sb->sprite+sb->roto];
+			addRenderCommand(reco);
 		}
 		body = body->next;
 	}

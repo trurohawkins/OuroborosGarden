@@ -62,19 +62,17 @@ void *renderFloaty(void *data) {
 		.type = 0,
 		.index = floatStamps[0 + (counter%2)],
 		.layer = UILAYER,
-	};
-	PosColor pc = {
 		.pos = {
 			.x = worldXToScreenX(flo->pos[0]),
 			.y = worldYToScreenY(flo->pos[1]),
 		},
-		.color = {
-			.rgb = {
-				floatColors[0], floatColors[1], floatColors[2]
-			},
+	};
+	Color color = {
+		.rgb = {
+			floatColors[0], floatColors[1], floatColors[2]
 		},
 	};
-	memcpy(reco.data, &pc, sizeof(PosColor));
+	memcpy(reco.data, &color, sizeof(Color));
 	addRenderCommand(reco);
 }
 

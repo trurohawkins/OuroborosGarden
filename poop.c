@@ -75,6 +75,10 @@ void *renderPoop(void *data) {
 		.type = 0,
 		.index = pooStamp[stamp],
 		.layer = POOPLAYER,
+		.pos = {
+			.x = worldXToScreenX(poo->pos[0]),
+			.y = worldYToScreenY(poo->pos[1]),
+		},
 	};
 	float r = 255;
 	float g = 255;
@@ -85,19 +89,13 @@ void *renderPoop(void *data) {
 		g = rainbowColors[color+1];
 		b = rainbowColors[color+2];
 	}
-	PosColor pc = {
-		.pos = {
-			.x = worldXToScreenX(poo->pos[0]),
-			.y = worldYToScreenY(poo->pos[1]),
-		},
-		.color = {
+	Color col = {
 			.rgb = {
 				//13, 194, 79
 				//255, 255, 255
 				r, g, b	
 			},
-		},
 	};
-	memcpy(reco.data, &pc, sizeof(PosColor));
+	memcpy(reco.data, &col, sizeof(Color));
 	addRenderCommand(reco);
 }

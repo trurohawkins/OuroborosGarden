@@ -40,16 +40,14 @@ void *renderStone(void *data) {
 	linkedList *cur = stoneBody;
 	while (cur) {
 		int *pos = cur->data;
-		PosColor pc = {
-			.pos = {
-				.x = worldXToScreenX(pos[0]),
-				.y = worldYToScreenY(pos[1]),
-			},
-			.color = {
+		reco.pos.x = worldXToScreenX(pos[0]);
+		reco.pos.y = worldYToScreenY(pos[1]);
+		Color color = {
+			.rgb = {
 				60, 80, 70
 			},
 		};
-		memcpy(reco.data, &pc, sizeof(PosColor));
+		memcpy(reco.data, &color, sizeof(Color));
 		addRenderCommand(reco);
 		cur = cur->next;
 	}

@@ -63,18 +63,14 @@ void *renderWater(void *data) {
 	linkedList *cur = waterBody;
 	while (cur) {
 		int *pos = cur->data;
-		PosColor pc = {
-			.pos = {
-				.x = worldXToScreenX(pos[0]),
-				.y = worldYToScreenY(pos[1]),
-			},
-			.color = {
-				.rgb = {
-					50, 100, 200
-				}
-			},
+		reco.pos.x = worldXToScreenX(pos[0]);
+		reco.pos.y = worldYToScreenY(pos[1]);
+		Color color = {
+			.rgb = {
+				50, 100, 200
+			}
 		};
-		memcpy(reco.data, &pc, sizeof(PosColor));
+		memcpy(reco.data, &color, sizeof(Color));
 		addRenderCommand(reco);
 		cur = cur->next;
 	}

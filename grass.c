@@ -143,6 +143,10 @@ void *renderGrass(void *data) {
 		.layer = GRASSLAYER,
 		.type = 0,
 		.index = grassStamps[plant->stage-1],
+		.pos = {
+			.x = worldXToScreenX(grass->pos[0]),// + screenX/2 - frameDim[0]/2;
+			.y = worldYToScreenY(grass->pos[1]),// + screenY/2 - frameDim[1]/2;
+		},
 	};
 	Color color = {
 		.rgb = {
@@ -175,14 +179,7 @@ void *renderGrass(void *data) {
 			}
 		}
 	}
-	PosColor pc = {
-		.pos = {
-			.x = worldXToScreenX(grass->pos[0]),// + screenX/2 - frameDim[0]/2;
-			.y = worldYToScreenY(grass->pos[1]),// + screenY/2 - frameDim[1]/2;
-		},
-		.color = color,
-	};
-	memcpy(reco.data, &pc, sizeof(PosColor));
+	memcpy(reco.data, &color, sizeof(Color));
 
 	addRenderCommand(reco);
 
