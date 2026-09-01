@@ -24,7 +24,8 @@ void generateLevel(int level) {
 		for (int i = -1; i < 4; i++) {
 			int *dir = getDir4(i);
 			int pos[2] = {island[0] + dir[0], island[1] + dir[1]};
-			removeForm(water, pos[0], pos[1]);
+			//removeForm(water->self, pos[0], pos[1]);
+			removeFromMass(water, pos[0], pos[1]);
 			Form *dirt = placeDirt(pos[0], pos[1]);
 			float *eco = getStat(dirt, ECO);
 			*eco = 1;
