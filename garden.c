@@ -4,7 +4,8 @@ void makeGarden() {
 	makeWorld(worldX, worldY);
 	setFrameDimension(worldX, worldY);
 	setFramePosition(worldX/2, worldY/2);
-
+	
+	initClouds();
 	initStone();
 	initWater();
 	initPlants();
@@ -16,6 +17,7 @@ void generateLevel(int level) {
 	World *w = getWorld();
 	int spawnPos[2] = {worldX/2, worldY/2};
 	if (level == 0) {
+		placeCircle(placeClouds, 10, 14, 6);
 		spawnPos[1] -= 10;
 		placeCircle(placeWater, spawnPos[0], spawnPos[1], 6);
 		int island[2] = {spawnPos[0] - 3, spawnPos[1] + 20};
@@ -110,6 +112,7 @@ void renderGarden() {
 }
 
 void endGarden() {
+	freeClouds();
 	freeWater();
 	freeStone();
 	linkedList *curSnake = snakeList;

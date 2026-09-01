@@ -11,29 +11,6 @@ void initWater() {
 		RenderObject *rob = ren->data;
 		rob->data = water;
 		rob->render = renderWater;
-
-		addTimedEvent(rain, 0, rainInterval);
-	}
-}
-
-void rain(void *) {
-	World *w = getWorld();
-	for (int x = 0; x < w->x; x++) {
-		for (int y = 0; y < w->y; y++) {
-			Cell *c = &w->map[(y*w->x)+x];
-			bool covered = false;
-			for (int i = FORMS_PER_CELL-1; i >= 0; i--) {
-				if (c->within[i]) {
-					if (getStat(c->within[i], COVER)) {
-						covered = true;
-						break;
-					}
-				}
-			}
-			if (!covered) {
-				addEco(x, y, rainAmount);
-			}
-		}
 	}
 }
 

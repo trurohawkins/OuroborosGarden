@@ -32,15 +32,8 @@ void *renderStone(void *data) {
 		},
 	};
 	memcpy(reco.data, &color, sizeof(Color));
+	renderMass(data, reco);
 
-	linkedList *cur = stone->body;
-	while (cur) {
-		int *pos = cur->data;
-		reco.pos.x = worldXToScreenX(pos[0]);
-		reco.pos.y = worldYToScreenY(pos[1]);
-		addRenderCommand(reco);
-		cur = cur->next;
-	}
 }
 
 void freeStone() {

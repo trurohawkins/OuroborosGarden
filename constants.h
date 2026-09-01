@@ -38,6 +38,7 @@ float flowerChance = 0.02;//.02f;
 #define STONE 7
 #define RAINBOW 8
 #define FLOATY 9
+#define CLOUDS 10
 
 //stat IDs
 // dirt
