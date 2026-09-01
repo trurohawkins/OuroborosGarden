@@ -3,6 +3,7 @@
 Mass *makeMass(int id) {
 	Mass *m = calloc(1, sizeof(Mass));
 	m->self = makeForm(id);
+	m->placed = true;
 	return m;
 }
 
@@ -34,7 +35,43 @@ bool removeFromMass(Mass *m, int x, int y) {
 	return false;
 }
 
+void removeMass(Mass *m) {
+	for (linkedList *cur = m->body; cur != 0; cur = cur->next) {
+		if (cur->data) {
+			int *pos = cur->data;
+			removeForm(m->self, pos[0] , pos[1]);
+		}
+	}
+	m->placed = false;
+}
+void placeMass(Mass *m) {
+	for (linkedList *cur = m->body; cur != 0; cur = cur->next) {
+		if (cur->data) {
+			int *pos = cur->data;
+			placeForm(m->self, pos[0] , pos[1]);
+		}
+	}
+	m->placed = true;
+}
+
+
+void moveMass(Mass *m, int xd, int yd) {
+	removeMass(m);
+	for (linkedList *cur = m->body; cur != 0; cur = cur->next) {
+		if (cur->data) {
+			int *pos = cur->data;
+			incPos(pos, pos + 1, xd, yd);
+			//memcpy(cur->data, pos, sizeof(int) * 2);
+		}
+	}
+
+	placeMass(m);
+}
+
 void renderMass(Mass *m, RenderCommand reco) {
+	if (!m->placed) {
+		return;
+	}
 	linkedList *cur = m->body;
 	while (cur) {
 		int *pos = cur->data;
@@ -45,7 +82,8 @@ void renderMass(Mass *m, RenderCommand reco) {
 	}
 }
 
-void freeMass(Mass *m) {
+void freeMass(void *mass) {
+	Mass *m = mass;
 	if (m->body) {
 		linkedList *cur = m->body;
 		while (cur) {

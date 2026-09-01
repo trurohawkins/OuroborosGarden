@@ -13,7 +13,7 @@ float rainInterval = 16.0 * spd;
 int maxEco = 1;
 float evaporation = 0.05;
 float evapMinimum = 0.05;
-float rainAmount = 0.05;
+float rainAmount = 5.0;//0.05;
 float spreadDither = 0.005;
 float bioEvap = 0.1;
 // snake

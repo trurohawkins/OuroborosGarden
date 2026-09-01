@@ -16,6 +16,7 @@ void makeGarden() {
 void generateLevel(int level) {
 	World *w = getWorld();
 	int spawnPos[2] = {worldX/2, worldY/2};
+	makeCloud();
 	if (level == 0) {
 		placeCircle(placeClouds, 10, 14, 6);
 		spawnPos[1] -= 10;

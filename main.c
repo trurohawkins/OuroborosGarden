@@ -6,8 +6,8 @@ linkedList *snakeList;
 bool drawing = true;
 #include "constants.h"
 #include "stat.c"
-#include "mass.c"
 #include "help.c"
+#include "mass.c"
 #include "floaty.c"
 #include "dirt.c"
 #include "water.c"
