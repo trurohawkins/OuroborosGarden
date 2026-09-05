@@ -22,7 +22,8 @@ void makeMenus() {
 	addKeyControl(god, '\x0D', pressSpace);
 	addKeyControl(god, '\x1B', pauseGame);
 
-	Menu *startMenu = makeMenu(1, 2, 20, 10);
+	Menu *startMenu = makeMenu(1, 2, 12, 5);
+	setMenuSpacing(startMenu, 20, 10);
 	Button *play = getButton(startMenu, 0, 1);
 	nameButton(play, "play");
 	play->func = &startGarden;
@@ -36,7 +37,8 @@ void makeMenus() {
 
 	GM.startMenu = startMenu;
 
-	Menu *pauseMenu = makeMenu(1, 3, 20, 10);
+	Menu *pauseMenu = makeMenu(1, 3, 12, 5);
+	setMenuSpacing(pauseMenu, 20, 10);
 	play = getButton(pauseMenu, 0, 2);
 	nameButton(play, "resume");
 	play->func = &resumeGame;
