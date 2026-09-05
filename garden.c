@@ -2,8 +2,8 @@
 
 void makeGarden() {
 	makeWorld(worldX, worldY);
-	setFrameDimension(worldX, worldY);
-	setFramePosition(worldX/2, worldY/2);
+	setViewDimension(worldX, worldY);
+	setViewPosition(worldX/2, worldY/2);
 	
 	initClouds();
 	initStone();

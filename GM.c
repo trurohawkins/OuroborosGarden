@@ -8,6 +8,7 @@ GameMaster GM  = {
 
 void makeMenus() {
 	Player *god = makePlayer(&GM, 0, 0);
+	god->ignorePause = true;
 	addPlayer(god);
 	addKeyControl(god, 'W', pressUp);
 	addKeyControl(god, 129, pressUp);
