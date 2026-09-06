@@ -160,7 +160,7 @@ void *renderGrass(void *data) {
 		Form *dirt = 0;
 		World *w = getWorld();
 		int wi = grass->pos[1] * w->x + grass->pos[0];
-		Cell c = theWorld.map[wi];
+		Cell c = w->map[wi];
 		for (int i = 0; i < FORMS_PER_CELL; i++) {
 			if (c.within[i]) {
 				int id = c.within[i]->id;

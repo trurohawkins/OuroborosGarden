@@ -59,7 +59,7 @@ bool setStat(Form *f, int id, float value) {
 Form *checkStat(int x, int y, int id) {
 	World *w = getWorld();
 	if (x >= 0 && y >= 0 && x < w->x && y < w->y) {
-		Cell *c = &w->map[(y*theWorld.x) + x];
+		Cell *c = &w->map[(y * w->x) + x];
 		for (int i = 0; i < FORMS_PER_CELL; i++) {
 			if (c->within[i]) {
 				float *stat = getStat(c->within[i], id);

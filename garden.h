@@ -2,7 +2,6 @@
 
 void makeGarden();
 void startGarden();
-void renderGarden();
 void endGarden();
 void generateLevel(int level);
 

@@ -105,13 +105,6 @@ void startGarden() {
 	makeGarden();
 }
 
-void renderGarden() {
-	if (GM.curMenu) {
-		addMenu(GM.curMenu);
-	}
-	renderWorld();
-}
-
 void endGarden() {
 	freeClouds();
 	freeWater();

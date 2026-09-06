@@ -21,7 +21,8 @@ void freeMenus();
 void plantCount(int amnt);
 void checkPlants();
 void endLevel();
-void loadLevel();
+void loadNewLevel();
+void renderGM();
 
 void pressUp(void *guy, float val);
 void pressLeft(void *guy, float val);

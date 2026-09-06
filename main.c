@@ -26,7 +26,7 @@ int main(int argc, char **argv) {
 		drawing = false;
 	}
 	startWorld(drawing, true);
-	renderFunc = &renderGarden;
+	addRenderFunction(renderGM);
 	setRenderStride(2, 1);
 	makeMenus();
 	

@@ -61,10 +61,15 @@ void makeMenus() {
 	GM.winScreen = makeMenu(1, 1, 20, 20);
 	Button *win = getButton(GM.winScreen, 0, 0);
 	nameButton(win, "YOU WIN!!!");
-	win->func = &loadLevel;
+	win->func = &loadNewLevel;
 	GM.winScreen->pos[0] = 0.5;
 	GM.winScreen->pos[1] = 0.5;
+}
 
+void renderGM() {
+	if (GM.curMenu) {
+		addMenu(GM.curMenu);
+	}
 }
 
 void plantCount(int amnt) {
@@ -83,7 +88,7 @@ void checkPlants() {
 	}
 }
 
-void loadLevel() {
+void loadNewLevel() {
 	endLevel();
 	startGarden();
 	GM.curPlants = 0;
@@ -167,7 +172,7 @@ void endLevel() {
 
 void restartGame() {
 	toggleGamePause();
-	loadLevel();
+	loadNewLevel();
 }
 
 void returnToMenu() {

@@ -1,5 +1,5 @@
 void incPos(int *px, int *py, int dx, int dy) {
-	World *w = &theWorld;//getWorld();
+	World *w = getWorld();
 	if ((*px + dx) < 0) {
 		*px = w->x + (*px + dx);
 	} else {
