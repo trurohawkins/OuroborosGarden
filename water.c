@@ -35,6 +35,10 @@ void *renderWater(void *data) {
 	renderMass(data, reco);
 }
 
+void deleteWater(void *null) {
+	freeWater();
+}
+
 void freeWater() {
 	if (water) {
 		freeMass(water);

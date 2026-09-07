@@ -1,21 +1,21 @@
 #include "garden.h"
 
 void makeGarden() {
-	makeWorld(worldX, worldY);
-	setViewDimension(worldX, worldY);
-	setViewPosition(worldX/2, worldY/2);
+	//makeWorld(worldX, worldY);
 	
 	initClouds();
 	initStone();
 	initWater();
-	initPlants();
 
 	generateLevel(GM.level);
+	setViewDimension(worldX, worldY);
+	setViewPosition(worldX/2, worldY/2);
 }
 
 void generateLevel(int level) {
 	World *w = getWorld();
 	int spawnPos[2] = {worldX/2, worldY/2};
+	/*
 	makeCloud();
 	if (level == 0) {
 		placeCircle(placeClouds, 10, 14, 6);
@@ -66,10 +66,16 @@ void generateLevel(int level) {
 		}
 
 	}
+	*/
+	if (!loadNextLevel()) {
+		reloadLevel();
+		debugWrite("could not load next level\n");
+	}
+	initPlants();
 	for (int x = 0; x < w->x; x++) {
 		for (int y = 0; y < w->y; y++) {
 			if (!checkFormID(x, y, WATER)) {
-				placeDirt(x, y);
+				//placeDirt(x, y);
 				if (!checkFormID(x, y, STONE)) {
 					if (randPercent() < grassChance) {
 						placeGrass(x, y);

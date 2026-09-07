@@ -29,13 +29,13 @@ float flowerChance = 0.02;//.02f;
 
 //Form IDs
 #define DIRT 0
-#define PLANT 1
-#define SNAKE 2
-#define GRASS 3
-#define POOP 4
-#define FLOWER 5
-#define WATER 6
-#define STONE 7
+#define STONE 1
+#define WATER 2
+#define PLANT 3
+#define SNAKE 4
+#define GRASS 5
+#define POOP 6
+#define FLOWER 7
 #define RAINBOW 8
 #define FLOATY 9
 #define CLOUDS 10

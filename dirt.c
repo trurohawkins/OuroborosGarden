@@ -92,7 +92,6 @@ void dirtFlow(void*) {
 		}
 	}
 	dir = (dir + 1) % 4;
-
 }
 
 void spreadEco(Form *from, int x, int y) {

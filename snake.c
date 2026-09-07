@@ -415,6 +415,7 @@ void snakeStagger(Snake *s, bool staggered) {
 	} else {
 		s->state = 0;
 	}
+	screenChanged(0, 0);
 }
 
 void snakePoop(Snake *s) {

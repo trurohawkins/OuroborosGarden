@@ -24,8 +24,10 @@ int main(int argc, char **argv) {
 	if (argc > 1) {
 		drawing = false;
 	}
-	initCookBook(1);
-	cookBook.recipes[0] = (FormRecipe){"Dirt", makeDirt, freeForm};
+	initCookBook(3);
+	cookBook.recipes[0] = (FormRecipe){"Dirt", placeDirt, freeForm};
+	cookBook.recipes[1] = (FormRecipe){"Stone", placeStone, deleteStone};
+	cookBook.recipes[2] = (FormRecipe){"Water", placeWater, deleteWater};
 	startWorld(drawing, true);
 	makeEditor();
 	setRenderStride(2, 1);

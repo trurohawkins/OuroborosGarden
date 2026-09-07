@@ -63,6 +63,9 @@ void makeMenus() {
 	win->func = &loadNewLevel;
 	GM.winScreen->pos[0] = 0.5;
 	GM.winScreen->pos[1] = 0.5;
+
+	makeLevel("lvl00.bin", 0);
+	makeLevel("lvl01.bin", 0);
 }
 
 void renderGM() {
@@ -172,7 +175,7 @@ void returnToMenu() {
 	endGarden();
 	endLevel();
 	toggleGamePause();
-	GM.level = 0;
+	setLevel(-1);
 	GM.curPlants = 0;
 	GM.curMenu = GM.startMenu;
 	screenChanged(0, 0);

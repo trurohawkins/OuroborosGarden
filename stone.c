@@ -33,6 +33,10 @@ void *renderStone(void *data) {
 
 }
 
+void deleteStone(void *data) {
+	freeStone();
+}
+
 void freeStone() {
 	if (stone) {
 		freeMass(stone);
