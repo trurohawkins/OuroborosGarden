@@ -51,22 +51,24 @@ void rain(void *) {
 		//for (int y = 0; y < w->y; y++) {
 	for (linkedList *cur = clouds; cur; cur = cur->next) {
 		Mass *clo = cur->data;
-		for (linkedList *bod = clo->body; bod; bod = bod->next) {
-			int *pos = bod->data;
-			Cell *c = &w->map[(pos[1]*w->x)+pos[0]];
-			bool covered = false;
-			for (int i = FORMS_PER_CELL-1; i >= 0; i--) {
-				if (c->within[i]) {
-					if (getStat(c->within[i], COVER)) {
-						covered = true;
-						break;
+		if (clo) {
+			for (linkedList *bod = clo->body; bod; bod = bod->next) {
+				int *pos = bod->data;
+				Cell *c = &w->map[(pos[1]*w->x)+pos[0]];
+				bool covered = false;
+				for (int i = FORMS_PER_CELL-1; i >= 0; i--) {
+					if (c->within[i]) {
+						if (getStat(c->within[i], COVER)) {
+							covered = true;
+							break;
+						}
 					}
 				}
-			}
-			if (!covered) {
-				addEco(pos[0], pos[1], rainAmount);
-			}
+				if (!covered) {
+					addEco(pos[0], pos[1], rainAmount);
+				}
 
+			}
 		}
 	}
 }

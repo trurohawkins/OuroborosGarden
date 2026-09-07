@@ -88,6 +88,7 @@ void checkPlants() {
 }
 
 void loadNewLevel() {
+	endGarden();
 	endLevel();
 	startGarden();
 	GM.curPlants = 0;

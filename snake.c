@@ -521,9 +521,6 @@ void snakeDie(Snake *s) {
 
 void freeSnake(void *s) {
 	Snake *snake = s;
-	Player *p = checkPlayer(snake->pNum + 1);
-	removePlayer(p);
-	freePlayer(p);
 	//remvoe audio movement
 	unscheduleEvent(snake->eNum);
 
