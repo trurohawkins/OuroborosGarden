@@ -8,14 +8,16 @@ Mass *makeMass(int id) {
 }
 
 Form *addToMass(Mass *m, int x, int y) {
-	World *w = getWorld();
-	if (x >= 0 && y >= 0 && x < w->x && y < w->y) {
-		int *pos = calloc(2, sizeof(int));
-		pos[0] = x;//(x % w->x + w->x) % w->x;
-		pos[1] = y;//(y % w->y + w->y) % w->y;
-		addToList(&m->body, pos);
-		placeForm(m->self, pos[0], pos[1]);
-		return m->self;
+	if (m) {
+		World *w = getWorld();
+		if (x >= 0 && y >= 0 && x < w->x && y < w->y) {
+			int *pos = calloc(2, sizeof(int));
+			pos[0] = x;//(x % w->x + w->x) % w->x;
+			pos[1] = y;//(y % w->y + w->y) % w->y;
+			addToList(&m->body, pos);
+			placeForm(m->self, pos[0], pos[1]);
+			return m->self;
+		}
 	}
 	return NULL;
 }

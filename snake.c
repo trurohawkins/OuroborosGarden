@@ -26,24 +26,19 @@ Snake *makeSnake(int xPos, int yPos) {
 	s->pooInterval = 100;
 	s->pooLength = 10;
 	s->pNum = snakeCount;
-	Player *player = checkPlayer(snakeCount+1);
-	if (player == 0) {
-		player = makePlayer(s, snakeCount+1, 0);
-		addPlayer(player);
-		if (snakeCount == 0) {
-			addKeyControl(player, 'W', snakeUp);
-			addKeyControl(player, 'A', snakeLeft);
-			addKeyControl(player, 'S', snakeDown);
-			addKeyControl(player, 'D', snakeRight);
-			addKeyControl(player, 129, snakeUp);
-			addKeyControl(player, 130, snakeLeft);
-			addKeyControl(player, 131, snakeDown);
-			addKeyControl(player, 132, snakeRight);
-		}
-	} else {
-		//probably on a restart and need to update snake
-		player->self = s;
+	Player *player = addPlayer(s);
+	if (snakeCount == 0) {
+		addKeyControl(player, 'W', snakeUp);
+		addKeyControl(player, 'A', snakeLeft);
+		addKeyControl(player, 'S', snakeDown);
+		addKeyControl(player, 'D', snakeRight);
+		addKeyControl(player, 129, snakeUp);
+		addKeyControl(player, 130, snakeLeft);
+		addKeyControl(player, 131, snakeDown);
+		addKeyControl(player, 132, snakeRight);
 	}
+	Control *con = makeFormControl(s->self);
+	con->player = player;
 	placeSnake(s);
 	/*
 	for (int i = 0; i < baseSnake - 1;  i++ ) {
@@ -53,10 +48,7 @@ Snake *makeSnake(int xPos, int yPos) {
 
 	addToList(&snakeList, s);
 	snakeCount++;
-	Nub *ren = growRenderNub(s->self);
-	RenderObject *rob = ren->data;
-	rob->data = s;
-	rob->render = renderSnake;
+	Nub *ren = growRenderNub(s->self, s, renderSnake);
 	
 	if (snakeStamps[0] == -1) {
 		bool braille = false;

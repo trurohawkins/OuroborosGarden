@@ -12,10 +12,7 @@ void initClouds() {
 
 Mass *makeCloud() {
 	Mass *cloud = makeMass(CLOUDS);
-	Nub *ren = growRenderNub(cloud->self);
-	RenderObject *rob = ren->data;
-	rob->data = cloud;
-	rob->render = renderClouds;
+	Nub *ren = growRenderNub(cloud->self, cloud, renderClouds);
 	addToList(&clouds, cloud);
 	return cloud;
 }

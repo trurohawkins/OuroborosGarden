@@ -3,13 +3,12 @@
 GameMaster GM  = {
 	.level = 0,
 	.curPlants = 0,
-	.plantGoal = 400,
+	.plantGoal = 4,//00,
 };
 
 void makeMenus() {
-	Player *god = makePlayer(&GM, 0, 0);
+	Player *god = addPlayer(&GM);
 	god->ignorePause = true;
-	addPlayer(god);
 	addKeyControl(god, 'W', pressUp);
 	addKeyControl(god, 129, pressUp);
 	addKeyControl(god, 'A', pressLeft);

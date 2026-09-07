@@ -42,10 +42,7 @@ bool growGrass(Form *g) {
 	if (!drawing) {printf("grwoing grass %p stage %i\n" , g, data->stage);}
 	if (data->stage == 1) {
 		data->cycle = 15;
-		Nub *ren = growRenderNub(g);
-		RenderObject *rob = ren->data;
-		rob->data = g;
-		rob->render = renderGrass;
+		Nub *ren = growRenderNub(g, g, renderGrass);
 		setStat(g, GROWTH, 0.8);
 		setStat(g, LOSS, 0.01);
 		setStat(g, ROOTS, 0.25);

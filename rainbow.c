@@ -16,15 +16,13 @@ Rainbow *newRainbow() {
 void actualizeRainbow(Rainbow *r) {
 	r->self = makeForm(RAINBOW);
 	
-	Nub *ren = growRenderNub(r->self);
-	RenderObject *rob = ren->data;
-	rob->data = r;
-	rob->render = renderRainbow;
+	Nub *ren = growRenderNub(r->self, r, renderRainbow);
 
-	Actor *actor = makeFormActor(r->self);
+	Control *control = makeFormControl(r->self);
+	control->actor = makeActor(r->self);
 	Action *action = makeAction(0, rainbowAction, r);
-	addAction(actor, action);
-	addActor(actor);
+	addAction(control->actor, action);
+	addActor(control->actor);
 
 	setRainbow(&r);
 	r->colorOffset = randomInt(6);

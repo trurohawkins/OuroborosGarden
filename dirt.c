@@ -17,10 +17,7 @@ Form *makeDirt() {
 	addStat(dirt, ECO, 0);//randPercent());
 	addStat(dirt, OUTPUT, 1);
 	//Sigil *skin = createSigil(dirt)->data;
-	Nub *ren = growRenderNub(dirt);
-	RenderObject *rob = ren->data;
-	rob->data = dirt;
-	rob->render = renderDirt;
+	Nub *ren = growRenderNub(dirt, dirt, renderDirt);
 	//dirtColor(dirt);
 	return dirt;
 }

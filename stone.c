@@ -8,10 +8,7 @@ void initStone() {
 		initStats(stone->self, 2);
 		addStat(stone->self, COVER, 0.05f);
 		addStat(stone->self, BLOCK, 1);
-		Nub *ren = growRenderNub(stone->self);
-		RenderObject *rob = ren->data;
-		rob->data = stone;
-		rob->render= renderStone;
+		Nub *ren = growRenderNub(stone->self, stone, renderStone);
 	}
 }
 

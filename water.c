@@ -7,15 +7,16 @@ void initWater() {
 		water = makeMass(WATER);
 		initStats(water->self, 1);
 		addStat(water->self, SOURCE, 0.015f);
-		Nub *ren = growRenderNub(water->self);
-		RenderObject *rob = ren->data;
-		rob->data = water;
-		rob->render = renderWater;
+		Nub *ren = growRenderNub(water->self, water, renderWater);
 	}
 }
 
 Form *placeWater(int x, int y) {
-	return addToMass(water, x, y);
+	Form *f = addToMass(water, x, y);
+	if (!f) {
+		debugWrite("failed to place water\n");
+	}
+	return f;
 }
 
 void *renderWater(void *data) {

@@ -1,15 +1,12 @@
 #include "poop.h"
 
-int poopLifeTime = 40;
+int poopLifeTime = 4;
 int pooStamp[2] = {-1, -1};
 
 Form *makePoop() {
 	Form *poo = makeForm(POOP);
 	
-	Nub *ren = growRenderNub(poo);
-	RenderObject *rob = ren->data;
-	rob->data = poo;
-	rob->render = renderPoop;
+	Nub *ren = growRenderNub(poo, poo, renderPoop);
 
 	if (pooStamp[0] == -1) {
 		//pooStamp = createStamp("\U0001694B", 0);
@@ -23,10 +20,11 @@ Form *makePoop() {
 		pooStamp[1] = createStamp(stamp, 0);
 	}
 
-	Actor *actor = makeFormActor(poo);
+	Control *con = makeFormControl(poo);
+	con->actor = makeActor(poo);
 	Action *action = makeAction(0, poopAction, poo);
-	addAction(actor, action);
-	addActor(actor);
+	addAction(con->actor, action);
+	addActor(con->actor);
 
 	initStats(poo, 4);
 	//decay
@@ -60,8 +58,6 @@ int poopAction(void *data, Action *a, float delta) {
 			int x = f->pos[0];
 			int y = f->pos[1];
 			removeForm(f, x, y);
-			Actor *a = findNub(f, 2)->data;
-			a->deleteMe = true;
 			freeForm(f);
 			placeFlower(x, y);
 		}

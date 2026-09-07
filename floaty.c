@@ -6,20 +6,22 @@ float floatColors[3] = {
 };
 Form *makeFloaty(int type) {
 	Form *flo = makeForm(FLOATY);
-	Nub *ren = growRenderNub(flo);
+	Nub *ren = growRenderNub(flo, flo, renderFloaty);
+	/*
 	RenderObject *rob = ren->data;
 	rob->data = flo;
 	rob->render = renderFloaty;
+	*/
 
 	if (floatStamps[0] == -1) {
 		floatStamps[0] = createStamp("\U0001682A", 0);
 		floatStamps[1] = createStamp(0, "\U0001682A");
 	}
-
-	Actor *actor = makeFormActor(flo);
+	Control *con = makeFormControl(flo);
+	con->actor = makeActor(flo);
 	Action *action = makeAction(0, floatyAction, flo);
-	addAction(actor, action);
-	addActor(actor);
+	addAction(con->actor, action);
+	addActor(con->actor);
 
 	initStats(flo, 3);
 	//counter
@@ -46,8 +48,6 @@ int floatyAction(void *data, Action *a, float delta) {
 			placeForm(f, f->pos[0], f->pos[1]);
 		} else {
 			removeForm(f, f->pos[0], f->pos[1]);
-			Actor *a = findNub(f, 2)->data;
-			a->deleteMe = true;
 			freeForm(f);
 		}
 	} else {

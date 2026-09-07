@@ -71,10 +71,7 @@ bool growFlower(Form *f) {
 	}
 	data->stage++;
 	if (data->stage == 1) {
-		Nub *ren = growRenderNub(f);
-		RenderObject *rob = ren->data;
-		rob->data = f;
-		rob->render = renderFlower;
+		Nub *ren = growRenderNub(f, f, renderFlower);
 		setStat(f, GROWTH, 1);
 		//setStat(f, PULL, 0.5);
 		setStat(f, LOSS, 0.1);
