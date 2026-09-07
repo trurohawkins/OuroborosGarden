@@ -35,7 +35,6 @@ Snake *makeSnake(int xPos, int yPos) {
 			addKeyControl(player, 'A', snakeLeft);
 			addKeyControl(player, 'S', snakeDown);
 			addKeyControl(player, 'D', snakeRight);
-			addKeyControl(player, 'P', snakeStep);
 			addKeyControl(player, 129, snakeUp);
 			addKeyControl(player, 130, snakeLeft);
 			addKeyControl(player, 131, snakeDown);

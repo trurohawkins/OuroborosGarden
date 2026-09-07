@@ -20,7 +20,6 @@ void makeMenus();
 void freeMenus();
 void plantCount(int amnt);
 void checkPlants();
-void endLevel();
 void loadNewLevel();
 void renderGM();
 

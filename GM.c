@@ -163,19 +163,13 @@ void resumeGame() {
 	screenChanged(0, 0);
 }
 
-void endLevel() {
-	clearTimedEvents();
-	endGarden();
-	freeWorld();
-	deleteActorLists();
-}
-
 void restartGame() {
 	toggleGamePause();
 	loadNewLevel();
 }
 
 void returnToMenu() {
+	endGarden();
 	endLevel();
 	toggleGamePause();
 	GM.level = 0;

@@ -24,10 +24,13 @@ int main(int argc, char **argv) {
 	if (argc > 1) {
 		drawing = false;
 	}
+	initCookBook(1);
+	cookBook.recipes[0] = (FormRecipe){"Dirt", makeDirt, freeForm};
 	startWorld(drawing, true);
-	addRenderFunction(renderGM);
+	makeEditor();
 	setRenderStride(2, 1);
 	makeMenus();
+	addRenderFunction(renderGM);
 	
 	//makeGarden();
 	quickExit = false;
