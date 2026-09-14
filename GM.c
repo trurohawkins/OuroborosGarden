@@ -64,7 +64,7 @@ void makeMenus() {
 	GM.winScreen->pos[0] = 0.5;
 	GM.winScreen->pos[1] = 0.5;
 
-	makeLevel("lvl00.bin", 0);
+	makeLevel("lvl02.bin", 0);
 	makeLevel("lvl01.bin", 0);
 }
 

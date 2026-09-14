@@ -3,6 +3,9 @@
 Mass *makeMass(int id) {
 	Mass *m = calloc(1, sizeof(Mass));
 	m->self = makeForm(id);
+	Nub *nub = growNub(m->self);
+	nub->type = MASSNUB;
+	nub->data = m;
 	m->placed = true;
 	return m;
 }
@@ -28,7 +31,7 @@ bool chkPos(void *a, void *b) {
 	return aPos[0] == bPos[0] && aPos[1] == bPos[1];
 }
 
-bool removeFromMass(Mass *m, int x, int y) {
+bool deleteFromMass(Mass *m, int x, int y) {
 	int pos[2] = {x, y};
 	if (deleteFromListCompare(&m->body, pos, chkPos)) {
 		removeForm(m->self, x, y);
@@ -36,6 +39,16 @@ bool removeFromMass(Mass *m, int x, int y) {
 	}
 	return false;
 }
+
+Form *removeFromMass(Form *f, int x, int y) {
+	Nub *nub = findNub(f, MASSNUB);
+	if (nub) {
+		Mass *m = nub->data;
+		deleteFromMass(m, x, y);
+	}
+	return NULL;
+}
+
 
 void removeMass(Mass *m) {
 	for (linkedList *cur = m->body; cur != 0; cur = cur->next) {

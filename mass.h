@@ -1,4 +1,5 @@
 #pragma once
+#define MASSNUB 7
 typedef struct {
 	Form *self;
 	linkedList *body;
@@ -7,7 +8,8 @@ typedef struct {
 
 Mass *makeMass(int id);
 Form *addToMass(Mass *m, int x, int y);
-bool removeFromMass(Mass *m, int x, int y);
+bool deleteFromMass(Mass *m, int x, int y);
+Form *removeFromMass(Form *f, int x, int y);
 void renderMass(Mass *m, RenderCommand reco);
 void removeMass(Mass *m);
 void placeMass(Mass *m);
