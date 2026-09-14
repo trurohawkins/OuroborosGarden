@@ -63,7 +63,8 @@ void makeMenus() {
 	win->func = &loadNewLevel;
 	GM.winScreen->pos[0] = 0.5;
 	GM.winScreen->pos[1] = 0.5;
-
+	
+	initLevels(2);
 	makeLevel("lvl02.bin", 0);
 	makeLevel("lvl01.bin", 0);
 }
@@ -179,7 +180,6 @@ void returnToMenu() {
 	GM.curPlants = 0;
 	GM.curMenu = GM.startMenu;
 	screenChanged(0, 0);
-
 }
 
 void freeMenus() {
