@@ -6,6 +6,7 @@ typedef struct {
 	Menu *startMenu;
 	Menu *pauseMenu;
 	Menu *winScreen;
+	Editor *editor;
 
 	int level;
 	bool won;
@@ -33,4 +34,12 @@ void pauseGame(void *, float val);
 void resumeGame();
 void restartGame();
 void returnToMenu();
+
+void pressEditorToggle(void *gm, float val);
+void pressEditorMake(void *gm, float val);
+void pressEditorRecipe(void *gm, float val);
+void pressEditorInspect(void *gm, float val);
+void pressEditorRemove(void *gm, float val);
+void pressEditorSave(void *gm, float val);
+
 

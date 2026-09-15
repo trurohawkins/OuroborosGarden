@@ -21,6 +21,13 @@ void makeMenus() {
 	addKeyControl(god, '\x0D', pressSpace);
 	addKeyControl(god, '\x1B', pauseGame);
 
+	addKeyControl(god, 'P', pressEditorToggle);
+	addKeyControl(god, 'C', pressEditorMake);
+	addKeyControl(god, 'F', pressEditorRecipe);
+	addKeyControl(god, 'R', pressEditorInspect);
+	addKeyControl(god, 'X', pressEditorRemove);
+	addKeyControl(god, 'M', pressEditorSave);
+
 	Menu *startMenu = makeMenu(1, 2, 12, 5);
 	setMenuSpacing(startMenu, 20, 10);
 	Button *play = getButton(startMenu, 0, 1);
@@ -67,6 +74,8 @@ void makeMenus() {
 	initLevels(2);
 	makeLevel("lvl02.bin", 0);
 	makeLevel("lvl01.bin", 0);
+
+	GM.editor = makeEditor();
 }
 
 void renderGM() {
@@ -102,7 +111,9 @@ void loadNewLevel() {
 void pressUp(void *gm, float val) {
 	if (val == 1) { 
 		GameMaster *GM = gm;
-		if (GM->curMenu) {
+		if (GM->editor->on) {
+			moveCursor(GM->editor, 0);
+		} else if (GM->curMenu) {
 			menuMoveCursor(GM->curMenu, 0);
 		}
 	}
@@ -111,7 +122,9 @@ void pressUp(void *gm, float val) {
 void pressLeft(void *gm, float val) {
 	if (val == 1) { 
 		GameMaster *GM = gm;
-		if (GM->curMenu) {
+		if (GM->editor->on) {
+			moveCursor(GM->editor, 1);
+		} else if (GM->curMenu) {
 			menuMoveCursor(GM->curMenu, 1);
 		}
 	}
@@ -120,7 +133,9 @@ void pressLeft(void *gm, float val) {
 void pressDown(void *gm, float val) {
 	if (val == 1) { 
 		GameMaster *GM = gm;
-		if (GM->curMenu) {
+		if (GM->editor->on) {
+			moveCursor(GM->editor, 2);
+		} else if (GM->curMenu) {
 			menuMoveCursor(GM->curMenu, 2);
 		}
 	}
@@ -129,7 +144,9 @@ void pressDown(void *gm, float val) {
 void pressRight(void *gm, float val) {
 	if (val == 1) { 
 		GameMaster *GM = gm;
-		if (GM->curMenu) {
+		if (GM->editor->on) {
+			moveCursor(GM->editor, 3);
+		} else if (GM->curMenu) {
 			menuMoveCursor(GM->curMenu, 3);
 		}
 	}
@@ -152,8 +169,12 @@ void pauseGame(void *gm, float val) {
 		if (GM->curMenu == GM->startMenu) {
 			exitGame();
 		} else if (GM->curMenu == NULL) {
-			toggleGamePause();
-			GM->curMenu = GM->pauseMenu;
+			if (!GM->editor->on) {
+				toggleGamePause();
+				GM->curMenu = GM->pauseMenu;
+			} else {
+				setEditMode(GM->editor, false);
+			}
 		} else if (GM->curMenu != GM->winScreen) {
 			resumeGame();
 		}
@@ -186,3 +207,61 @@ void freeMenus() {
 	deleteMenu(GM.pauseMenu);
 	deleteMenu(GM.startMenu);
 }
+
+void pressEditorToggle(void *gm, float val) {
+	if (val == 1) {
+		GameMaster *GM = gm;
+		if (GM->editor && GM->curMenu == NULL) {
+			setEditMode(GM->editor, !GM->editor->on);
+		}
+	}
+}
+
+void pressEditorMake(void *gm, float val) {
+	if (val == 1) { 
+		GameMaster *GM = gm;
+		if (GM->editor && GM->editor->on) {
+			editorSpawnForm(GM->editor);
+		}
+	}
+}
+
+void pressEditorRecipe(void *gm, float val) {
+	if (val == 1) { 
+		GameMaster *GM = gm;
+		if (GM->editor && GM->editor->on) {
+			switchRecipe(GM->editor);
+		}
+	}
+}
+
+void pressEditorInspect(void *gm, float val) {
+	if (val == 1) { 
+		GameMaster *GM = gm;
+		if (GM->editor && GM->editor->on) {
+			switchInspect(GM->editor);
+		}
+	}
+}
+
+void pressEditorRemove(void *gm, float val) {
+	if (val == 1) { 
+		GameMaster *GM = gm;
+		if (GM->editor && GM->editor->on) {
+			removeInspected(GM->editor);
+		}
+	}
+}
+
+void pressEditorSave(void *gm, float val) {
+	if (val == 1) { 
+		GameMaster *GM = gm;
+		if (GM->editor && GM->editor->on) {
+			if (GM->editor->on) {
+				writeWorld("level00.bin");
+			}
+		}
+	}
+}
+
+
