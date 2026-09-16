@@ -63,6 +63,5 @@ float flowerChance = 0.02;//.02f;
 #define DIRTLAYER 0
 
 //NUBS
-#define STATNUB 3
-#define PLANTNUB 4
+#define PLANTNUB 3
 

@@ -24,7 +24,7 @@ int main(int argc, char **argv) {
 	if (argc > 1) {
 		drawing = false;
 	}
-	initCookBook(3);
+	initCookBook(3, 3);
 	cookBook.recipes[0] = (FormRecipe){"Dirt", placeDirt, removeForm, freeForm};
 	cookBook.recipes[1] = (FormRecipe){"Stone", placeStone, removeFromMass, deleteStone};
 	cookBook.recipes[2] = (FormRecipe){"Water", placeWater, removeFromMass, deleteWater};
