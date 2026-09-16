@@ -2,7 +2,7 @@
 #include "grass.h"
 #include "flower.h"
 
-int plantStats = 11;
+int plantStats = 3;
 int grassStamps[4];
 int flowerStamps[8];
 
@@ -45,9 +45,6 @@ Form *makePlant() {
 	plantNub->data = calloc(1, sizeof(Plant));
 	initStats(plant, plantStats);
 	addStat(plant, ECO, 0);
-	addStat(plant, GROWTH, 0);
-	addStat(plant, PULL, 0);
-	addStat(plant, LOSS, 0);
 	// affects the output of dirt patch
 	addStat(plant, ROOTS, 0);
 	// affects evaporation in dirt
@@ -98,12 +95,11 @@ bool lifeCycle(Form *plant) {
 		float *eco = getStat(plant, ECO);
 		if (!drawing) {printf("plant beat %p\n", plant);}
 		if (!drawing) {printf("    starting eco %f\n", *eco);}
-		float loss = *getStat(plant, LOSS); 
 		//if they lose too much they die
 		//if (stage < lifeTime && *eco - loss >= 0) 
-		if (!drawing) {printf("   eco loss %f\n", loss);}
-		if (*eco - loss >= 0) {
-			*eco -= loss;
+		if (!drawing) {printf("   eco loss %f\n", data->loss);}
+		if (*eco - data->loss >= 0) {
+			*eco -= data->loss;
 		} else {
 			// seeds dont die but do lose water
 			if (data->stage > 0) {
@@ -120,11 +116,9 @@ bool lifeCycle(Form *plant) {
 			if (!drawing) {printf("	soilEco %p: %f\n", soilEco, *soilEco);}
 			//return true;
 		}
-		float pull = *getStat(plant, PULL);
-		float *growth = getStat(plant, GROWTH);
-		if (!drawing) {printf("     pull: %f\n", pull);}
+		if (!drawing) {printf("     pull: %f\n", data->pull);}
 		//pulling eco from the surrounding ground
-		pull = min(pull, *growth - *eco);
+		float pull = min(data->pull, data->growth - *eco);
 		if (!drawing) {printf("     pull == %f\n", pull);}
 		float gather = pullEco(x, y, pull);
 		if (gather > 0) {
@@ -134,8 +128,8 @@ bool lifeCycle(Form *plant) {
 		if (!drawing) {printf("     final eco: %f\n", *eco);}
 		// if they gather enough eco they grow
 		// if they are old enough
-		if (!drawing) {printf("    growth: %f. life: %d >= cycle %d\n", *growth, data->life, data->cycle);}
-		if (*eco >= *growth && data->life >= data->cycle) {
+		if (!drawing) {printf("    growth: %f. life: %d >= cycle %d\n", data->growth, data->life, data->cycle);}
+		if (*eco >= data->growth && data->life >= data->cycle) {
 			if (!checkStat(x, y, BLOCK)) {
 				if (!drawing) {printf(    "GROW\n");}
 				if (grow(plant)) {
@@ -174,7 +168,14 @@ void plantDie(void *plant) {
 	removeForm(plant, p->pos[0], p->pos[1]);
 	freeForm(plant);
 	plantCount(-1);
+}
 
+int inspectPlant(Nub *nub, char *buff, int capacity) {
+	if (nub) {
+		Plant *p = nub->data;
+		return snprintf(buff, capacity, "Plant\n  life: %i stage: %i\n  growth: %.3f\n  pull: %.3f\n  loss: %.3f\n", p->life, p->stage, p->growth, p->pull, p->loss);
+	}
+	return 0;
 }
 
 #include "grass.c"

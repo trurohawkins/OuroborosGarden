@@ -309,8 +309,10 @@ void freeRainbow(void *r) {
 	Rainbow *rb = r;
 	removeRainbow(rb);
 	if (rb->self) { // in case rainbow hasnt been actualized
+		/*
 		Actor *a = findNub(rb->self, 2)->data;
 		a->deleteMe = true;
+		*/
 		freeForm(rb->self);
 	}
 	freeRainbowData(rb);

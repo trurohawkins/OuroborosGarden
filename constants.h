@@ -17,7 +17,7 @@ float rainAmount = 5.0;//0.05;
 float spreadDither = 0.005;
 float bioEvap = 0.1;
 // snake
-int baseSnake = 5;
+int baseSnake = 8;
 int deadSnake = 2;
 int fullStomach = 3;
 int deathEco = 5;
@@ -25,7 +25,7 @@ float ecoTrail = 1.0f;
 float plantTrail = 0.03;
 //plants
 float grassChance = 0;//.65f;
-float flowerChance = 0.02;//.02f;
+float flowerChance = 0.02;
 
 //Form IDs
 #define DIRT 0
@@ -64,4 +64,3 @@ float flowerChance = 0.02;//.02f;
 
 //NUBS
 #define PLANTNUB 3
-

@@ -5,13 +5,14 @@ float grassB[3] = {24, 101, 2};
 Form *makeGrass() {
 	Form *grass = makePlant();
 	grass->id = GRASS;
-	setStat(grass, GROWTH, 0.1);
-	setStat(grass, PULL, 0.1);
 	Nub *plantNub = findNub(grass, PLANTNUB);
 	Plant *data = plantNub->data;
 	data->beat = 1;
 	data->cycle = 4;
 	data->lifeTime = 4;
+
+	data->growth = 0.1;
+	data->pull = 0.1;
 
 	return grass;
 }
@@ -43,8 +44,8 @@ bool growGrass(Form *g) {
 	if (data->stage == 1) {
 		data->cycle = 15;
 		Nub *ren = growRenderNub(g, g, renderGrass);
-		setStat(g, GROWTH, 0.8);
-		setStat(g, LOSS, 0.01);
+		data->growth = 0.8;
+		data->loss = 0.01;
 		setStat(g, ROOTS, 0.25);
 		setStat(g, COVER, evaporation/5);
 		calcFlow(g->pos[0], g->pos[1]);
@@ -54,7 +55,7 @@ bool growGrass(Form *g) {
 		data->cycle = 25;
 		setStat(g, ROOTS, 0.75);
 		calcFlow(g->pos[0], g->pos[1]);
-		setStat(g, GROWTH, 0.6);
+		data->growth = 0.6;
 		setStat(g, COVER, evaporation/3);
 		/*
 			 g->id = 3;
@@ -92,7 +93,7 @@ void spreadGrass(Form *g) {
 
 Color grassColor(Form *g) {
 	float eco = *getStat(g, ECO);
-	float growth = *getStat(g, GROWTH);
+	//float growth = *getStat(g, GROWTH);
 	// should be some sort of stasis point
 	// if the plant has less eco than stasis its dying
 	// if more its growing

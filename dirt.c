@@ -14,7 +14,7 @@ int dirtStats = 2;
 Form *makeDirt() {
 	Form *dirt = makeForm(DIRT);
 	initStats(dirt, dirtStats);
-	addStat(dirt, ECO, 0);//randPercent());
+	addStat(dirt, ECO, 0);
 	addStat(dirt, OUTPUT, output[0]);
 	//Sigil *skin = createSigil(dirt)->data;
 	Nub *ren = growRenderNub(dirt, dirt, renderDirt);

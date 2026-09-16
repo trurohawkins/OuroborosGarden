@@ -3,6 +3,7 @@
 int snakeCount = 0;
 int staggerTime = 20;
 float fullBodyEco = 20;
+float ecoSuck = 3;
 
 // head: 0 - 3
 // butt: 4 - 7
@@ -213,8 +214,8 @@ void placeSnake(Snake *s) {
 			int x = sb->pos[0];
 			int y = sb->pos[1];
 			if (checkFormID(x, y, WATER)) {
-				if (sb->eco + 1 < fullBodyEco) {
-					sb->eco += 1;
+				if (sb->eco + ecoSuck < fullBodyEco) {
+					sb->eco += ecoSuck;
 				} else {
 					sb->eco = fullBodyEco;
 				}

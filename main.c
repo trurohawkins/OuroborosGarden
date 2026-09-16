@@ -24,10 +24,12 @@ int main(int argc, char **argv) {
 	if (argc > 1) {
 		drawing = false;
 	}
-	initCookBook(3, 3);
+	initCookBook(3, 4, 1);
 	cookBook.recipes[0] = (FormRecipe){"Dirt", placeDirt, removeForm, freeForm};
 	cookBook.recipes[1] = (FormRecipe){"Stone", placeStone, removeFromMass, deleteStone};
 	cookBook.recipes[2] = (FormRecipe){"Water", placeWater, removeFromMass, deleteWater};
+	cookBook.infos[3] = (NubInfo){"Plant", inspectPlant};
+	cookBook.names[0] = (StatName){"Eco", 0};
 	startWorld(drawing, true);
 	setRenderStride(2, 1);
 	makeMenus();

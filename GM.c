@@ -3,7 +3,7 @@
 GameMaster GM  = {
 	.level = 0,
 	.curPlants = 0,
-	.plantGoal = 4,//00,
+	.plantGoal = 400,
 };
 
 void makeMenus() {
@@ -70,11 +70,10 @@ void makeMenus() {
 	win->func = &loadNewLevel;
 	GM.winScreen->pos[0] = 0.5;
 	GM.winScreen->pos[1] = 0.5;
-	
 	initLevels(2);
+	//makeLevel("empty.bin", 0);
 	makeLevel("lvl02.bin", 0);
 	makeLevel("lvl01.bin", 0);
-
 	GM.editor = makeEditor();
 }
 

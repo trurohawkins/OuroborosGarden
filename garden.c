@@ -71,6 +71,7 @@ void generateLevel(int level) {
 		reloadLevel();
 		debugWrite("could not load next level\n");
 	}
+
 	initPlants();
 	for (int x = 0; x < w->x; x++) {
 		for (int y = 0; y < w->y; y++) {

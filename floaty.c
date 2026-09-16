@@ -29,7 +29,7 @@ Form *makeFloaty(int type) {
 	//speed
 	addStat(flo, 1, 20);
 	//lifeTime
-	addStat(flo, 2, 5);
+	addStat(flo, 3, 5);
 	return flo;
 }
 
@@ -37,7 +37,7 @@ int floatyAction(void *data, Action *a, float delta) {
 	Form *f = data;
 	float *counter = getStat(f, 0);
 	float *interval = getStat(f, 1);
-	float *lifeTime = getStat(f, 2);
+	float *lifeTime = getStat(f, 3);
 	if (*counter >= *interval) {
 		(*counter) = 0;
 		if (*lifeTime > 0) {

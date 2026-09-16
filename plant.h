@@ -9,6 +9,10 @@ typedef struct {
 	int stage;
 	int lifeTime;// how many stages until death
 
+	float growth;
+	float pull;
+	float loss;
+
 	int type;//used for multiple sprites
 } Plant;
 
@@ -20,3 +24,5 @@ Form *makePlant();
 bool lifeCycle(Form *plant);
 bool grow(Form *plant);
 void plantDie(void *plant);
+
+int inspectPlant(Nub *nub, char *buff, int capacity);
