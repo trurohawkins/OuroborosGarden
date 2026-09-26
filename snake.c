@@ -1,4 +1,5 @@
 #include "snake.h"
+uint64_t lastTime = 0;
 
 int snakeCount = 0;
 int staggerTime = 20;
@@ -362,10 +363,15 @@ bool moveSnake(Snake *s) {
 	placeSnake(s);
 	ouroboros(s);
 	s->moving = true;
+	lastTime = nowMS();
 	return true;
 }
 
 void snakeAction(void *snake) {
+	char buff[100];
+	sprintf(buff, "elapsed %i\n", nowMS() - lastTime);
+	debugWrite(buff);
+	lastTime = nowMS();
 	Snake *s = snake;
 	if (s->pooCounter >= s->pooInterval) {
 		s->pooCounter = -s->pooLength;
