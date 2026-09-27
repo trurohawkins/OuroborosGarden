@@ -11,7 +11,7 @@ float rainInterval = 16.0 * spd;
 
 // soil
 int maxEco = 1;
-float evaporation = 0.05;
+float evaporation = 0.03;
 float evapMinimum = 0.05;
 float rainAmount = 5.0;//0.05;
 float spreadDither = 0.005;
