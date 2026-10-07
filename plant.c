@@ -7,9 +7,9 @@ int grassStamps[4];
 int flowerStamps[8];
 
 void initPlants() {
-	addTimedEvent(plantsAction, 0, plantsInterval);
-	addTimedEvent(dirtFlow, 0, spreadInterval);
-	addTimedEvent(ecoEvaporation, 0, evapInterval);
+	scheduleEvent(plantsAction, 0, plantsInterval);
+	scheduleEvent(dirtFlow, 0, spreadInterval);
+	scheduleEvent(ecoEvaporation, 0, evapInterval);
 	grassStamps[0] = createStamp("\u2591", "\u2591");//("\u2261");
 	grassStamps[1] = createStamp("\u2592", "\u2592");
 	grassStamps[2] = createStamp("\u2593", "\u2593");

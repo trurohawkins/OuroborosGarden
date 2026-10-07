@@ -5,8 +5,8 @@ linkedList *clouds = 0;
 void initClouds() {
 	if (!clouds) {
 		clouds = makeList();
-		addTimedEvent(breeze, 0, rainInterval/2);
-		addTimedEvent(rain, 0, rainInterval);
+		scheduleEvent(breeze, 0, rainInterval/2);
+		scheduleEvent(rain, 0, rainInterval);
 	}
 }
 

@@ -23,7 +23,7 @@ Snake *makeSnake(int xPos, int yPos) {
 
 	addToList(&s->body, sb);
 
-	s->eNum = addTimedEvent(snakeAction, s, moveInterval);
+	s->eNum = scheduleEvent(snakeAction, s, moveInterval);
 	s->stomach = 0;//fullStomach;
 	s->pooInterval = 100;
 	s->pooLength = 10;
@@ -530,7 +530,9 @@ void snakeDie(Snake *s) {
 void freeSnake(void *s) {
 	Snake *snake = s;
 	//remvoe audio movement
-	unscheduleEvent(snake->eNum);
+	//assumes snake is the last audio event to have been added
+	//this also destroys all audio events after snake too
+	unscheduleEvents(snake->eNum);
 
 	removeSnake(snake);
 	freeForm(snake->self);
