@@ -24,6 +24,8 @@ Snake *makeSnake(int xPos, int yPos) {
 	addToList(&s->body, sb);
 
 	s->eNum = scheduleEvent(snakeAction, s, moveInterval);
+	uint64_t snakeRhythm = (1ULL << 56) - 1;//0b1001;
+	setRhythmCommand(s->eNum, snakeRhythm, 64);
 	s->stomach = 0;//fullStomach;
 	s->pooInterval = 100;
 	s->pooLength = 10;
@@ -373,6 +375,7 @@ void snakeAction(void *snake) {
 	debugWrite(buff);
 	lastTime = nowMS();
 	Snake *s = snake;
+	/*
 	if (s->pooCounter >= s->pooInterval) {
 		s->pooCounter = -s->pooLength;
 		if (countSnakeParts(s) > deadSnake) {
@@ -385,8 +388,9 @@ void snakeAction(void *snake) {
 	} else {
 		s->pooCounter++;
 	}
+	*/
 
-	if (s->staggered == 0 && s->pooCounter >= 0) {
+	if (s->staggered == 0) {// && s->pooCounter >= 0) {
 		int preDir = s->dir;
 		s->dir = s->newDir;
 		if (!moveSnake(s)) {
@@ -401,6 +405,7 @@ void snakeAction(void *snake) {
 				snakeStagger(s, false);
 			}
 		}
+		/*
 		if (s->pooCounter == -1) {
 			if (s->staggered == 0) {
 				s->state = 0;
@@ -409,6 +414,7 @@ void snakeAction(void *snake) {
 			}
 			snakePoop(s);
 		}
+		*/
 	}
 }
 
