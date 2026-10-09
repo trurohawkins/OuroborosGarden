@@ -30,7 +30,8 @@ typedef struct Snake {
 	// for player event
 	int pNum;
 	//for audio event
-	int eNum;
+	int eNum0;
+	int eNum1; //poop event
 } Snake;
 
 Snake *makeSnake(int xPos, int yPos);
@@ -44,6 +45,7 @@ void turnSnake(Snake *s, int direction);
 bool snakeCheck(Snake *s);
 bool moveSnake(Snake *s);
 void snakeAction(void *s);
+void snakePoopAction(void *snake);
 void snakeStagger(Snake *s, bool staggered);
 void ouroboros(Snake *s);
 void spaceCheck(Snake *s, int x, int y);

@@ -23,9 +23,12 @@ Snake *makeSnake(int xPos, int yPos) {
 
 	addToList(&s->body, sb);
 
-	s->eNum = scheduleEvent(snakeAction, s, moveInterval);
+	s->eNum0= scheduleEvent(snakeAction, s, moveInterval);
+	s->eNum1 = scheduleEvent(snakePoopAction, s, moveInterval);
 	uint64_t snakeRhythm = (1ULL << 56) - 1;//0b1001;
 	setRhythmCommand(s->eNum, snakeRhythm, 64);
+	snakeRhythm = ~snakeRhythm;
+	setRhythmCommand(s->eNum1, snakeRhythm, 64);
 	s->stomach = 0;//fullStomach;
 	s->pooInterval = 100;
 	s->pooLength = 10;
@@ -367,6 +370,24 @@ bool moveSnake(Snake *s) {
 	s->moving = true;
 	lastTime = nowMS();
 	return true;
+}
+
+void snakePoopAction(void *snake) {
+	Snake *s = snake;
+	char buff[100];
+	sprintf(buff, "snake poop action %i\n", s->pooCounter);
+	debugWrite(buff);
+	if (s->pooCounter == 0) {
+		s->state = 3;
+	} else if (s->pooCounter == 7) {
+		snakePoop(s);
+		if (s->staggered == 0) {
+			s->state = 0;
+		} else {
+			s->state = 2;
+		}
+	}
+	s->pooCounter = (s->pooCounter + 1) % 8;
 }
 
 void snakeAction(void *snake) {
