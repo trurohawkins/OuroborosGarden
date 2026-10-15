@@ -22,11 +22,10 @@ Snake *makeSnake(int xPos, int yPos) {
 	s->body = makeList();
 
 	addToList(&s->body, sb);
-
-	s->eNum0= scheduleEvent(snakeAction, s, moveInterval);
-	s->eNum1 = scheduleEvent(snakePoopAction, s, moveInterval);
+	s->eNum0= scheduleEvent(getDjTrack(SNAKESND), snakeAction, s, moveInterval);
+	s->eNum1 = scheduleEvent(getDjTrack(POOPSND), snakePoopAction, s, moveInterval);
 	uint64_t snakeRhythm = (1ULL << 56) - 1;//0b1001;
-	setRhythmCommand(s->eNum, snakeRhythm, 64);
+	setRhythmCommand(s->eNum0, snakeRhythm, 64);
 	snakeRhythm = ~snakeRhythm;
 	setRhythmCommand(s->eNum1, snakeRhythm, 64);
 	s->stomach = 0;//fullStomach;
@@ -374,9 +373,6 @@ bool moveSnake(Snake *s) {
 
 void snakePoopAction(void *snake) {
 	Snake *s = snake;
-	char buff[100];
-	sprintf(buff, "snake poop action %i\n", s->pooCounter);
-	debugWrite(buff);
 	if (s->pooCounter == 0) {
 		s->state = 3;
 	} else if (s->pooCounter == 7) {
@@ -393,7 +389,7 @@ void snakePoopAction(void *snake) {
 void snakeAction(void *snake) {
 	char buff[100];
 	sprintf(buff, "elapsed %i\n", nowMS() - lastTime);
-	debugWrite(buff);
+	//debugWrite(buff);
 	lastTime = nowMS();
 	Snake *s = snake;
 	/*
@@ -559,7 +555,8 @@ void freeSnake(void *s) {
 	//remvoe audio movement
 	//assumes snake is the last audio event to have been added
 	//this also destroys all audio events after snake too
-	unscheduleEvents(snake->eNum);
+	unscheduleEvents(snake->eNum0);
+	unscheduleEvents(snake->eNum1);
 
 	removeSnake(snake);
 	freeForm(snake->self);

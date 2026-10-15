@@ -2,10 +2,10 @@
 int worldX = 40;
 int worldY = 40;
 
-const float spd = 0.3;
-float spreadInterval = 4.0 * spd;
+const float spd = 1;//0.3;
 float moveInterval = 1.0 * spd;
-float plantsInterval = 4.0 * spd;
+float plantsInterval = 2.0 * spd;
+float spreadInterval = 4.0 * spd;
 float evapInterval = 8.0 * spd;
 float rainInterval = 16.0 * spd;
 
@@ -64,3 +64,11 @@ float flowerChance = 0.02;
 
 //NUBS
 #define PLANTNUB 3
+
+//SOUNDLIST
+#define RAINSND 0
+#define DIRTSND 1
+#define HEATSND 2
+#define PLANTSND 3
+#define SNAKESND 4
+#define POOPSND 5

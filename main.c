@@ -6,6 +6,7 @@ linkedList *snakeList;
 bool drawing = true;
 #include "constants.h"
 #include "help.c"
+#include "dj.c"
 #include "mass.c"
 #include "floaty.c"
 #include "dirt.c"
@@ -30,8 +31,15 @@ int main(int argc, char **argv) {
 	cookBook.recipes[2] = (FormRecipe){"Water", placeWater, removeFromMass, deleteWater};
 	cookBook.infos[3] = (NubInfo){"Plant", inspectPlant};
 	cookBook.names[0] = (StatName){"Eco", 0};
+	initWorldDJ(6);
 	startWorld(drawing, true);
 	setRenderStride(2, 1);
+	addDjTrack("Wuh.wav", RAINSND);
+	addDjTrack("foop.wav", DIRTSND);
+	addDjTrack("shaa.wav", HEATSND);
+	addDjTrack("Baboop.wav", PLANTSND);
+	addDjTrack("fftt.wav", SNAKESND);
+	addDjTrack("fart.wav", POOPSND);
 	makeMenus();
 	addRenderFunction(renderGM);
 	
@@ -43,6 +51,7 @@ int main(int argc, char **argv) {
 		endGarden();
 	}
 	endWorld();
+	freeWorldDJ();
 	freeMenus();
 	return 0;
 }

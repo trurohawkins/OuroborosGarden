@@ -3,8 +3,12 @@
 GameMaster GM  = {
 	.level = 0,
 	.curPlants = 0,
-	.plantGoal = 400,
+	.plantGoal = 4,
 };
+
+void testLevel() {
+	debugWrite("test lvele func\n");
+}
 
 void makeMenus() {
 	Player *god = addPlayer(&GM);
@@ -70,10 +74,12 @@ void makeMenus() {
 	win->func = &loadNewLevel;
 	GM.winScreen->pos[0] = 0.5;
 	GM.winScreen->pos[1] = 0.5;
-	initLevels(2);
-	//makeLevel("empty.bin", 0);
-	makeLevel("lvl02.bin", 0);
-	makeLevel("lvl01.bin", 0);
+	initLevels(3);
+	makeLevel("island.bin", baseGardenLevel);
+	//makeLevel("level00.bin", 0);
+	//makeLevel("empty.bin");
+	makeLevel("lvl02.bin", baseGardenLevel);
+	makeLevel("lvl01.bin", baseGardenLevel);
 	GM.editor = makeEditor();
 }
 
@@ -100,6 +106,7 @@ void checkPlants() {
 }
 
 void loadNewLevel() {
+	debugWrite("loading new level\n");
 	endGarden();
 	endLevel();
 	startGarden();

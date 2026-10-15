@@ -2,19 +2,44 @@
 
 void makeGarden() {
 	//makeWorld(worldX, worldY);
-	
+	debugWrite("making garden\n");	
 	initClouds();
 	initStone();
 	initWater();
-
-	generateLevel(GM.level);
+	if (!loadNextLevel()) {
+		reloadLevel();
+		debugWrite("could not load next level\n");
+	}
+	initPlants();
+	//baseGardenLevel();
+	//generateLevel(GM.level);
 	setViewDimension(worldX, worldY);
 	setViewPosition(worldX/2, worldY/2);
 }
 
-void generateLevel(int level) {
+void baseGardenLevel() {
 	World *w = getWorld();
 	int spawnPos[2] = {worldX/2, worldY/2};
+	for (int x = 0; x < w->x; x++) {
+		for (int y = 0; y < w->y; y++) {
+			if (!checkFormID(x, y, WATER)) {
+				//placeDirt(x, y);
+				if (!checkFormID(x, y, STONE)) {
+					if (randPercent() < grassChance) {
+						placeGrass(x, y);
+					}
+					if (randPercent() < flowerChance) {
+						placeFlower(x, y);
+					}
+				}
+			}
+		}
+	}
+	makeSnake(spawnPos[0], spawnPos[1]);
+
+}
+
+void generateLevel(int level) {
 	/*
 	makeCloud();
 	if (level == 0) {
@@ -67,28 +92,7 @@ void generateLevel(int level) {
 
 	}
 	*/
-	if (!loadNextLevel()) {
-		reloadLevel();
-		debugWrite("could not load next level\n");
-	}
 
-	initPlants();
-	for (int x = 0; x < w->x; x++) {
-		for (int y = 0; y < w->y; y++) {
-			if (!checkFormID(x, y, WATER)) {
-				//placeDirt(x, y);
-				if (!checkFormID(x, y, STONE)) {
-					if (randPercent() < grassChance) {
-						placeGrass(x, y);
-					}
-					if (randPercent() < flowerChance) {
-						placeFlower(x, y);
-					}
-				}
-			}
-		}
-	}
-	makeSnake(spawnPos[0], spawnPos[1]);
 }
 
 void placeCircle(Form* (*place)(int,int), int xPos, int yPos, int radius) {
