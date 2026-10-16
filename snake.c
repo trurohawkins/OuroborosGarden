@@ -555,6 +555,7 @@ void freeSnake(void *s) {
 	//remvoe audio movement
 	//assumes snake is the last audio event to have been added
 	//this also destroys all audio events after snake too
+	debugWrite("freeing snake\n");
 	unscheduleEvents(snake->eNum0);
 	unscheduleEvents(snake->eNum1);
 

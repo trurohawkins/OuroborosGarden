@@ -4,11 +4,12 @@ linkedList *clouds = 0;
 
 void initClouds() {
 	if (!clouds) {
+		char buff[100];
+		debugWrite(buff);
 		clouds = makeList();
-		scheduleEvent(getDjTrack(RAINSND), rain, 0, rainInterval);
-		scheduleEvent(-1, breeze, 0, rainInterval/2);
 	}
 }
+
 
 Mass *makeCloud() {
 	Mass *cloud = makeMass(CLOUDS);

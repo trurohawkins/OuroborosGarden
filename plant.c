@@ -6,21 +6,7 @@ int plantStats = 3;
 int grassStamps[4];
 int flowerStamps[8];
 
-int plantSound = -1;
-int dirtSound = -1;
-int evapSound = -1;
-
 void initPlants() {
-	if (plantSound < 0) {
-		/*
-		plantSound = processAudioFile("resources/Baboop.wav", false);
-		dirtSound = processAudioFile("resources/foop.wav", false);
-		evapSound = processAudioFile("resources/shaa.wav", false);
-		*/
-	}
-	scheduleEvent(getDjTrack(DIRTSND), dirtFlow, 0, spreadInterval);
-	scheduleEvent(getDjTrack(HEATSND), ecoEvaporation, 0, evapInterval);
-	scheduleEvent(getDjTrack(PLANTSND), plantsAction, 0, plantsInterval);
 	grassStamps[0] = createStamp("\u2591", "\u2591");//("\u2261");
 	grassStamps[1] = createStamp("\u2592", "\u2592");
 	grassStamps[2] = createStamp("\u2593", "\u2593");

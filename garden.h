@@ -1,8 +1,8 @@
 #pragma once
 
 void makeGarden();
-void startGarden();
 void endGarden();
+void islandLevel();
 void baseGardenLevel();
 void generateLevel(int level);
 

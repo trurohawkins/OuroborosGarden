@@ -3,7 +3,7 @@
 GameMaster GM  = {
 	.level = 0,
 	.curPlants = 0,
-	.plantGoal = 4,
+	.plantGoal = 400,
 };
 
 void testLevel() {
@@ -36,7 +36,7 @@ void makeMenus() {
 	setMenuSpacing(startMenu, 20, 10);
 	Button *play = getButton(startMenu, 0, 1);
 	nameButton(play, "play");
-	play->func = &startGarden;
+	play->func = &makeGarden;
 
 	Button *exit = getButton(startMenu, 0, 0);
 	nameButton(exit, "exit");
@@ -75,7 +75,7 @@ void makeMenus() {
 	GM.winScreen->pos[0] = 0.5;
 	GM.winScreen->pos[1] = 0.5;
 	initLevels(3);
-	makeLevel("island.bin", baseGardenLevel);
+	makeLevel("island.bin", islandLevel);
 	//makeLevel("level00.bin", 0);
 	//makeLevel("empty.bin");
 	makeLevel("lvl02.bin", baseGardenLevel);
@@ -106,10 +106,9 @@ void checkPlants() {
 }
 
 void loadNewLevel() {
-	debugWrite("loading new level\n");
 	endGarden();
 	endLevel();
-	startGarden();
+	makeGarden();
 	GM.curPlants = 0;
 	GM.won = 0;
 }

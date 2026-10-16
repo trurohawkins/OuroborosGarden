@@ -1,20 +1,32 @@
 #include "garden.h"
 
 void makeGarden() {
+	GM.curMenu = NULL;
 	//makeWorld(worldX, worldY);
-	debugWrite("making garden\n");	
-	initClouds();
 	initStone();
 	initWater();
+	initClouds();
+	initPlants();
 	if (!loadNextLevel()) {
 		reloadLevel();
-		debugWrite("could not load next level\n");
 	}
-	initPlants();
+	scheduleEvent(getDjTrack(RAINSND), rain, 0, rainInterval);
+	scheduleEvent(-1, breeze, 0, rainInterval/2);
+	scheduleEvent(getDjTrack(DIRTSND), dirtFlow, 0, spreadInterval);
+	scheduleEvent(getDjTrack(HEATSND), ecoEvaporation, 0, evapInterval);
+	scheduleEvent(getDjTrack(PLANTSND), plantsAction, 0, plantsInterval);
 	//baseGardenLevel();
 	//generateLevel(GM.level);
 	setViewDimension(worldX, worldY);
 	setViewPosition(worldX/2, worldY/2);
+}
+
+void islandLevel() {
+	World *w = getWorld();
+	int spawnPos[2] = {worldX/2, worldY/2};
+	makeCloud();
+	placeCircle(placeClouds, spawnPos[0], spawnPos[1] + 15, 8);
+	makeSnake(spawnPos[0], spawnPos[1]);
 }
 
 void baseGardenLevel() {
@@ -39,62 +51,6 @@ void baseGardenLevel() {
 
 }
 
-void generateLevel(int level) {
-	/*
-	makeCloud();
-	if (level == 0) {
-		placeCircle(placeClouds, 10, 14, 6);
-		spawnPos[1] -= 10;
-		placeCircle(placeWater, spawnPos[0], spawnPos[1], 6);
-		int island[2] = {spawnPos[0] - 3, spawnPos[1] + 20};
-		placeCircle(placeWater, island[0], island[1], 4);
-		
-		for (int i = -1; i < 4; i++) {
-			int *dir = getDir4(i);
-			int pos[2] = {island[0] + dir[0], island[1] + dir[1]};
-			//removeForm(water->self, pos[0], pos[1]);
-			removeFromMass(water, pos[0], pos[1]);
-			Form *dirt = placeDirt(pos[0], pos[1]);
-			float *eco = getStat(dirt, ECO);
-			*eco = 1;
-		}
-		Form *flower = placeFlower(island[0], island[1]);
-		grow(flower);
-		grow(flower);
-		float *eco = getStat(flower, ECO);
-		*eco = 1;
-		Plant *p = getPlant(flower);
-		p->life = p->cycle - 4;
-	} else if (level == 1) {
-		placeCircle(placeWater, spawnPos[0], spawnPos[1], 4);
-
-		placeCircle(placeWater, 0, 0, 5);
-		placeCircle(placeStone, worldX/2, 0, 4);
-		placeCircle(placeStone, 0, worldY/2, 4);
-
-	} else if (level == 2) {
-		placeFlower(30, 10);
-
-	} else {
-		for (int i = 0; i < 3; i++) {
-			int xp = randRange(0, worldX);
-			int yp = randRange(0, worldY);
-			int radius = randRange(4, 6);
-			placeCircle(placeWater, xp, yp, radius);
-		}
-
-		for (int i = 0; i < 8; i++) {
-			int xp = randRange(0, worldX);
-			int yp = randRange(0, worldY);
-			int radius = randRange(4, 5);
-			placeCircle(placeStone, xp, yp, radius);
-		}
-
-	}
-	*/
-
-}
-
 void placeCircle(Form* (*place)(int,int), int xPos, int yPos, int radius) {
 	World *w = getWorld();
 	for (int x = -radius; x < radius; x++) {
@@ -109,11 +65,6 @@ void placeCircle(Form* (*place)(int,int), int xPos, int yPos, int radius) {
 		}
 	}
 
-}
-
-void startGarden() {
-	GM.curMenu = NULL;
-	makeGarden();
 }
 
 void endGarden() {
