@@ -20,6 +20,7 @@ typedef struct {
 void initPlants();
 Plant *getPlant(Form *p);
 void plantsAction(void *);
+int plantStatus(void *data, Action *a, float delta);
 Form *makePlant();
 bool lifeCycle(Form *plant);
 bool grow(Form *plant);

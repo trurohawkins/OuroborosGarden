@@ -32,6 +32,67 @@ void initPlants() {
 	flowerStamps[3] = createStamp("\U0001F73E", 0);
 	*/
 	//flowerStamps[3] = createStamp("\U000168E6", 0);
+	Action *action = makeAction(0, plantStatus, 0);
+	Actor *actor = makeActor(0);
+	addAction(actor, action);
+	addActor(actor);
+}
+
+float statusInterval = 2;
+float statusCounter = 0;
+
+int plantStatus(void *data, Action *a, float delta) {
+	if (statusCounter + delta >= statusInterval) {
+		World *w = getWorld();
+		if (w->map == 0) {
+			debugWrite("no world!!!\n");
+			return 0;
+		}
+		int healthyPlants = 0;
+		int illPlants = 0;
+		for (int x = 0; x < w->x; x++) {
+			for (int y = 0; y < w->y; y++) {
+				Cell *c = &w->map[(y*w->x)+x];
+				for (int i = 0; i < FORMS_PER_CELL; i++) {
+					if (c->within[i]) {
+						Form *form = c->within[i];
+						Nub *nub = findNub(form, PLANTNUB);
+						if (nub) {
+							Plant *plant = nub->data;
+							if (plant-> stage > 0) {
+								float *eco = getStat(form, ECO);
+								if (*eco > plant->growth / 2) {
+									healthyPlants++;
+								} else {
+									illPlants++;
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		char buff[100];
+		sprintf(buff, "healthy plants: %i, ill plants: %i\n", healthyPlants, illPlants);
+		debugWrite(buff);
+		if (healthyPlants + illPlants > 0) {
+			if (getMute(PLANTSND)) {
+				setMuteTrack(PLANTSND, false);
+			}
+			if (healthyPlants >= illPlants) {
+				setTrackSound(PLANTSND, 0);
+			} else {
+				setTrackSound(PLANTSND, 1);
+			}
+		} else {
+			if (!getMute(PLANTSND)) {
+				setMuteTrack(PLANTSND, true);
+			}
+		}
+		statusCounter = statusInterval - (statusCounter + delta);
+	} else {
+		statusCounter += delta;
+	}
 }
 
 Form *makePlant() {
@@ -50,6 +111,7 @@ Form *makePlant() {
 }
 
 void plantsAction(void *) {
+	debugWrite("plant action\n");
 	World *w = getWorld();
 	linkedList *dead = 0;
 	for (int x = 0; x < w->x; x++) {

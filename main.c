@@ -34,12 +34,25 @@ int main(int argc, char **argv) {
 	initWorldDJ(6);
 	startWorld(drawing, true);
 	setRenderStride(2, 1);
+	initDjTrack(RAINSND, 1);
 	addDjTrack("Wuh.wav", RAINSND);
+	initDjTrack(DIRTSND, 1);
 	addDjTrack("foop.wav", DIRTSND);
+	initDjTrack(HEATSND, 1);
 	addDjTrack("shaa.wav", HEATSND);
+	initDjTrack(PLANTSND, 2);
 	addDjTrack("Baboop.wav", PLANTSND);
+	addDjTrack("grrr.wav", PLANTSND);
+	setTrackSound(PLANTSND, 0);
+	initDjTrack(SNAKESND, 1);
 	addDjTrack("fftt.wav", SNAKESND);
+	initDjTrack(POOPSND, 1);
 	addDjTrack("fart.wav", POOPSND);
+	for (int i = 0; i < POOPSND; i++) {
+		if (i != PLANTSND) {
+			setMuteTrack(i, true);
+		}
+	}
 	makeMenus();
 	addRenderFunction(renderGM);
 	

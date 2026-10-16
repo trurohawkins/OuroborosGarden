@@ -3,9 +3,7 @@
 void initClouds();
 Mass *makeCloud();
 void rain(void *);
-void breeze(void *);
+int breeze(void *data, Action *a, float delta);
 Form *placeClouds(int x, int y);
 void *renderClouds(void *data);
 void freeClouds();
-
-

@@ -4,9 +4,11 @@ linkedList *clouds = 0;
 
 void initClouds() {
 	if (!clouds) {
-		char buff[100];
-		debugWrite(buff);
 		clouds = makeList();
+		Action *action = makeAction(0, breeze, clouds);
+		Actor *actor = makeActor(0);
+		addAction(actor, action);
+		addActor(actor);
 	}
 }
 
@@ -37,12 +39,19 @@ Form *placeClouds(int x, int y) {
 }
 
 int breezeDir[2] = {-1, 1};
+float breezeInterval = 3;
+float breezeCounter = 0;
 
-void breeze(void *) {
-	for (linkedList *cur = clouds; cur != 0; cur = cur->next) {
-		if (cur->data) {
-			moveMass(cur->data, breezeDir[0], breezeDir[1]);
+int breeze(void *data, Action *a, float delta) {
+	if (breezeCounter + delta >= breezeInterval) {
+		for (linkedList *cur = clouds; cur != 0; cur = cur->next) {
+			if (cur->data) {
+				moveMass(cur->data, breezeDir[0], breezeDir[1]);
+			}
 		}
+		breezeCounter = (breezeCounter + delta) - breezeInterval;
+	} else {
+		breezeCounter += delta;
 	}
 }
 
