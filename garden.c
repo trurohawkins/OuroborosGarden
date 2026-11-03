@@ -12,10 +12,14 @@ void makeGarden() {
 	}
 	setMuteTrack(PLANTSND, true);
 
-	scheduleEvent(getDjTrack(RAINSND), rain, 0, rainInterval);
-	scheduleEvent(getDjTrack(DIRTSND), dirtFlow, 0, spreadInterval);
-	scheduleEvent(getDjTrack(HEATSND), ecoEvaporation, 0, evapInterval);
-	scheduleEvent(getDjTrack(PLANTSND), plantsAction, 0, plantsInterval);
+	int rainEvent = scheduleEvent(getDjTrack(RAINSND), rain, 0, rainInterval);
+	setRhythmCommand(rainEvent, rainRhythm, rainRhythmLen);
+	int dirtEvent = scheduleEvent(getDjTrack(DIRTSND), dirtFlow, 0, spreadInterval);
+	setRhythmCommand(dirtEvent, dirtRhythm, dirtRhythmLen);
+	int heatEvent = scheduleEvent(getDjTrack(HEATSND), ecoEvaporation, 0, evapInterval);
+	setRhythmCommand(heatEvent, heatRhythm, heatRhythmLen);
+	int plantEvent = scheduleEvent(getDjTrack(PLANTSND), plantsAction, 0, plantsInterval);
+	setRhythmCommand(plantEvent, plantRhythm, plantRhythmLen);
 	//baseGardenLevel();
 	//generateLevel(GM.level);
 	setViewDimension(worldX, worldY);

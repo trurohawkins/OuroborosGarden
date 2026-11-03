@@ -2,12 +2,24 @@
 int worldX = 40;
 int worldY = 40;
 
-const float spd = 1;//0.3;
+//sound/event intervals
+const float spd = 1.0;//0.3;
 float moveInterval = 1.0 * spd;
 float plantsInterval = 2.0 * spd;
 float spreadInterval = 4.0 * spd;
 float evapInterval = 8.0 * spd;
 float rainInterval = 16.0 * spd;
+// sound/event rhythm
+uint64_t snakeRhythm = (1ULL << 56) - 1;
+int snakeRhythmLen = 64;
+uint64_t plantRhythm = 0b1001;
+int plantRhythmLen = 4;
+uint64_t dirtRhythm = 0b11;
+int dirtRhythmLen = 2;
+uint64_t rainRhythm = 0b010110;
+int rainRhythmLen = 6;
+uint64_t heatRhythm = 0b10;
+int heatRhythmLen = 2;
 
 // soil
 int maxEco = 1;

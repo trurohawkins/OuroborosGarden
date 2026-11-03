@@ -24,10 +24,10 @@ Snake *makeSnake(int xPos, int yPos) {
 	addToList(&s->body, sb);
 	s->eNum0= scheduleEvent(getDjTrack(SNAKESND), snakeAction, s, moveInterval);
 	s->eNum1 = scheduleEvent(getDjTrack(POOPSND), snakePoopAction, s, moveInterval);
-	uint64_t snakeRhythm = (1ULL << 56) - 1;//0b1001;
-	setRhythmCommand(s->eNum0, snakeRhythm, 64);
+	//uint64_t snakeRhythm = (1ULL << 56) - 1;//0b1001;
+	setRhythmCommand(s->eNum0, snakeRhythm, snakeRhythmLen);
 	snakeRhythm = ~snakeRhythm;
-	setRhythmCommand(s->eNum1, snakeRhythm, 64);
+	setRhythmCommand(s->eNum1, snakeRhythm,  snakeRhythmLen);
 	s->stomach = 0;//fullStomach;
 	s->pooInterval = 100;
 	s->pooLength = 10;
