@@ -10,12 +10,12 @@ void makeGarden() {
 	if (!loadNextLevel()) {
 		reloadLevel();
 	}
-	setMuteTrack(PLANTSND, true);
+	//setMuteTrack(PLANTSND, true);
 
 	int rainEvent = scheduleEvent(getDjTrack(RAINSND), rain, 0, rainInterval);
 	setRhythmCommand(rainEvent, rainRhythm, rainRhythmLen);
 	int dirtEvent = scheduleEvent(getDjTrack(DIRTSND), dirtFlow, 0, spreadInterval);
-	setRhythmCommand(dirtEvent, dirtRhythm, dirtRhythmLen);
+	//setRhythmCommand(dirtEvent, dirtRhythm, dirtRhythmLen);
 	int heatEvent = scheduleEvent(getDjTrack(HEATSND), ecoEvaporation, 0, evapInterval);
 	setRhythmCommand(heatEvent, heatRhythm, heatRhythmLen);
 	int plantEvent = scheduleEvent(getDjTrack(PLANTSND), plantsAction, 0, plantsInterval);
@@ -29,10 +29,8 @@ void makeGarden() {
 void islandLevel() {
 	World *w = getWorld();
 	int spawnPos[2] = {worldX/2, worldY/2};
-	/*
 	makeCloud();
 	placeCircle(placeClouds, spawnPos[0], spawnPos[1] + 15, 8);
-	*/
 	makeSnake(spawnPos[0], spawnPos[1]);
 }
 

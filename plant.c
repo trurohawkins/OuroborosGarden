@@ -77,7 +77,7 @@ int plantStatus(void *data, Action *a, float delta) {
 		debugWrite(buff);
 		if (healthyPlants + illPlants > 0) {
 			if (getMute(PLANTSND)) {
-				setMuteTrack(PLANTSND, false);
+				//setMuteTrack(PLANTSND, false);
 			}
 			if (healthyPlants >= illPlants) {
 				setTrackSound(PLANTSND, 0);
@@ -86,7 +86,7 @@ int plantStatus(void *data, Action *a, float delta) {
 			}
 		} else {
 			if (!getMute(PLANTSND)) {
-				setMuteTrack(PLANTSND, true);
+				//setMuteTrack(PLANTSND, true);
 			}
 		}
 		statusCounter = statusInterval - (statusCounter + delta);

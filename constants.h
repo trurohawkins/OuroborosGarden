@@ -3,9 +3,9 @@ int worldX = 40;
 int worldY = 40;
 
 //sound/event intervals
-const float spd = 1.0;//0.3;
+const float spd = 0.6;
 float moveInterval = 1.0 * spd;
-float plantsInterval = 2.0 * spd;
+float plantsInterval = 1.0 * spd;
 float spreadInterval = 4.0 * spd;
 float evapInterval = 8.0 * spd;
 float rainInterval = 16.0 * spd;

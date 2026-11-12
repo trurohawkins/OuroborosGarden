@@ -49,8 +49,8 @@ int main(int argc, char **argv) {
 	initDjTrack(POOPSND, 1);
 	addDjTrack("fart.wav", POOPSND);
 	for (int i = 0; i < POOPSND; i++) {
-		if (i != PLANTSND && i != DIRTSND) {
-			//setMuteTrack(i, true);
+		if (i != DIRTSND) {
+			setMuteTrack(i, true);
 		}
 	}
 	makeMenus();
