@@ -18,6 +18,7 @@ typedef struct {
 
 
 void initPlants();
+void startPlants();
 Plant *getPlant(Form *p);
 void plantsAction(void *);
 int plantStatus(void *data, Action *a, float delta);
@@ -27,3 +28,5 @@ bool grow(Form *plant);
 void plantDie(void *plant);
 
 int inspectPlant(Nub *nub, char *buff, int capacity);
+bool checkPlant(int x, int y, int plantType);
+

@@ -49,7 +49,8 @@ void snakePoopAction(void *snake);
 void snakeStagger(Snake *s, bool staggered);
 void ouroboros(Snake *s);
 void spaceCheck(Snake *s, int x, int y);
-void snakePoop(Snake *s);
+//return true if not dead
+bool snakePoop(Snake *s);
 
 void snakeStep(void *s, float val);
 void snakeUp(void *s, float val);

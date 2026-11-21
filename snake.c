@@ -22,12 +22,12 @@ Snake *makeSnake(int xPos, int yPos) {
 	s->body = makeList();
 
 	addToList(&s->body, sb);
-	s->eNum0= scheduleEvent(getDjTrack(SNAKESND), snakeAction, s, moveInterval);
+	s->eNum0 = scheduleEvent(getDjTrack(SNAKESND), snakeAction, s, moveInterval);
 	s->eNum1 = scheduleEvent(getDjTrack(POOPSND), snakePoopAction, s, moveInterval);
 	//uint64_t snakeRhythm = (1ULL << 56) - 1;//0b1001;
 	setRhythmCommand(s->eNum0, snakeRhythm, snakeRhythmLen);
-	snakeRhythm = ~snakeRhythm;
-	setRhythmCommand(s->eNum1, snakeRhythm,  snakeRhythmLen);
+	uint64_t pooRhythm = ~snakeRhythm;
+	setRhythmCommand(s->eNum1, pooRhythm,  snakeRhythmLen);
 	s->stomach = 0;//fullStomach;
 	s->pooInterval = 100;
 	s->pooLength = 10;
@@ -376,7 +376,9 @@ void snakePoopAction(void *snake) {
 	if (s->pooCounter == 0) {
 		s->state = 3;
 	} else if (s->pooCounter == 7) {
-		snakePoop(s);
+		if (!snakePoop(s)) {
+			return;
+		}
 		if (s->staggered == 0) {
 			s->state = 0;
 		} else {
@@ -387,9 +389,6 @@ void snakePoopAction(void *snake) {
 }
 
 void snakeAction(void *snake) {
-	char buff[100];
-	sprintf(buff, "elapsed %i\n", nowMS() - lastTime);
-	//debugWrite(buff);
 	lastTime = nowMS();
 	Snake *s = snake;
 	/*
@@ -448,7 +447,8 @@ void snakeStagger(Snake *s, bool staggered) {
 	screenChanged(0, 0);
 }
 
-void snakePoop(Snake *s) {
+//return true if not dead
+bool snakePoop(Snake *s) {
 	//if (s->stomach > 0) {
 		//s->stomach--;
 	//} else {
@@ -459,8 +459,10 @@ void snakePoop(Snake *s) {
 			shrinkSnake(s);
 		} else {
 			snakeDie(s);
+			return false;
 		}
 	//}
+	return true;
 }
 
 

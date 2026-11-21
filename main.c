@@ -48,8 +48,8 @@ int main(int argc, char **argv) {
 	addDjTrack("fftt.wav", SNAKESND);
 	initDjTrack(POOPSND, 1);
 	addDjTrack("fart.wav", POOPSND);
-	for (int i = 0; i < POOPSND; i++) {
-		if (i != DIRTSND) {
+	for (int i = 0; i <= POOPSND; i++) {
+		if (i != -1) {//DIRTSND) {
 			setMuteTrack(i, true);
 		}
 	}

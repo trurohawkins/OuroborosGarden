@@ -28,6 +28,7 @@ float evapMinimum = 0.05;
 float rainAmount = 5.0;//0.05;
 float spreadDither = 0.005;
 float bioEvap = 0.1;
+float waterSource = 0.03;
 // snake
 int baseSnake = 8;
 int deadSnake = 2;

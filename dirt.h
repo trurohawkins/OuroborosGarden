@@ -1,4 +1,6 @@
 #pragma once
+void startDirt();
+
 Form *makeDirt();
 Form *placeDirt(int x, int y);
 

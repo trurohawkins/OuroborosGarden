@@ -5,11 +5,16 @@ linkedList *clouds = 0;
 void initClouds() {
 	if (!clouds) {
 		clouds = makeList();
-		Action *action = makeAction(0, breeze, clouds);
-		Actor *actor = makeActor(0);
-		addAction(actor, action);
-		addActor(actor);
 	}
+}
+
+void startClouds() {
+	Action *action = makeAction(0, breeze, clouds);
+	Actor *actor = makeActor(0);
+	addAction(actor, action);
+	addActor(actor);
+	int rainEvent = scheduleEvent(getDjTrack(RAINSND), rain, 0, rainInterval);
+	setRhythmCommand(rainEvent, rainRhythm, rainRhythmLen);
 }
 
 

@@ -1,5 +1,7 @@
 #include "garden.h"
 
+int spawnPos[2] = {0, 0};
+
 void makeGarden() {
 	GM.curMenu = NULL;
 	//makeWorld(worldX, worldY);
@@ -7,36 +9,38 @@ void makeGarden() {
 	initWater();
 	initClouds();
 	initPlants();
+	setViewDimension(worldX, worldY);
+	setViewPosition(worldX/2, worldY/2);
+	debugWrite("making garden\n");
 	if (!loadNextLevel()) {
 		reloadLevel();
 	}
+	startGarden();
 	//setMuteTrack(PLANTSND, true);
-
-	int rainEvent = scheduleEvent(getDjTrack(RAINSND), rain, 0, rainInterval);
-	setRhythmCommand(rainEvent, rainRhythm, rainRhythmLen);
-	int dirtEvent = scheduleEvent(getDjTrack(DIRTSND), dirtFlow, 0, spreadInterval);
-	//setRhythmCommand(dirtEvent, dirtRhythm, dirtRhythmLen);
-	int heatEvent = scheduleEvent(getDjTrack(HEATSND), ecoEvaporation, 0, evapInterval);
-	setRhythmCommand(heatEvent, heatRhythm, heatRhythmLen);
-	int plantEvent = scheduleEvent(getDjTrack(PLANTSND), plantsAction, 0, plantsInterval);
-	setRhythmCommand(plantEvent, plantRhythm, plantRhythmLen);
 	//baseGardenLevel();
 	//generateLevel(GM.level);
-	setViewDimension(worldX, worldY);
-	setViewPosition(worldX/2, worldY/2);
+}
+
+void startGarden() {
+	startDirt();
+	startPlants();
+	startClouds();
 }
 
 void islandLevel() {
 	World *w = getWorld();
-	int spawnPos[2] = {worldX/2, worldY/2};
+	spawnPos[0] = worldX/2;
+	spawnPos[1] = worldY/2;
 	makeCloud();
 	placeCircle(placeClouds, spawnPos[0], spawnPos[1] + 15, 8);
+	debugWrite("level built\n");
 	makeSnake(spawnPos[0], spawnPos[1]);
 }
 
 void baseGardenLevel() {
 	World *w = getWorld();
-	int spawnPos[2] = {worldX/2, worldY/2};
+	spawnPos[0] = worldX/2;
+	spawnPos[1] = worldY/2;
 	for (int x = 0; x < w->x; x++) {
 		for (int y = 0; y < w->y; y++) {
 			if (!checkFormID(x, y, WATER)) {
@@ -53,7 +57,6 @@ void baseGardenLevel() {
 		}
 	}
 	makeSnake(spawnPos[0], spawnPos[1]);
-
 }
 
 void placeCircle(Form* (*place)(int,int), int xPos, int yPos, int radius) {

@@ -6,7 +6,8 @@ void initWater() {
 	if (!water) {
 		water = makeMass(WATER);
 		initStats(water->self, 1);
-		addStat(water->self, SOURCE, 0.015f);
+		addStat(water->self, SOURCE, waterSource);
+		addStat(water->self, COVER, 1);
 		Nub *ren = growRenderNub(water->self, water, renderWater);
 	}
 }
@@ -24,7 +25,7 @@ void *renderWater(void *data) {
 	RenderCommand reco = {
 		.type = 0,
 		.index = -1,
-		.layer = DIRTLAYER,
+		.layer = GRASSLAYER,
 	};
 	Color color = {
 		.rgb = {

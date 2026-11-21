@@ -11,6 +11,13 @@ int dirtStats = 2;
 #define MAXADDFORMS 4
 #define MAXPULLFORMS 4
 
+void startDirt() {
+	int dirtEvent = scheduleEvent(getDjTrack(DIRTSND), dirtFlow, 0, spreadInterval);
+	setRhythmCommand(dirtEvent, dirtRhythm, dirtRhythmLen);
+	int heatEvent = scheduleEvent(getDjTrack(HEATSND), ecoEvaporation, 0, evapInterval);
+	setRhythmCommand(heatEvent, heatRhythm, heatRhythmLen);
+}
+
 Form *makeDirt() {
 	Form *dirt = makeForm(DIRT);
 	initStats(dirt, dirtStats);
@@ -55,7 +62,10 @@ void dirtCell(int x, int y) {
 			} else {
 				float *src = getStat(f, SOURCE);
 				if (src) {
-					addEco(x, y, *src);
+					float added = addEco(x, y, *src);
+					//char buff[100];
+					//sprintf(buff, "adding eco from source: %f\n", added);
+					//debugWrite(buff);
 				}
 			}
 		}

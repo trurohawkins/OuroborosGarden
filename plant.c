@@ -32,10 +32,15 @@ void initPlants() {
 	flowerStamps[3] = createStamp("\U0001F73E", 0);
 	*/
 	//flowerStamps[3] = createStamp("\U000168E6", 0);
+}
+
+void startPlants() {
 	Action *action = makeAction(0, plantStatus, 0);
 	Actor *actor = makeActor(0);
 	addAction(actor, action);
 	addActor(actor);
+	int plantEvent = scheduleEvent(getDjTrack(PLANTSND), plantsAction, 0, plantsInterval);
+	setRhythmCommand(plantEvent, plantRhythm, plantRhythmLen);
 }
 
 float statusInterval = 2;
@@ -72,9 +77,11 @@ int plantStatus(void *data, Action *a, float delta) {
 				}
 			}
 		}
+		/*
 		char buff[100];
 		sprintf(buff, "healthy plants: %i, ill plants: %i\n", healthyPlants, illPlants);
 		debugWrite(buff);
+		*/
 		if (healthyPlants + illPlants > 0) {
 			if (getMute(PLANTSND)) {
 				//setMuteTrack(PLANTSND, false);
@@ -111,7 +118,7 @@ Form *makePlant() {
 }
 
 void plantsAction(void *) {
-	debugWrite("plant action\n");
+	//debugWrite("plant action\n");
 	World *w = getWorld();
 	linkedList *dead = 0;
 	for (int x = 0; x < w->x; x++) {
@@ -235,6 +242,30 @@ int inspectPlant(Nub *nub, char *buff, int capacity) {
 		return snprintf(buff, capacity, "Plant\n  life: %i stage: %i\n  growth: %.3f\n  pull: %.3f\n  loss: %.3f\n", p->life, p->stage, p->growth, p->pull, p->loss);
 	}
 	return 0;
+}
+
+bool checkPlant(int x, int y, int plantType) {
+	Cell *c = getCell(x, y);
+	bool plant = false;
+	bool dirt = false;
+	bool water = false;
+	if (c) {
+		for (int i = 0; i < FORMS_PER_CELL; i++) {
+			if (c->within[i]) {
+				if (c->within[i]->id == plantType) {
+					plant = true;
+				}
+				if (c->within[i]->id == DIRT) {
+					dirt = true;
+				}
+				if (c->within[i]->id == WATER) {
+					water = true;
+				}
+			}
+		}
+	}
+	return dirt && !plant && !water;
+
 }
 
 #include "grass.c"

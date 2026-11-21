@@ -18,15 +18,12 @@ Form *makeGrass() {
 }
 
 bool placeGrass(int x, int y) {
-	if (!checkGrass(x, y)) {
-		Form *dirt = checkSoil(x, y);
-		if (dirt) {
-			Form *grass = makeGrass();
-			if (placeForm(grass, x, y)) {
-				return true;
-			} else {
-				freeForm(grass);
-			}
+	if (checkPlant(x, y, GRASS)) {
+		Form *grass = makeGrass();
+		if (placeForm(grass, x, y)) {
+			return true;
+		} else {
+			freeForm(grass);
 		}
 	}
 	return false;
@@ -113,20 +110,6 @@ int grassStamp(Form *grass) {
 		return -1;
 	}
 	return plant->stage - 1;
-}
-
-Form *checkGrass(int x, int y) {
-	Cell *c = getCell(x, y);
-	if (c) {
-		for (int i = 0; i < FORMS_PER_CELL; i++) {
-			if (c->within[i]) {
-				if (c->within[i]->id == GRASS) {
-					return c->within[i];
-				}
-			}
-		}
-	}
-	return NULL;
 }
 
 void *renderGrass(void *data) {

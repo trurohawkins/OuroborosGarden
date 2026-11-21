@@ -32,15 +32,12 @@ Form *makeFlower() {
 }
 
 Form *placeFlower(int x, int y) {
-	if (!checkFormID(x, y, FLOWER)) {
-		Form *dirt = checkSoil(x, y);
-		if (checkFormID(x, y, DIRT)) {
-			Form *flower = makeFlower();
-			if (placeForm(flower, x, y)) {
-				return flower;
-			} else {
-				freeForm(flower);
-			}
+	if (checkPlant(x, y, FLOWER)) {
+		Form *flower = makeFlower();
+		if (placeForm(flower, x, y)) {
+			return flower;
+		} else {
+			freeForm(flower);
 		}
 	}
 	return NULL;
@@ -105,6 +102,7 @@ bool growFlower(Form *f) {
 	}
 	return true;
 }
+
 
 void *renderFlower(void *data) {
 	Form *flower = data;
